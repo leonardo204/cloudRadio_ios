@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="KGk-i7-Jjw" customClass="TimerTableViewCell" customModule="cloudRadio" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="400" height="80"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="400" height="80"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="0eh-qQ-FKL">
+                        <rect key="frame" x="14" y="40" width="305" height="30"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="301" id="5n6-p3-ViM"/>
+                            <constraint firstAttribute="height" constant="29" id="LPo-87-1Zt"/>
+                            <constraint firstAttribute="width" secondItem="0eh-qQ-FKL" secondAttribute="height" multiplier="301:29" id="YPG-2B-NDA"/>
+                        </constraints>
+                        <connections>
+                            <action selector="TimerSliderValueChanged:" destination="KGk-i7-Jjw" eventType="valueChanged" id="dny-Fj-XCV"/>
+                        </connections>
+                    </slider>
+                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="d76-VQ-mi6">
+                        <rect key="frame" x="335" y="25" width="49" height="31"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="31" id="MHR-27-6Ff"/>
+                            <constraint firstAttribute="width" constant="47" id="enT-jQ-t0a"/>
+                            <constraint firstAttribute="width" secondItem="d76-VQ-mi6" secondAttribute="height" multiplier="47:31" id="oiy-3D-H5R"/>
+                        </constraints>
+                        <connections>
+                            <action selector="TimerSwitchValueChanged:" destination="KGk-i7-Jjw" eventType="valueChanged" id="Qqq-06-BOe"/>
+                        </connections>
+                    </switch>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LiM-2Z-Hd5">
+                        <rect key="frame" x="16" y="17" width="84" height="21"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="LiM-2Z-Hd5" secondAttribute="height" multiplier="4:1" id="3zZ-Us-VVT"/>
+                            <constraint firstAttribute="height" constant="21" id="9zx-ae-qOp"/>
+                            <constraint firstAttribute="width" constant="84" id="wt4-aX-aDi"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VFd-Vo-XZy">
+                        <rect key="frame" x="247" y="17" width="70" height="21"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="VFd-Vo-XZy" secondAttribute="height" multiplier="10:3" id="FIP-WC-bU1"/>
+                            <constraint firstAttribute="width" constant="70" id="QPV-h3-4ir"/>
+                            <constraint firstAttribute="height" constant="21" id="vsi-Nt-eZH"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="bottom" secondItem="d76-VQ-mi6" secondAttribute="bottom" constant="24" id="0HG-LW-pqE"/>
+                    <constraint firstItem="0eh-qQ-FKL" firstAttribute="top" secondItem="VFd-Vo-XZy" secondAttribute="bottom" constant="2" id="205-b3-R7e"/>
+                    <constraint firstItem="VFd-Vo-XZy" firstAttribute="leading" secondItem="LiM-2Z-Hd5" secondAttribute="trailing" constant="147" id="6fM-dM-H4x"/>
+                    <constraint firstItem="d76-VQ-mi6" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="25" id="DlY-nj-agl"/>
+                    <constraint firstAttribute="bottom" secondItem="0eh-qQ-FKL" secondAttribute="bottom" constant="11" id="Hrg-54-qVS"/>
+                    <constraint firstItem="0eh-qQ-FKL" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="LRT-tl-O0g"/>
+                    <constraint firstAttribute="trailing" secondItem="d76-VQ-mi6" secondAttribute="trailing" constant="18" id="ScV-h7-tgg"/>
+                    <constraint firstItem="0eh-qQ-FKL" firstAttribute="top" secondItem="LiM-2Z-Hd5" secondAttribute="bottom" constant="2" id="V31-MD-Nhc"/>
+                    <constraint firstItem="LiM-2Z-Hd5" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="VQM-Ho-xl9"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="TimeLabel" destination="VFd-Vo-XZy" id="ZxN-Ub-5jx"/>
+                <outlet property="TimerSlider" destination="0eh-qQ-FKL" id="e4E-Fi-XjM"/>
+                <outlet property="TimerSwitch" destination="d76-VQ-mi6" id="0t0-uc-zhX"/>
+                <outlet property="TimerTitle" destination="LiM-2Z-Hd5" id="zKP-9z-bQe"/>
+            </connections>
+            <point key="canvasLocation" x="137.68115942028987" y="114.50892857142857"/>
+        </tableViewCell>
+    </objects>
+</document>

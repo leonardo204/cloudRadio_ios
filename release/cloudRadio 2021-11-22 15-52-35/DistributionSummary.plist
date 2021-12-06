@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>cloudRadio.ipa</key>
+	<array>
+		<dict>
+			<key>architectures</key>
+			<array>
+				<string>arm64</string>
+			</array>
+			<key>buildNumber</key>
+			<string>1</string>
+			<key>certificate</key>
+			<dict>
+				<key>SHA1</key>
+				<string>6C57920553E602D9F8E379343105BDDD35D1DBFA</string>
+				<key>dateExpires</key>
+				<string>2022/11/17</string>
+				<key>type</key>
+				<string>iOS Distribution</string>
+			</dict>
+			<key>embeddedBinaries</key>
+			<array>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>6C57920553E602D9F8E379343105BDDD35D1DBFA</string>
+						<key>dateExpires</key>
+						<string>2022/11/17</string>
+						<key>type</key>
+						<string>iOS Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>Alamofire.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>XU8HS9JUTS</string>
+						<key>name</key>
+						<string>YONGSUB LEE</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>5.4.4</string>
+				</dict>
+			</array>
+			<key>entitlements</key>
+			<dict>
+				<key>application-identifier</key>
+				<string>XU8HS9JUTS.com.zerolive.cloudRadio</string>
+				<key>com.apple.developer.team-identifier</key>
+				<string>XU8HS9JUTS</string>
+				<key>get-task-allow</key>
+				<false/>
+				<key>keychain-access-groups</key>
+				<array>
+					<string>XU8HS9JUTS.com.zerolive.cloudRadio</string>
+				</array>
+			</dict>
+			<key>name</key>
+			<string>cloudRadio.app</string>
+			<key>profile</key>
+			<dict>
+				<key>UUID</key>
+				<string>77588c7e-fe9f-4a05-bf7e-dfafc35017f1</string>
+				<key>dateExpires</key>
+				<string>2022/11/17</string>
+				<key>name</key>
+				<string>cloudradio_adhoc</string>
+			</dict>
+			<key>team</key>
+			<dict>
+				<key>id</key>
+				<string>XU8HS9JUTS</string>
+				<key>name</key>
+				<string>YONGSUB LEE</string>
+			</dict>
+			<key>versionNumber</key>
+			<string>1.0</string>
+		</dict>
+	</array>
+</dict>
+</plist>

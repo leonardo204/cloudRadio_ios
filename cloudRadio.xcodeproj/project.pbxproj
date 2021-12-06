@@ -1,0 +1,524 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 51;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1F398566274791EF00C6E395 /* RadioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F398565274791EF00C6E395 /* RadioPlayer.swift */; };
+		1F398568274792A500C6E395 /* RadioChannelResources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F398567274792A400C6E395 /* RadioChannelResources.swift */; };
+		1F4F800B274E2306006E0733 /* CloudRadioUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4F800A274E2305006E0733 /* CloudRadioUtils.swift */; };
+		1F4F800D27546E95006E0733 /* CloudRadioLogs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4F800C27546E95006E0733 /* CloudRadioLogs.swift */; };
+		1F4F800F27547DA4006E0733 /* OSLog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F4F800E27547DA4006E0733 /* OSLog.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		1F4F8012275DEB2A006E0733 /* TimerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4F8010275DEB2A006E0733 /* TimerTableViewCell.swift */; };
+		1F4F8013275DEB2A006E0733 /* TimerTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1F4F8011275DEB2A006E0733 /* TimerTableViewCell.xib */; };
+		1F4F8016275E9FED006E0733 /* CloudRadioShareValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4F8015275E9FEC006E0733 /* CloudRadioShareValues.swift */; };
+		A3E37FFC63EC35CE59A44CC0 /* Pods_cloudRadio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29D46A8AB2B793599F464842 /* Pods_cloudRadio.framework */; };
+		C20E9E2225E1B79B001B1A11 /* SideMenuModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20E9E2125E1B79A001B1A11 /* SideMenuModel.swift */; };
+		C25EF4CE25D067D00086441F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25EF4CD25D067D00086441F /* AppDelegate.swift */; };
+		C25EF4D025D067D00086441F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25EF4CF25D067D00086441F /* SceneDelegate.swift */; };
+		C25EF4D225D067D00086441F /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25EF4D125D067D00086441F /* HomeViewController.swift */; };
+		C25EF4D525D067D00086441F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C25EF4D325D067D00086441F /* Main.storyboard */; };
+		C25EF4D725D067D20086441F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C25EF4D625D067D20086441F /* Assets.xcassets */; };
+		C25EF4DA25D067D20086441F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C25EF4D825D067D20086441F /* LaunchScreen.storyboard */; };
+		C25EF4E425D06A430086441F /* SideMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25EF4E325D06A430086441F /* SideMenuViewController.swift */; };
+		C25EF4EA25D06B6A0086441F /* SideMenuCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25EF4E825D06B6A0086441F /* SideMenuCell.swift */; };
+		C25EF4EB25D06B6A0086441F /* SideMenuCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C25EF4E925D06B6A0086441F /* SideMenuCell.xib */; };
+		C25EF52C25D09AC30086441F /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25EF52B25D09AC30086441F /* MainViewController.swift */; };
+		C2DE6A3B25D2CED4002B885A /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2DE6A3A25D2CED4002B885A /* SettingsViewController.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		1F398565274791EF00C6E395 /* RadioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioPlayer.swift; sourceTree = "<group>"; };
+		1F398567274792A400C6E395 /* RadioChannelResources.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioChannelResources.swift; sourceTree = "<group>"; };
+		1F4F800A274E2305006E0733 /* CloudRadioUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudRadioUtils.swift; sourceTree = "<group>"; };
+		1F4F800C27546E95006E0733 /* CloudRadioLogs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudRadioLogs.swift; sourceTree = "<group>"; };
+		1F4F800E27547DA4006E0733 /* OSLog.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OSLog.framework; path = System/Library/Frameworks/OSLog.framework; sourceTree = SDKROOT; };
+		1F4F8010275DEB2A006E0733 /* TimerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerTableViewCell.swift; sourceTree = "<group>"; };
+		1F4F8011275DEB2A006E0733 /* TimerTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TimerTableViewCell.xib; sourceTree = "<group>"; };
+		1F4F8015275E9FEC006E0733 /* CloudRadioShareValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudRadioShareValues.swift; sourceTree = "<group>"; };
+		200FFA4529D68641B5256C36 /* Pods-cloudRadio.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cloudRadio.release.xcconfig"; path = "Target Support Files/Pods-cloudRadio/Pods-cloudRadio.release.xcconfig"; sourceTree = "<group>"; };
+		29D46A8AB2B793599F464842 /* Pods_cloudRadio.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_cloudRadio.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AD89ADD52E60CBC22C5D2054 /* Pods-cloudRadio.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cloudRadio.debug.xcconfig"; path = "Target Support Files/Pods-cloudRadio/Pods-cloudRadio.debug.xcconfig"; sourceTree = "<group>"; };
+		C20E9E2125E1B79A001B1A11 /* SideMenuModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuModel.swift; sourceTree = "<group>"; };
+		C25EF4CA25D067D00086441F /* cloudRadio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = cloudRadio.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C25EF4CD25D067D00086441F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		C25EF4CF25D067D00086441F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		C25EF4D125D067D00086441F /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		C25EF4D425D067D00086441F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		C25EF4D625D067D20086441F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		C25EF4D925D067D20086441F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		C25EF4DB25D067D20086441F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C25EF4E325D06A430086441F /* SideMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuViewController.swift; sourceTree = "<group>"; };
+		C25EF4E825D06B6A0086441F /* SideMenuCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuCell.swift; sourceTree = "<group>"; };
+		C25EF4E925D06B6A0086441F /* SideMenuCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SideMenuCell.xib; sourceTree = "<group>"; };
+		C25EF52B25D09AC30086441F /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		C2DE6A3A25D2CED4002B885A /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C25EF4C725D067D00086441F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1F4F800F27547DA4006E0733 /* OSLog.framework in Frameworks */,
+				A3E37FFC63EC35CE59A44CC0 /* Pods_cloudRadio.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1F3985642747919B00C6E395 /* Radio */ = {
+			isa = PBXGroup;
+			children = (
+				1F398565274791EF00C6E395 /* RadioPlayer.swift */,
+				1F398567274792A400C6E395 /* RadioChannelResources.swift */,
+			);
+			path = Radio;
+			sourceTree = "<group>";
+		};
+		1F4F8009274E22F2006E0733 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				1F4F800A274E2305006E0733 /* CloudRadioUtils.swift */,
+				1F4F800C27546E95006E0733 /* CloudRadioLogs.swift */,
+				1F4F8015275E9FEC006E0733 /* CloudRadioShareValues.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		1F4F8014275DEB3A006E0733 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				1F4F8010275DEB2A006E0733 /* TimerTableViewCell.swift */,
+				1F4F8011275DEB2A006E0733 /* TimerTableViewCell.xib */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		57D7F770E6B980DBBF97215E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1F4F800E27547DA4006E0733 /* OSLog.framework */,
+				29D46A8AB2B793599F464842 /* Pods_cloudRadio.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		921B6981A64ED59C4253FD93 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				AD89ADD52E60CBC22C5D2054 /* Pods-cloudRadio.debug.xcconfig */,
+				200FFA4529D68641B5256C36 /* Pods-cloudRadio.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		C22DF82F25D1917200FEB621 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				1F4F8014275DEB3A006E0733 /* Cell */,
+				C25EF4D125D067D00086441F /* HomeViewController.swift */,
+				C2DE6A3A25D2CED4002B885A /* SettingsViewController.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		C25EF4C125D067D00086441F = {
+			isa = PBXGroup;
+			children = (
+				C25EF4CC25D067D00086441F /* cloudRadio */,
+				C25EF4CB25D067D00086441F /* Products */,
+				921B6981A64ED59C4253FD93 /* Pods */,
+				57D7F770E6B980DBBF97215E /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		C25EF4CB25D067D00086441F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C25EF4CA25D067D00086441F /* cloudRadio.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C25EF4CC25D067D00086441F /* cloudRadio */ = {
+			isa = PBXGroup;
+			children = (
+				1F4F8009274E22F2006E0733 /* Utils */,
+				1F3985642747919B00C6E395 /* Radio */,
+				C22DF82F25D1917200FEB621 /* Views */,
+				C25EF4E225D06A2D0086441F /* SideMenu */,
+				C25EF52B25D09AC30086441F /* MainViewController.swift */,
+				C25EF4D325D067D00086441F /* Main.storyboard */,
+				C25EF4D625D067D20086441F /* Assets.xcassets */,
+				C25EF4D825D067D20086441F /* LaunchScreen.storyboard */,
+				C25EF4CD25D067D00086441F /* AppDelegate.swift */,
+				C25EF4CF25D067D00086441F /* SceneDelegate.swift */,
+				C25EF4DB25D067D20086441F /* Info.plist */,
+			);
+			path = cloudRadio;
+			sourceTree = "<group>";
+		};
+		C25EF4E225D06A2D0086441F /* SideMenu */ = {
+			isa = PBXGroup;
+			children = (
+				C25EF4ED25D06B740086441F /* Cell */,
+				C20E9E2125E1B79A001B1A11 /* SideMenuModel.swift */,
+				C25EF4E325D06A430086441F /* SideMenuViewController.swift */,
+			);
+			path = SideMenu;
+			sourceTree = "<group>";
+		};
+		C25EF4ED25D06B740086441F /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				C25EF4E825D06B6A0086441F /* SideMenuCell.swift */,
+				C25EF4E925D06B6A0086441F /* SideMenuCell.xib */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C25EF4C925D067D00086441F /* cloudRadio */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C25EF4DE25D067D20086441F /* Build configuration list for PBXNativeTarget "cloudRadio" */;
+			buildPhases = (
+				A62053B4CDF16105239F9705 /* [CP] Check Pods Manifest.lock */,
+				C25EF4C625D067D00086441F /* Sources */,
+				C25EF4C725D067D00086441F /* Frameworks */,
+				C25EF4C825D067D00086441F /* Resources */,
+				976F307192DEDA8D979CAB6C /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = cloudRadio;
+			productName = CustomSideMenuiOSExample;
+			productReference = C25EF4CA25D067D00086441F /* cloudRadio.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C25EF4C225D067D00086441F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1240;
+				LastUpgradeCheck = 1240;
+				TargetAttributes = {
+					C25EF4C925D067D00086441F = {
+						CreatedOnToolsVersion = 12.4;
+					};
+				};
+			};
+			buildConfigurationList = C25EF4C525D067D00086441F /* Build configuration list for PBXProject "cloudRadio" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = C25EF4C125D067D00086441F;
+			productRefGroup = C25EF4CB25D067D00086441F /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C25EF4C925D067D00086441F /* cloudRadio */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C25EF4C825D067D00086441F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1F4F8013275DEB2A006E0733 /* TimerTableViewCell.xib in Resources */,
+				C25EF4DA25D067D20086441F /* LaunchScreen.storyboard in Resources */,
+				C25EF4D725D067D20086441F /* Assets.xcassets in Resources */,
+				C25EF4D525D067D00086441F /* Main.storyboard in Resources */,
+				C25EF4EB25D06B6A0086441F /* SideMenuCell.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		976F307192DEDA8D979CAB6C /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-cloudRadio/Pods-cloudRadio-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-cloudRadio/Pods-cloudRadio-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-cloudRadio/Pods-cloudRadio-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A62053B4CDF16105239F9705 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-cloudRadio-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C25EF4C625D067D00086441F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C25EF4E425D06A430086441F /* SideMenuViewController.swift in Sources */,
+				1F398568274792A500C6E395 /* RadioChannelResources.swift in Sources */,
+				1F4F8012275DEB2A006E0733 /* TimerTableViewCell.swift in Sources */,
+				C2DE6A3B25D2CED4002B885A /* SettingsViewController.swift in Sources */,
+				C25EF52C25D09AC30086441F /* MainViewController.swift in Sources */,
+				1F4F8016275E9FED006E0733 /* CloudRadioShareValues.swift in Sources */,
+				C25EF4EA25D06B6A0086441F /* SideMenuCell.swift in Sources */,
+				C25EF4D225D067D00086441F /* HomeViewController.swift in Sources */,
+				C25EF4CE25D067D00086441F /* AppDelegate.swift in Sources */,
+				1F398566274791EF00C6E395 /* RadioPlayer.swift in Sources */,
+				C20E9E2225E1B79B001B1A11 /* SideMenuModel.swift in Sources */,
+				C25EF4D025D067D00086441F /* SceneDelegate.swift in Sources */,
+				1F4F800D27546E95006E0733 /* CloudRadioLogs.swift in Sources */,
+				1F4F800B274E2306006E0733 /* CloudRadioUtils.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		C25EF4D325D067D00086441F /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C25EF4D425D067D00086441F /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		C25EF4D825D067D20086441F /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C25EF4D925D067D20086441F /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		C25EF4DC25D067D20086441F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		C25EF4DD25D067D20086441F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		C25EF4DF25D067D20086441F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = AD89ADD52E60CBC22C5D2054 /* Pods-cloudRadio.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = XU8HS9JUTS;
+				INFOPLIST_FILE = "$(SRCROOT)/cloudRadio/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.zerolive.cloudRadio;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = cloudradio_dev;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		C25EF4E025D067D20086441F /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 200FFA4529D68641B5256C36 /* Pods-cloudRadio.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = XU8HS9JUTS;
+				INFOPLIST_FILE = "$(SRCROOT)/cloudRadio/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.zerolive.cloudRadio;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = cloudradio_adhoc;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C25EF4C525D067D00086441F /* Build configuration list for PBXProject "cloudRadio" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C25EF4DC25D067D20086441F /* Debug */,
+				C25EF4DD25D067D20086441F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C25EF4DE25D067D20086441F /* Build configuration list for PBXNativeTarget "cloudRadio" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C25EF4DF25D067D20086441F /* Debug */,
+				C25EF4E025D067D20086441F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C25EF4C225D067D00086441F /* Project object */;
+}
