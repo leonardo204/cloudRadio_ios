@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 class CloudRadioShareValues {
     // RADIO TIMER
@@ -15,6 +16,8 @@ class CloudRadioShareValues {
     static var stopRadioTimer: Timer? = nil
     static var drawRadioTimeTimer: Timer? = nil
     static var globalStopRadioTimer: Timer? = nil
+    static var TimeLabel: UILabel? = nil
+    static var TimeSlider: UISlider? = nil
     
     static func requestStopRadioTimer() {
         if ( CloudRadioShareValues.stopRadioTimer?.isValid ) != nil {

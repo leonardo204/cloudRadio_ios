@@ -34,7 +34,8 @@ extension String {
         dateFMT.timeZone = TimeZone(abbreviation: "KST")
         dateFMT.dateFormat = "HH:mm"
 
-        return dateFMT.date(from: self)
+        let dd =  dateFMT.date(from: self)
+        return dd
     }
     
     func tad2DateSec() -> Date? {
@@ -57,7 +58,12 @@ class CloudRadioUtils {
     // get interval from "xx:ss"
     // endTime="17:00"
     static func getDifftimeSecondForEndtime(endTime: String) -> Double {
-        let givenDate = endTime.tad2Date()!
+        var givenDateDouble: Double = 0.0
+        if ( endTime == "24:00" ) {
+            givenDateDouble = "23:59".tad2Date()!.timeIntervalSince1970 + (60*1000)
+        } else {
+            givenDateDouble = endTime.tad2Date()!.timeIntervalSince1970
+        }
         
         let dateFMT = DateFormatter()
         dateFMT.locale = Locale(identifier:"ko_KR")
@@ -68,9 +74,9 @@ class CloudRadioUtils {
 
         let nowDate = nowString.tad2Date()!
         
-        Log.print("getDifftimeSecond() now(\(nowString)) - endTime(\(endTime))")
+        Log.print("getDifftimeSecond() now(\(nowString): \(nowDate.timeIntervalSince1970) - endTime(\(endTime): \(givenDateDouble))")
         
-        return (givenDate.timeIntervalSince1970 - nowDate.timeIntervalSince1970)
+        return (givenDateDouble - nowDate.timeIntervalSince1970)
     }
     
     // get interval from "xx:ss"
@@ -79,9 +85,22 @@ class CloudRadioUtils {
         if ( startTime == nil || endTime == nil ) {
             return nil
         }
-        let startDate = startTime!.tad2Date()!
-        let endDate = endTime!.tad2Date()!
-        return (endDate.timeIntervalSince1970 - startDate.timeIntervalSince1970)
+        
+        var startDateDouble: Double = 0.0
+        if ( startTime == "24:00" || startTime == "24:00:00" ) {
+            startDateDouble = "00:00".tad2Date()!.timeIntervalSince1970
+        } else {
+            startDateDouble = startTime!.tad2Date()!.timeIntervalSince1970
+        }
+        
+//        let startDate = startTime!.tad2Date()!
+        var givenDateDouble: Double = 0.0
+        if ( endTime == "24:00" ) {
+            givenDateDouble = "23:59".tad2Date()!.timeIntervalSince1970 + (60*1000)
+        } else {
+            givenDateDouble = endTime!.tad2Date()!.timeIntervalSince1970
+        }
+        return (givenDateDouble - startDateDouble)
     }
     
     static func getElapsedWith(startTime: String?) -> Double? {
@@ -95,9 +114,37 @@ class CloudRadioUtils {
         let now = Date()
         let nowString = dateFMT.string(from: now)
         let nowDate = dateFMT.date(from: nowString)!
-        let startDate = dateFMT.date(from: startTime!)!
+//        let startDate = dateFMT.date(from: startTime!)!
+        var startDateDouble: Double = 0.0
+        if ( startTime == "24:00" || startTime == "24:00:00" ) {
+            startDateDouble = dateFMT.date(from: "00:00:00")!.timeIntervalSince1970
+        } else {
+            startDateDouble = dateFMT.date(from: startTime!)!.timeIntervalSince1970
+        }
         
-        return (nowDate.timeIntervalSince1970 - startDate.timeIntervalSince1970)
+        return (nowDate.timeIntervalSince1970 - startDateDouble)
+    }
+    
+    static func getElapsedWithMin(startTime: String?) -> Double? {
+        if ( startTime == nil ) {
+            return nil
+        }
+        let dateFMT = DateFormatter()
+        dateFMT.locale = Locale(identifier:"ko_KR")
+        dateFMT.timeZone = TimeZone(abbreviation: "KST")
+        dateFMT.dateFormat = "HH:mm"
+        let now = Date()
+        let nowString = dateFMT.string(from: now)
+        let nowDate = dateFMT.date(from: nowString)!
+//        let startDate = dateFMT.date(from: startTime!)!
+        var startDateDouble: Double = 0.0
+        if ( startTime == "24:00" || startTime == "24:00:00" ) {
+            startDateDouble = dateFMT.date(from: "00:00")!.timeIntervalSince1970
+        } else {
+            startDateDouble = dateFMT.date(from: startTime!)!.timeIntervalSince1970
+        }
+        
+        return (nowDate.timeIntervalSince1970 - startDateDouble)
     }
     
     static func getDuration(startTime: String?, endTime: String?) -> Double? {
@@ -108,10 +155,25 @@ class CloudRadioUtils {
         dateFMT.locale = Locale(identifier:"ko_KR")
         dateFMT.timeZone = TimeZone(abbreviation: "KST")
         dateFMT.dateFormat = "HH:mm:ss"
-        let startDate = dateFMT.date(from: startTime!)!
-        let endDate = dateFMT.date(from: endTime!)!
         
-        return (endDate.timeIntervalSince1970 - startDate.timeIntervalSince1970)
+        var startDateDouble: Double = 0.0
+        if ( startTime == "24:00" || startTime == "24:00:00" ) {
+            startDateDouble = dateFMT.date(from: "00:00:00")!.timeIntervalSince1970
+        } else {
+            startDateDouble = dateFMT.date(from: startTime!)!.timeIntervalSince1970
+        }
+        
+//        let startDate = dateFMT.date(from: startTime!)!
+        
+        var givenDateDouble: Double = 0.0
+        if ( endTime == "24:00" || endTime == "24:00:00" ) {
+            givenDateDouble = dateFMT.date(from: "23:59:00")!.timeIntervalSince1970 + (60*1000)
+        } else {
+            givenDateDouble = dateFMT.date(from: endTime!)!.timeIntervalSince1970
+        }
+//        let endDate = dateFMT.date(from: endTime!)!
+        
+        return (givenDateDouble - startDateDouble)
     }
     
     static func getRemains(endtime: String?) -> Double? {

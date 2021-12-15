@@ -82,9 +82,9 @@ class HomeViewController: UIViewController {
 
         setImageViewButton()
         
-        updateAlbumArt(path: HomeViewController.albumArtPath)
+//        updateAlbumArt(path: HomeViewController.albumArtPath)
         updateProgressView()
-        updateLabel()
+//        updateLabel()
         
         self.view.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
 
@@ -146,21 +146,29 @@ class HomeViewController: UIViewController {
     
     @objc func onPreviousClicked(recognizer: UIGestureRecognizer) {
         Log.print("onPreviousClicked")
+        progressTimer?.invalidate()
+        setButtonHideShow(hide: true)
         NotificationCenter.default.post(name: .previousRadioMain, object: nil)
     }
     
     @objc func onPauseClicked(recognizer: UIGestureRecognizer) {
         Log.print("onPauseBtnClicked")
+        progressTimer?.invalidate()
+        setButtonHideShow(hide: true)
         NotificationCenter.default.post(name: .pauseRadioMain, object: nil)
     }
     
     @objc func onSkipBtnClicked(recognizer: UIGestureRecognizer) {
         Log.print("onSkipBtnClicked")
+        progressTimer?.invalidate()
+        setButtonHideShow(hide: true)
         NotificationCenter.default.post(name: .skipRadioMain, object: nil)
     }
     
     @objc func onPlayBtnClicked(recognizer: UIGestureRecognizer) {
         Log.print("onPlayBtnClicked")
+        progressTimer?.invalidate()
+        setButtonHideShow(hide: true)
         NotificationCenter.default.post(name: .startCurrentRadioMain, object: nil)
     }
     
@@ -206,6 +214,7 @@ class HomeViewController: UIViewController {
     }
     
     func setButtonHideShow(hide: Bool) {
+//        Log.print("setButtonHideShow: \(hide)")
         self.previousImageview.isHidden = hide
         self.playImageview.isHidden = hide
         self.pauseImageview.isHidden = hide
@@ -213,6 +222,7 @@ class HomeViewController: UIViewController {
     }
     
     func showMediaControllButtons() {
+//        Log.print("showMediaControllButtons")
         setButtonHideShow(hide: false)
         if ( RadioPlayer.IsRadioPlaying == RadioPlayStatus.playing
              || RadioPlayer.IsRadioPlaying == RadioPlayStatus.live) {
@@ -251,6 +261,9 @@ class HomeViewController: UIViewController {
         }
         progressTimer?.invalidate()
         progressTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(doUpdateProgressBar), userInfo: nil, repeats: true)
+        
+        updateAlbumArt(path: HomeViewController.albumArtPath)
+        updateLabel()
     }
     
     @objc func doUpdateProgressBar(timer: Timer) {

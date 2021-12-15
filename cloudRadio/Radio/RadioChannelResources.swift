@@ -136,6 +136,13 @@ struct RadioChannelModel {
     var channelcode: Int
 }
 
+struct CBSMusicProgramTable {
+    var starttime: String
+    var endtime: String
+    var programName: String
+    var ImageAddress: String
+}
+
 class RadioChannelResources {
         
     static func getKBSFMAddressURL(channelCode: Int) -> String? {
@@ -210,6 +217,34 @@ class RadioChannelResources {
         }
     }
     
+    static func setCBSAlbumArt() {
+        
+        for i in 0...CBSMUSIC.count {
+            guard let elapsed = CloudRadioUtils.getElapsedWithMin(startTime: CBSMUSIC[i].endtime) else { continue }
+            Log.print("endtime: \(CBSMUSIC[i].endtime) . elapsed: \(elapsed)")
+            if elapsed < 0.0 {
+                let addr = CBSMUSIC[i].ImageAddress
+                let url = URL(string: addr)
+                do {
+                    let data = try Data(contentsOf: url!)
+                    let image = UIImage(data: data)
+                    RadioPlayer.curAlbumImg = image
+                    RadioPlayer.curAlbumUrl = addr
+                    RadioPlayer.curProgramName = CBSMUSIC[i].programName
+                    
+                    Log.print("start(\(CBSMUSIC[i].starttime)) ~ end(\(CBSMUSIC[i].endtime))")
+                    let radioTimeInfo = RadioTimeInfo(starttime: String(CBSMUSIC[i].starttime), endtime: String(CBSMUSIC[i].endtime), interval: CloudRadioUtils.getDifftimeSecondForEndtime(endTime: String(CBSMUSIC[i].endtime)))
+                    RadioPlayer.curPlayTimeInfo = radioTimeInfo
+                    NotificationCenter.default.post(name: .startRadioTimerMain, object: radioTimeInfo)
+                    break
+                } catch let error {
+                    Log.print("Error: \(error)")
+                    break
+                }
+            }
+        }
+    }
+    
     static func setTBSAlbumArt(channelName: String, isPlaying: Bool) {
         let mainURL = getAddressByName(channelName: channelName)
 
@@ -225,7 +260,12 @@ class RadioChannelResources {
                 guard let bodyValue = doc.body?.toHTML else { return }
                 let time1 = bodyValue[bodyValue.endIndex(of: "<span class=\"time\">")!..<bodyValue.index(of: "<span class=\"tit\">")!]
                 let starttime = time1[time1.startIndex..<time1.index(time1.startIndex, offsetBy: 5)]
-                let endtime = time1[time1.index(time1.startIndex, offsetBy: 8)..<time1.index(time1.startIndex, offsetBy: 13)]
+                var endtime = time1[time1.index(time1.startIndex, offsetBy: 8)..<time1.index(time1.startIndex, offsetBy: 13)]
+                
+                if ( endtime == "00:00" ) {
+                    endtime = "24:00"
+                }
+                
                 Log.print("start(\(starttime)) ~ end(\(endtime))")
                 let radioTimeInfo = RadioTimeInfo(starttime: String(starttime), endtime: String(endtime), interval: CloudRadioUtils.getDifftimeSecondForEndtime(endTime: String(endtime)))
                 RadioPlayer.curPlayTimeInfo = radioTimeInfo
@@ -258,22 +298,45 @@ class RadioChannelResources {
     
     // 0: powerFM, 1: loveFM
     static func setSBSAlbumArt(channelNameKeyword: String, isPlaying: Bool) {
-        let url = URL(string: "https://www.sbs.co.kr/ko/live?div=gnb_pc")
+        let address = "https://www.sbs.co.kr/" + RadioChannelResources.SBSLangType + "/live?div=gnb_pc"
+        let url = URL(string: address)
         do {
             let lolMain = try String(contentsOf: url!, encoding: .utf8)
             if let doc = try? HTML(html: lolMain, encoding: .utf8) {
                 
                 // Search for nodes by XPath
                 guard let value = doc.body?.toHTML else { return }
+
+                print(value)
                 
-                let jsonString = String(value[value.endIndex(of: "<script id=\"__NEXT_DATA__\" type=\"application/json\">")!..<value.index(of: "</script><script nomodule=")!]).trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
-                
-//                Log.print(jsonString)
+                var jsonString: String = ""
+                Log.print("sbs check base: \(value.contains("<script id=\"__NEXT_DATA__\" type=\"application/json\">")) ")
+                Log.print("sbs check 1: \(value.contains("</script><script nomodule=")) ")
+                Log.print("sbs check 2: \(value.contains("scriptLoader")) ")
+                if ( value.contains("</script><script nomodule=")) {
+                    Log.print("sbs case 1")
+                    jsonString = String(value[value.endIndex(of: "<script id=\"__NEXT_DATA__\" type=\"application/json\">")!..<value.index(of: "</script><script nomodule=")!]).trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+                } else if ( value.contains("scriptLoader") ) {
+                    Log.print("sbs case 2")
+                    let guessEndJsonIdx = value.index(value.index(of: "scriptLoader")!, offsetBy: 17)
+                    jsonString = String(value[value.endIndex(of: "<script id=\"__NEXT_DATA__\" type=\"application/json\">")!..<guessEndJsonIdx]).trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+                } else {
+                    Log.print("parse error. no matched keywords for programs")
+                    setDefaultAlbumArt(programName: channelNameKeyword)
+                    return
+                }
+//                Log.print("json: \(jsonString)")
                                 
                 // string to json
                 let json = JSON.init(parseJSON: jsonString)
                 let arrayLength = json["props"]["pageProps"]["radio"].count
                 Log.print("radio length: \(arrayLength) ")
+                
+                if ( arrayLength == 0 ) {
+                    Log.print("parse error. arrayLength is 0")
+                    setDefaultAlbumArt(programName: channelNameKeyword)
+                    return
+                }
 
                 for i in 0...arrayLength {
                     let radioList1 = json["props"]["pageProps"]["radio"].arrayValue[i]
@@ -283,8 +346,12 @@ class RadioChannelResources {
                     if channelname == channelNameKeyword {
                         let photo1 = radioList1["thumbimg"].stringValue
                         let title = radioList1["title"].stringValue
-                        let endtime = radioList1["endtime"].stringValue
+                        var endtime = radioList1["endtime"].stringValue
                         let starttime = radioList1["starttime"].stringValue
+                        
+                        if ( endtime == "00:00" ) {
+                            endtime = String("24:00")
+                        }
                         
                         Log.print("title: \(title)   startTime(\(starttime)) - endTime(\(endtime))")
                         let radioTimeInfo = RadioTimeInfo(starttime: starttime, endtime: endtime, interval: CloudRadioUtils.getDifftimeSecondForEndtime(endTime: endtime))
@@ -341,6 +408,10 @@ class RadioChannelResources {
                         let sepIdx = endtime.index(endtime.startIndex, offsetBy: 2)
                         starttime.insert(":", at: sepIdx)
                         endtime.insert(":", at: sepIdx)
+                        
+                        if ( endtime == "00:00" ) {
+                            endtime = String("24:00")
+                        }
                         
                         Log.print("title: \(title)   startTime(\(starttime)) - endTime(\(endtime))")
                         
@@ -412,11 +483,15 @@ class RadioChannelResources {
                     let timeFirstIndex = title1.index(title1.endIndex, offsetBy: -11)
 
                     let starttime = title1[timeFirstIndex..<timeSepIndex].trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
-                    let endtime = title1[timeLastIndex..<title1.endIndex].trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+                    var endtime = title1[timeLastIndex..<title1.endIndex].trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
 
+                    if ( endtime == "00:00" ) {
+                        endtime = String("24:00")
+                    }
                 
-                    Log.print("title: \(title)   startTime(\(starttime)) - endTime(\(endtime))")
-                    let radioTimeInfo = RadioTimeInfo(starttime: starttime, endtime: endtime, interval: CloudRadioUtils.getDifftimeSecondForEndtime(endTime: endtime))
+                    let interval = CloudRadioUtils.getDifftimeSecondForEndtime(endTime: endtime)
+                    Log.print("title: \(title)   startTime(\(starttime)) - endTime(\(endtime))  => interval: \(interval)")
+                    let radioTimeInfo = RadioTimeInfo(starttime: starttime, endtime: endtime, interval: interval)
                     RadioPlayer.curPlayTimeInfo = radioTimeInfo
                     
 //                    if ( isPlaying == false ) {
@@ -445,7 +520,7 @@ class RadioChannelResources {
     static func checkLiveChannel(channelName: String) -> Bool {
         var isLive: Bool = false
         switch(channelName) {
-        case "CBS Music", "AFN The Eagle", "AFN The Voice", "AFN Joe Radio", "AFN Legacy":
+        case "AFN The Eagle", "AFN The Voice", "AFN Joe Radio", "AFN Legacy":
             isLive = true
         default: break
         }
@@ -486,6 +561,16 @@ class RadioChannelResources {
         return index
     }
     
+    static var SBSLangType: String = "ko"
+    static func changeSBSLangType()  {
+        if ( SBSLangType == "ko" ) {
+            SBSLangType = "en"
+        } else {
+            SBSLangType = "ko"
+        }
+        Log.print("changeSBSLangType: \(RadioChannelResources.SBSLangType)")
+    }
+    
     static var CHANNELS: [RadioChannelModel] = [
         RadioChannelModel(playURL: "", address: "http://serpent0.duckdns.org:8088/kbsfm.pls", name: "KBS Classic FM", channelcode: 24),
         RadioChannelModel(playURL: "", address: "http://serpent0.duckdns.org:8088/mbcfm.pls", name: "MBC FM For U", channelcode: 0),
@@ -501,5 +586,21 @@ class RadioChannelResources {
         RadioChannelModel(playURL: "", address: "http://playerservices.streamtheworld.com/pls/AFN_VCE.pls", name: "AFN The Voice", channelcode: 0),
         RadioChannelModel(playURL: "", address: "http://playerservices.streamtheworld.com/pls/AFN_JOEP.pls", name: "AFN Joe Radio", channelcode: 0),
         RadioChannelModel(playURL: "", address: "http://playerservices.streamtheworld.com/pls/AFN_LGYP.pls", name: "AFN Legacy", channelcode: 0)
+    ]
+    
+    static var CBSMUSIC: [CBSMusicProgramTable] = [
+        CBSMusicProgramTable(starttime: "00:00", endtime: "02:00", programName: "시작하는 밤 박준입니다", ImageAddress: "http://zerolive7.iptime.org:9093/api/public/dl/WXAHL8Qo/01_project/cloudradio/CBSMusic_Images/0000_0200.jpg"),
+        CBSMusicProgramTable(starttime: "02:00", endtime: "04:00", programName: "이지민의 All that Jazz", ImageAddress: "http://zerolive7.iptime.org:9093/api/public/dl/1salVdVQ/01_project/cloudradio/CBSMusic_Images/0200_0400.jpg"),
+        CBSMusicProgramTable(starttime: "04:00", endtime: "06:00", programName: "김윤주의 내가 매일 기쁘게", ImageAddress: "http://zerolive7.iptime.org:9093/api/public/dl/wxtTPr0J/01_project/cloudradio/CBSMusic_Images/0400_0600.jpg"),
+        CBSMusicProgramTable(starttime: "06:00", endtime: "07:00", programName: "정민아의 Amazing grace", ImageAddress: "http://zerolive7.iptime.org:9093/api/public/dl/YDeKg4pC/01_project/cloudradio/CBSMusic_Images/0600_0700.jpg"),
+        CBSMusicProgramTable(starttime: "07:00", endtime: "09:00", programName: "김용신의 그대와 여는 아침", ImageAddress: "http://zerolive7.iptime.org:9093/api/public/dl/Y9zz-Rx0/01_project/cloudradio/CBSMusic_Images/0700_0900.gif"),
+        CBSMusicProgramTable(starttime: "09:00", endtime: "11:00", programName: "강석우의 아름다운 당신에게", ImageAddress: "http://zerolive7.iptime.org:9093/api/public/dl/6sl0QYZZ/01_project/cloudradio/CBSMusic_Images/0900_1100.jpg"),
+        CBSMusicProgramTable(starttime: "11:00", endtime: "12:00", programName: "신지혜의 영화음악", ImageAddress: "http://zerolive7.iptime.org:9093/api/public/dl/h3JcS460/01_project/cloudradio/CBSMusic_Images/1100_1200.jpg"),
+        CBSMusicProgramTable(starttime: "12:00", endtime: "14:00", programName: "이수영의 12시에 만납시다", ImageAddress: "http://zerolive7.iptime.org:9093/api/public/dl/4Vig49E3/01_project/cloudradio/CBSMusic_Images/1200_1400.jpg"),
+        CBSMusicProgramTable(starttime: "14:00", endtime: "16:00", programName: "한동준의 FM POPS", ImageAddress: "http://zerolive7.iptime.org:9093/api/public/dl/4_OotC_9/01_project/cloudradio/CBSMusic_Images/1400_1600.jpg"),
+        CBSMusicProgramTable(starttime: "16:00", endtime: "18:00", programName: "박승화의 가요속으로", ImageAddress: "http://zerolive7.iptime.org:9093/api/public/dl/h3DI0b90/01_project/cloudradio/CBSMusic_Images/1600_1800.jpg"),
+        CBSMusicProgramTable(starttime: "18:00", endtime: "20:00", programName: "배미향의 저녁스케치", ImageAddress: "http://zerolive7.iptime.org:9093/api/public/dl/IefmAi-M/01_project/cloudradio/CBSMusic_Images/1800_2000.jpeg"),
+        CBSMusicProgramTable(starttime: "20:00", endtime: "22:00", programName: "김현주의 행복한 동행", ImageAddress: "http://zerolive7.iptime.org:9093/api/public/dl/gV9CrC0w/01_project/cloudradio/CBSMusic_Images/2000_2200.jpg"),
+        CBSMusicProgramTable(starttime: "22:00", endtime: "24:00", programName: "허윤희의 꿈과 음악사이에", ImageAddress: "http://zerolive7.iptime.org:9093/api/public/dl/-_-QlO4o/01_project/cloudradio/CBSMusic_Images/2200_2400.jpg")
     ]
 }

@@ -249,6 +249,11 @@ class MainViewController: UIViewController {
     @objc func doProgramRefresh(timer: Timer) {
         Log.print("doProgramRefresh called at [\(CloudRadioUtils.getNowtimeStringSeconds())]")
 
+        if ( RadioPlayer.curChannelName.contains("SBS") ) {
+            Log.print("Change SBS LangTypes!")
+            RadioChannelResources.changeSBSLangType()
+        }
+        
         RadioPlayer.setAlbumArtPrepare(channelName: RadioPlayer.curChannelName, isPlaying: true)
 //        Log.print("TEST CALL")
 //        self.TEST_FOR_TIMER()

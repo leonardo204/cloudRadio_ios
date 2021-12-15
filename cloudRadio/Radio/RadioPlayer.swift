@@ -17,8 +17,9 @@ case initial, playing, stopped, paused, live, unknown
 
 class RadioPlayer {
     static var bPlaying: Bool = false
-    var player: AVPlayer?
+    var player: AVPlayer? = nil
     var curUrl: URL? = nil
+    var audioSession: AVAudioSession? = nil
     
     // current playing info
     static var curChannelName: String = "CloudRadio"
@@ -118,7 +119,7 @@ class RadioPlayer {
         case "SBS Power FM":
             RadioChannelResources.setSBSAlbumArt(channelNameKeyword: "POWER FM", isPlaying: isPlaying)
         case "CBS Music":
-            RadioChannelResources.setDefaultAlbumArt(programName: channelName)
+            RadioChannelResources.setCBSAlbumArt()
         case "TBS FM" :
             RadioChannelResources.setTBSAlbumArt(channelName: channelName, isPlaying: isPlaying)
         case "AFN The Eagle" , "AFN The Voice", "AFN Joe Radio", "AFN Legacy":
@@ -215,7 +216,7 @@ class RadioPlayer {
     func enableAudioSessionActive(enable: Bool) {
         do {
             Log.print("enableAudioSessionActive \(enable)")
-            try AVAudioSession.sharedInstance().setActive(enable)
+            try audioSession?.setActive(enable)
         } catch {
             Log.print("Error enableAudioSessionActive: \(error.localizedDescription)")
         }
@@ -239,6 +240,7 @@ class RadioPlayer {
         case .began:
             // An interruption began. Update the UI as necessary.
             Log.print("interrupt start")
+            self.pauseRadio()
 
         case .ended:
            // An interruption ended. Resume playback, if appropriate.
@@ -249,6 +251,8 @@ class RadioPlayer {
             if options.contains(.shouldResume) {
                 // An interruption ended. Resume playback.
                 Log.print("playback resume")
+                self.playRadio(channelName: RadioPlayer.curChannelName, channelUrl: RadioPlayer.curChannelUrl!)
+
             } else {
                 // An interruption ended. Don't resume playback.
                 Log.print("playback didn't resume")
@@ -263,14 +267,15 @@ class RadioPlayer {
 extension RadioPlayer: RadioPlayerDelegate {
     func setupAudioSession() {
         do {
-            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [])
-            try AVAudioSession.sharedInstance().setActive(true)
+            audioSession = AVAudioSession.sharedInstance()
+            try audioSession!.setCategory(.playback, mode: .default, options: [])
+            try audioSession!.setActive(true)
             
             // 1. 전화가 오는 등의 인터럽트 상황에 발생하는 Notification 등록
-//            NotificationCenter.default.addObserver(self,
-//                                                   selector: #selector(handleInterruption),
-//                                                   name: AVAudioSession.interruptionNotification,
-//                                                   object: AVAudioSession.sharedInstance)
+            NotificationCenter.default.addObserver(self,
+                                                   selector: #selector(handleInterruption),
+                                                   name: AVAudioSession.interruptionNotification,
+                                                   object: audioSession)
         } catch {
             Log.print("Error setting the AVAudioSession: \(error.localizedDescription)")
         }

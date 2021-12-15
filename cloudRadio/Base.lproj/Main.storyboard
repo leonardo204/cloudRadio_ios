@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="WEK-hQ-hlc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="WEK-hQ-hlc">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -282,40 +282,57 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="SettingTableView" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="5cQ-t9-xWp">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="SettingTableView" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="5cQ-t9-xWp">
                                 <rect key="frame" x="0.0" y="112" width="414" height="784"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="5cQ-t9-xWp" secondAttribute="height" multiplier="207:392" id="QMu-GI-rq2"/>
-                                    <constraint firstAttribute="height" constant="784" id="dQq-cn-TP4"/>
-                                    <constraint firstAttribute="width" constant="414" id="kIZ-CB-l8D"/>
+                                    <constraint firstAttribute="height" constant="784" id="BQb-yn-czL"/>
+                                    <constraint firstAttribute="width" constant="414" id="Zwf-bL-4Pl"/>
+                                    <constraint firstAttribute="width" secondItem="5cQ-t9-xWp" secondAttribute="height" multiplier="207:392" id="h0e-Oi-esm"/>
                                 </constraints>
                             </tableView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ibx-Zb-zBj">
-                                <rect key="frame" x="0.0" y="44" width="414" height="60"/>
+                                <rect key="frame" x="0.0" y="44" width="414" height="68"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="ibx-Zb-zBj" secondAttribute="height" multiplier="69:10" id="3qE-ct-y1Q"/>
-                                    <constraint firstAttribute="width" constant="414" id="FdG-kR-dfv"/>
-                                    <constraint firstAttribute="height" constant="60" id="dsR-v5-D3H"/>
+                                    <constraint firstAttribute="width" secondItem="ibx-Zb-zBj" secondAttribute="height" multiplier="207:34" id="7Ju-dp-ufs"/>
+                                    <constraint firstAttribute="width" constant="414" id="hWb-sA-x98"/>
+                                    <constraint firstAttribute="height" constant="68" id="jY1-B6-5Dt"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8d7-ST-jIf">
+                                <rect key="frame" x="327" y="61" width="67" height="34"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="67" id="G3Z-VH-q8C"/>
+                                    <constraint firstAttribute="width" secondItem="8d7-ST-jIf" secondAttribute="height" multiplier="67:34" id="frT-gC-etX"/>
+                                    <constraint firstAttribute="height" constant="34" id="sTu-ld-GZB"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Button" titleAlignment="center"/>
+                                <connections>
+                                    <action selector="SettingBackButtonClicked:" destination="ofZ-y6-c5s" eventType="touchUpInside" id="whf-k8-DBl"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="t6M-Bl-YC7"/>
                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="ibx-Zb-zBj" firstAttribute="trailing" secondItem="t6M-Bl-YC7" secondAttribute="trailing" id="4fE-nI-6Yo"/>
-                            <constraint firstItem="5cQ-t9-xWp" firstAttribute="leading" secondItem="t6M-Bl-YC7" secondAttribute="leading" id="55e-sa-82b"/>
-                            <constraint firstItem="ibx-Zb-zBj" firstAttribute="top" secondItem="t6M-Bl-YC7" secondAttribute="top" id="58X-vs-eY6"/>
-                            <constraint firstItem="5cQ-t9-xWp" firstAttribute="trailing" secondItem="t6M-Bl-YC7" secondAttribute="trailing" id="GZ0-Y0-85j"/>
-                            <constraint firstItem="ibx-Zb-zBj" firstAttribute="leading" secondItem="t6M-Bl-YC7" secondAttribute="leading" id="XR5-Y9-wUS"/>
-                            <constraint firstAttribute="bottom" secondItem="5cQ-t9-xWp" secondAttribute="bottom" id="eco-es-csK"/>
-                            <constraint firstItem="5cQ-t9-xWp" firstAttribute="top" secondItem="ibx-Zb-zBj" secondAttribute="bottom" constant="8" id="yd5-YV-UcM"/>
+                            <constraint firstItem="5cQ-t9-xWp" firstAttribute="top" secondItem="ibx-Zb-zBj" secondAttribute="bottom" id="04X-Ui-Fmk"/>
+                            <constraint firstAttribute="bottom" secondItem="5cQ-t9-xWp" secondAttribute="bottom" id="7em-pe-1gG"/>
+                            <constraint firstItem="5cQ-t9-xWp" firstAttribute="trailing" secondItem="t6M-Bl-YC7" secondAttribute="trailing" id="Hyc-JS-uoH"/>
+                            <constraint firstItem="5cQ-t9-xWp" firstAttribute="top" secondItem="8d7-ST-jIf" secondAttribute="bottom" constant="17" id="M5b-Gr-Tf1"/>
+                            <constraint firstItem="5cQ-t9-xWp" firstAttribute="leading" secondItem="t6M-Bl-YC7" secondAttribute="leading" id="Oc8-J5-TOB"/>
+                            <constraint firstItem="ibx-Zb-zBj" firstAttribute="top" secondItem="t6M-Bl-YC7" secondAttribute="top" id="Z04-55-cbO"/>
+                            <constraint firstItem="t6M-Bl-YC7" firstAttribute="trailing" secondItem="8d7-ST-jIf" secondAttribute="trailing" constant="20" id="cWY-YL-Ph5"/>
+                            <constraint firstItem="ibx-Zb-zBj" firstAttribute="trailing" secondItem="t6M-Bl-YC7" secondAttribute="trailing" id="ei9-nL-k1E"/>
+                            <constraint firstItem="8d7-ST-jIf" firstAttribute="top" secondItem="t6M-Bl-YC7" secondAttribute="top" constant="17" id="iY3-pZ-3s2"/>
+                            <constraint firstItem="ibx-Zb-zBj" firstAttribute="leading" secondItem="t6M-Bl-YC7" secondAttribute="leading" id="rVN-Ac-rYc"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="SettingBackButton" destination="8d7-ST-jIf" id="v81-PL-xId"/>
                         <outlet property="SettingViewHeaderLabel" destination="ibx-Zb-zBj" id="Yvc-D3-WuX"/>
                         <outlet property="settingTableView" destination="5cQ-t9-xWp" id="GyX-d8-vNB"/>
                     </connections>

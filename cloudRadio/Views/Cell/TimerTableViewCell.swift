@@ -27,7 +27,7 @@ class TimerTableViewCell: UITableViewCell {
     
     var radioStopTimer: Timer? = nil
     var drawTimeTimer: Timer? = nil
-    var valueTime = 0.0
+    var valueTime = CloudRadioShareValues.stopRadioTimerTime
     
     func setStopTimer(value: Double) {
         Log.print("setStopTimer: \(value)")
@@ -38,7 +38,7 @@ class TimerTableViewCell: UITableViewCell {
         self.radioStopTimer = Timer.scheduledTimer(timeInterval: TimeInterval(value), target: self, selector: #selector(requestStopRadio), userInfo: nil, repeats: false)
         CloudRadioShareValues.stopRadioTimer = self.radioStopTimer
 
-        valueTime = value - 1
+        CloudRadioShareValues.stopRadioTimerTime = value - 1
         self.drawTimeTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(drawTimerTime), userInfo: nil, repeats: true)
         CloudRadioShareValues.drawRadioTimeTimer = self.drawTimeTimer
     }
@@ -46,33 +46,30 @@ class TimerTableViewCell: UITableViewCell {
     func stopTimerTimer() {
         CloudRadioShareValues.stopRadioTimerisActive = false
         
-        if ( self.radioStopTimer?.isValid ) != nil {
-            self.radioStopTimer?.invalidate()
-            self.radioStopTimer = nil
+        if ( CloudRadioShareValues.stopRadioTimer?.isValid ) != nil {
+            CloudRadioShareValues.stopRadioTimer?.invalidate()
             CloudRadioShareValues.stopRadioTimer = nil
         }
 
-        if ( self.drawTimeTimer?.invalidate() ) != nil {
-            self.drawTimeTimer?.invalidate()
-            self.drawTimeTimer = nil
+        if ( CloudRadioShareValues.drawRadioTimeTimer?.invalidate() ) != nil {
+            CloudRadioShareValues.drawRadioTimeTimer?.invalidate()
             CloudRadioShareValues.drawRadioTimeTimer = nil
         }
     }
     
     @objc func drawTimerTime(timer: Timer) {
-        if ( valueTime > 0 ) {
-            let valuestring = CloudRadioUtils.getUTCDateString(timevalue: valueTime)
+        if ( CloudRadioShareValues.stopRadioTimerTime > 0 ) {
+            let valuestring = CloudRadioUtils.getUTCDateString(timevalue: CloudRadioShareValues.stopRadioTimerTime)
             Log.print("drawTimerTime Going \(valuestring)")
 
-            self.TimeLabel.text = valuestring
-            self.TimerSlider.value = Float(valueTime)
-            valueTime -= 1
-            CloudRadioShareValues.stopRadioTimerTime = valueTime
+            CloudRadioShareValues.TimeLabel?.text = valuestring
+            CloudRadioShareValues.TimeSlider?.value = Float(CloudRadioShareValues.stopRadioTimerTime)
+            CloudRadioShareValues.stopRadioTimerTime -= 1
+//            CloudRadioShareValues.stopRadioTimerTime = valueTime
         } else {
             Log.print("drawTimerTime End \(valueTime)")
 
-            self.drawTimeTimer?.invalidate()
-            self.drawTimeTimer = nil
+            CloudRadioShareValues.drawRadioTimeTimer?.invalidate()
             CloudRadioShareValues.drawRadioTimeTimer = nil
         }
     }
@@ -82,19 +79,26 @@ class TimerTableViewCell: UITableViewCell {
         CloudRadioShareValues.stopRadioSwitchisOn = self.TimerSwitch.isOn
         
         if ( self.TimerSwitch.isOn ) {
-            self.TimeLabel.isHidden = false
-            self.TimerSlider.isEnabled = true
+            CloudRadioShareValues.TimeLabel = self.TimeLabel
+            CloudRadioShareValues.TimeSlider = self.TimerSlider
+            CloudRadioShareValues.TimeLabel?.isHidden = false
+            CloudRadioShareValues.TimeSlider?.isEnabled = true
+            CloudRadioShareValues.TimeSlider?.minimumTrackTintColor = .systemBlue
 
-            let valuestring = CloudRadioUtils.getUTCDateString(timevalue: Double(round(self.TimerSlider.value)))
-            let value = Double(round(self.TimerSlider.value))
+
+            let valuestring = CloudRadioUtils.getUTCDateString(timevalue: Double(round(CloudRadioShareValues.TimeSlider!.value)))
+            let value = Double(round(CloudRadioShareValues.TimeSlider!.value))
             setStopTimer(value: value)
 
-            self.TimeLabel.text = valuestring
-            self.TimeLabel.textColor = .white
-            self.TimeLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
+            CloudRadioShareValues.TimeLabel?.text = valuestring
+            CloudRadioShareValues.TimeLabel?.textColor = .white
+            CloudRadioShareValues.TimeLabel?.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         } else {
-            self.TimeLabel.isHidden = true
-            self.TimerSlider.isEnabled = false
+            CloudRadioShareValues.TimeLabel?.isHidden = true
+            CloudRadioShareValues.TimeSlider?.isEnabled = false
+            CloudRadioShareValues.TimeSlider?.minimumTrackTintColor = .gray
+            CloudRadioShareValues.TimeLabel = nil
+            CloudRadioShareValues.TimeSlider = nil
             stopTimerTimer()
         }
     }
@@ -123,19 +127,37 @@ class TimerTableViewCell: UITableViewCell {
         // Background
         self.backgroundColor = .clear
         
-        if ( CloudRadioShareValues.stopRadioTimerisActive ) {
-            self.TimeLabel.isHidden = false
-            self.TimerSlider.isEnabled = true
+        // initialize
+        if CloudRadioShareValues.TimeLabel == nil {
+            CloudRadioShareValues.TimeLabel = self.TimeLabel
+        }
+        
+        if CloudRadioShareValues.TimeSlider == nil {
+            CloudRadioShareValues.TimeSlider = self.TimerSlider
+        }
 
+        
+        if ( CloudRadioShareValues.stopRadioTimerisActive ) {
+            stopTimerTimer()
+            
+            CloudRadioShareValues.TimeLabel?.isHidden = false
+            CloudRadioShareValues.TimeSlider?.isEnabled = true
+            
             let valuestring = CloudRadioUtils.getUTCDateString(timevalue: Double(CloudRadioShareValues.stopRadioTimerTime))
             Log.print("restart stopRadioTimer w/ \(valuestring)")
 
             let value = Double(Double(CloudRadioShareValues.stopRadioTimerTime))
             setStopTimer(value: value)
 
-            self.TimeLabel.text = valuestring
-            self.TimeLabel.textColor = .white
-            self.TimeLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
+            CloudRadioShareValues.TimeLabel?.text = valuestring
+            CloudRadioShareValues.TimeLabel?.textColor = .white
+            CloudRadioShareValues.TimeLabel?.font = UIFont.systemFont(ofSize: 12, weight: .medium)
+            CloudRadioShareValues.TimeSlider?.value = Float(CloudRadioShareValues.stopRadioTimerTime)
+            CloudRadioShareValues.TimeSlider?.minimumTrackTintColor = .systemBlue
+        } else {
+            CloudRadioShareValues.TimeLabel?.isHidden = true
+            CloudRadioShareValues.TimeSlider?.isEnabled = false
+            CloudRadioShareValues.TimeSlider?.minimumTrackTintColor = .gray
         }
     }
 

@@ -15,6 +15,8 @@
 		1F4F8012275DEB2A006E0733 /* TimerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4F8010275DEB2A006E0733 /* TimerTableViewCell.swift */; };
 		1F4F8013275DEB2A006E0733 /* TimerTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1F4F8011275DEB2A006E0733 /* TimerTableViewCell.xib */; };
 		1F4F8016275E9FED006E0733 /* CloudRadioShareValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4F8015275E9FEC006E0733 /* CloudRadioShareValues.swift */; };
+		1F4F801927673B78006E0733 /* ProgramInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4F801727673B77006E0733 /* ProgramInfoCell.swift */; };
+		1F4F801A27673B78006E0733 /* ProgramInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1F4F801827673B77006E0733 /* ProgramInfoCell.xib */; };
 		A3E37FFC63EC35CE59A44CC0 /* Pods_cloudRadio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29D46A8AB2B793599F464842 /* Pods_cloudRadio.framework */; };
 		C20E9E2225E1B79B001B1A11 /* SideMenuModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20E9E2125E1B79A001B1A11 /* SideMenuModel.swift */; };
 		C25EF4CE25D067D00086441F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25EF4CD25D067D00086441F /* AppDelegate.swift */; };
@@ -39,6 +41,8 @@
 		1F4F8010275DEB2A006E0733 /* TimerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerTableViewCell.swift; sourceTree = "<group>"; };
 		1F4F8011275DEB2A006E0733 /* TimerTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TimerTableViewCell.xib; sourceTree = "<group>"; };
 		1F4F8015275E9FEC006E0733 /* CloudRadioShareValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudRadioShareValues.swift; sourceTree = "<group>"; };
+		1F4F801727673B77006E0733 /* ProgramInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramInfoCell.swift; sourceTree = "<group>"; };
+		1F4F801827673B77006E0733 /* ProgramInfoCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ProgramInfoCell.xib; sourceTree = "<group>"; };
 		200FFA4529D68641B5256C36 /* Pods-cloudRadio.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cloudRadio.release.xcconfig"; path = "Target Support Files/Pods-cloudRadio/Pods-cloudRadio.release.xcconfig"; sourceTree = "<group>"; };
 		29D46A8AB2B793599F464842 /* Pods_cloudRadio.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_cloudRadio.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD89ADD52E60CBC22C5D2054 /* Pods-cloudRadio.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cloudRadio.debug.xcconfig"; path = "Target Support Files/Pods-cloudRadio/Pods-cloudRadio.debug.xcconfig"; sourceTree = "<group>"; };
@@ -95,6 +99,8 @@
 			children = (
 				1F4F8010275DEB2A006E0733 /* TimerTableViewCell.swift */,
 				1F4F8011275DEB2A006E0733 /* TimerTableViewCell.xib */,
+				1F4F801727673B77006E0733 /* ProgramInfoCell.swift */,
+				1F4F801827673B77006E0733 /* ProgramInfoCell.xib */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -245,6 +251,7 @@
 				C25EF4DA25D067D20086441F /* LaunchScreen.storyboard in Resources */,
 				C25EF4D725D067D20086441F /* Assets.xcassets in Resources */,
 				C25EF4D525D067D00086441F /* Main.storyboard in Resources */,
+				1F4F801A27673B78006E0733 /* ProgramInfoCell.xib in Resources */,
 				C25EF4EB25D06B6A0086441F /* SideMenuCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -305,6 +312,7 @@
 				C25EF52C25D09AC30086441F /* MainViewController.swift in Sources */,
 				1F4F8016275E9FED006E0733 /* CloudRadioShareValues.swift in Sources */,
 				C25EF4EA25D06B6A0086441F /* SideMenuCell.swift in Sources */,
+				1F4F801927673B78006E0733 /* ProgramInfoCell.swift in Sources */,
 				C25EF4D225D067D00086441F /* HomeViewController.swift in Sources */,
 				C25EF4CE25D067D00086441F /* AppDelegate.swift in Sources */,
 				1F398566274791EF00C6E395 /* RadioPlayer.swift in Sources */,
