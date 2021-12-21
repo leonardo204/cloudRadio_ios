@@ -74,7 +74,7 @@ class CloudRadioUtils {
 
         let nowDate = nowString.tad2Date()!
         
-        Log.print("getDifftimeSecond() now(\(nowString): \(nowDate.timeIntervalSince1970) - endTime(\(endTime): \(givenDateDouble))")
+        Log.print("getDifftimeSecondForEndtime() now(\(nowString): \(nowDate.timeIntervalSince1970) - endTime(\(endTime): \(givenDateDouble))")
         
         return (givenDateDouble - nowDate.timeIntervalSince1970)
     }
@@ -162,18 +162,15 @@ class CloudRadioUtils {
         } else {
             startDateDouble = dateFMT.date(from: startTime!)!.timeIntervalSince1970
         }
-        
-//        let startDate = dateFMT.date(from: startTime!)!
-        
-        var givenDateDouble: Double = 0.0
+                
+        var endDateDouble: Double = 0.0
         if ( endTime == "24:00" || endTime == "24:00:00" ) {
-            givenDateDouble = dateFMT.date(from: "23:59:00")!.timeIntervalSince1970 + (60*1000)
+            endDateDouble = dateFMT.date(from: "23:59:00")!.timeIntervalSince1970 + 60
         } else {
-            givenDateDouble = dateFMT.date(from: endTime!)!.timeIntervalSince1970
+            endDateDouble = dateFMT.date(from: endTime!)!.timeIntervalSince1970
         }
-//        let endDate = dateFMT.date(from: endTime!)!
         
-        return (givenDateDouble - startDateDouble)
+        return (endDateDouble - startDateDouble)
     }
     
     static func getRemains(endtime: String?) -> Double? {

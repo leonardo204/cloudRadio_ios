@@ -219,10 +219,10 @@ class RadioChannelResources {
     
     static func setCBSAlbumArt() {
         
-        for i in 0...CBSMUSIC.count {
+        for i in 0..<CBSMUSIC.count {
             guard let elapsed = CloudRadioUtils.getElapsedWithMin(startTime: CBSMUSIC[i].endtime) else { continue }
             Log.print("endtime: \(CBSMUSIC[i].endtime) . elapsed: \(elapsed)")
-            if elapsed < 0.0 {
+            if elapsed < 0.0 || elapsed == 80460 /* In case of 24:00 */ {
                 let addr = CBSMUSIC[i].ImageAddress
                 let url = URL(string: addr)
                 do {
