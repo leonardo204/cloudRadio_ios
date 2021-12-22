@@ -60,7 +60,7 @@ class CloudRadioUtils {
     static func getDifftimeSecondForEndtime(endTime: String) -> Double {
         var givenDateDouble: Double = 0.0
         if ( endTime == "24:00" ) {
-            givenDateDouble = "23:59".tad2Date()!.timeIntervalSince1970 + (60*1000)
+            givenDateDouble = "23:59".tad2Date()!.timeIntervalSince1970 + 60
         } else {
             givenDateDouble = endTime.tad2Date()!.timeIntervalSince1970
         }
@@ -96,7 +96,7 @@ class CloudRadioUtils {
 //        let startDate = startTime!.tad2Date()!
         var givenDateDouble: Double = 0.0
         if ( endTime == "24:00" ) {
-            givenDateDouble = "23:59".tad2Date()!.timeIntervalSince1970 + (60*1000)
+            givenDateDouble = "23:59".tad2Date()!.timeIntervalSince1970 + 60
         } else {
             givenDateDouble = endTime!.tad2Date()!.timeIntervalSince1970
         }
