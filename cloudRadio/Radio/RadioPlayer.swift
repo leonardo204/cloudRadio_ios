@@ -345,7 +345,7 @@ extension RadioPlayer: RadioPlayerDelegate {
         DispatchQueue.global().async {
             do {
                 let dataString = try String(contentsOf: URL(string: channelPLSAddress)!, encoding: .utf8)
-                Log.print(dataString)
+                Log.print("[addr: \(channelPLSAddress)] dataString=\(dataString)")
                 // if address is over than one
                 if ( dataString.contains("File2") ) {
                     let playAddress = String(dataString[dataString.endIndex(of: "File1=")!..<dataString.index(of: "File2")!]).trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
@@ -361,6 +361,14 @@ extension RadioPlayer: RadioPlayerDelegate {
                     let playAddress = String(dataString[dataString.endIndex(of: "File1=")!..<dataString.index(of: "Title1")!]).trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
                     Log.print("playAddress: (\(playAddress))")
                     guard let url = URL.init(string: playAddress)
+                        else {
+                            Log.print("Error for playing")
+                            return
+                    }
+                    self.playRadio(channelName: channelName, channelUrl: url)
+                } else if ( channelPLSAddress.contains("m3u8") ) {
+                    Log.print("m3u8 type!")
+                    guard let url = URL.init(string: channelPLSAddress)
                         else {
                             Log.print("Error for playing")
                             return

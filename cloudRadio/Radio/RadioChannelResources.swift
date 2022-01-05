@@ -580,7 +580,7 @@ class RadioChannelResources {
         RadioChannelModel(playURL: "", address: "http://serpent0.duckdns.org:8088/mbcsfm.pls", name: "MBC Standard FM", channelcode: 0),
         RadioChannelModel(playURL: "", address: "http://serpent0.duckdns.org:8088/kbs2radio.pls", name: "KBS Happy FM", channelcode: 22),
         RadioChannelModel(playURL: "", address: "http://serpent0.duckdns.org:8088/kbs1radio.pls", name: "KBS1 Radio", channelcode: 21),
-        RadioChannelModel(playURL: "", address: "https://korradio.stream/cbs.pls", name: "CBS Music", channelcode: 0),
+        RadioChannelModel(playURL: "", address: "http://aac.cbs.co.kr/cbs939/_definst_/cbs939.stream/playlist.m3u8", name: "CBS Music", channelcode: 0),
         RadioChannelModel(playURL: "", address: "https://tbs.seoul.kr/player/live.do?channelCode=CH_A", name: "TBS FM", channelcode: 0),
         RadioChannelModel(playURL: "", address: "http://playerservices.streamtheworld.com/pls/AFNP_OSN.pls", name: "AFN The Eagle", channelcode: 0),
         RadioChannelModel(playURL: "", address: "http://playerservices.streamtheworld.com/pls/AFN_VCE.pls", name: "AFN The Voice", channelcode: 0),
