@@ -164,7 +164,7 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
             guard let cell1 = tableView.dequeueReusableCell(withIdentifier: ProgramInfoCell.identifier, for: indexPath) as? ProgramInfoCell else { fatalError("TimerTableViewCell xib doesn't exist") }
             if ( indexPath.row == 0 ) {
                 cell1.title.text = "Version"
-                cell1.body.text = "v1.1 (2022. 1. 4)"
+                cell1.body.text = CloudRadioShareValues.versionString
             } else {
                 cell1.title.text = "Contact"
                 let underlineAttriString = NSAttributedString(string: "zerolive7@gmail.com", attributes: [NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue])

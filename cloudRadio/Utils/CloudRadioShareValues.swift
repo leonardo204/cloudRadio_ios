@@ -9,6 +9,9 @@ import Foundation
 import UIKit
 
 class CloudRadioShareValues {
+    // Version
+    static let versionString = "v1.2 (2022/1/5)"
+
     // RADIO TIMER
     static var stopRadioTimerTime = 0.0
     static var stopRadioSwitchisOn = false
