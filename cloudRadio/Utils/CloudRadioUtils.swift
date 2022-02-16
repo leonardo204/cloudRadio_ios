@@ -246,4 +246,42 @@ class CloudRadioUtils {
         let percent = Float(round((elapsed/duration)*1000)/1000)
         return percent
     }
+    
+    static func saveJsonData(data: CRAppInfo) {
+        print("saveJsonData")
+        let jsonEncoder = JSONEncoder()
+        do {
+            let encodedData = try jsonEncoder.encode(data)
+            print(String(data: encodedData, encoding: .utf8)!)
+            
+            guard let documentDirectoryUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
+            let fileURL = documentDirectoryUrl.appendingPathComponent("CRAppInfo.json")
+            
+            do {
+                try encodedData.write(to: fileURL)
+            } catch let error as NSError {
+                print(error)
+            }
+        } catch {
+            print(error)
+        }
+    }
+    
+    static func loadJsonFile() -> CRAppInfo? {
+        print("loadJsonData")
+        let jsonDecoder = JSONDecoder()
+        
+        do {
+            guard let documentDirectoryUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return nil }
+            let fileURL = documentDirectoryUrl.appendingPathComponent("CRAppInfo.json")
+            
+            let jsonData = try Data(contentsOf: fileURL, options: .mappedIfSafe)
+            
+            let decodedCRAppInfo = try jsonDecoder.decode(CRAppInfo.self, from: jsonData)
+            return decodedCRAppInfo
+        } catch {
+            print(error)
+            return nil
+        }
+    }
 }

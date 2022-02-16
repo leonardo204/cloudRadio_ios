@@ -82,6 +82,19 @@ class MainViewController: UIViewController {
         super.viewDidLoad()
         self.view.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
         
+        // load specialFeatures
+        if let appInfo = CloudRadioUtils.loadJsonFile() {
+            print("Found app info json")
+            if ( appInfo.isUnlocked ) {
+                print("Making awesome")
+                CloudRadioShareValues.isUnlocked = appInfo.isUnlocked
+                CloudRadioShareValues.versionString = CloudRadioShareValues.versionString + " (Awesome!)"
+            }
+        } else {
+            print("Can't load app info json.")
+        }
+        
+        
         // Shadow Background View
         self.sideMenuShadowView = UIView(frame: self.view.bounds)
         self.sideMenuShadowView.autoresizingMask = [.flexibleWidth, .flexibleHeight]

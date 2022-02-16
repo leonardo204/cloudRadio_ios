@@ -65,7 +65,26 @@ class ProgramInfoCell: UITableViewCell {
         if let range = text.range(of: NSLocalizedString("zerolive7@gmail.com", comment: "zerolive7@gmail.com")),
             recognizer.didTapAttributedTextInLabel(label: body, inRange: NSRange(range, in: text)) {
             goToContactToByEmail(address: text)
+        } else if let range = text.range(of: NSLocalizedString(CloudRadioShareValues.versionString, comment: CloudRadioShareValues.versionString)),
+                  recognizer.didTapAttributedTextInLabel(label: body, inRange: NSRange(range, in: text)) {
+            if ( !CloudRadioShareValues.isUnlocked ) {
+                CloudRadioShareValues.hiddenCount+=1
+                print("clicked version.... \(CloudRadioShareValues.hiddenCount)")
+                if ( CloudRadioShareValues.hiddenCount >= 40 ) {
+                    setUnlockFeature()
+                }
+            }
         }
+    }
+    
+    func setUnlockFeature() {
+        CloudRadioShareValues.versionString = CloudRadioShareValues.versionString + " (Awesome!)"
+        body.text = CloudRadioShareValues.versionString
+        CloudRadioShareValues.isUnlocked = true
+        
+        let appInfo = CRAppInfo(isUnlocked: true)
+        
+        CloudRadioUtils.saveJsonData(data: appInfo)
     }
     
     func goToContactToByEmail(address: String) {

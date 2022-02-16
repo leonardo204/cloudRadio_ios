@@ -10,7 +10,11 @@ import UIKit
 
 class CloudRadioShareValues {
     // Version
-    static let versionString = "v1.2 (2022/1/5)"
+    static var versionString = "v1.3"
+    
+    // hidden count
+    static var isUnlocked = false
+    static var hiddenCount = 0
 
     // RADIO TIMER
     static var stopRadioTimerTime = 0.0
@@ -34,4 +38,8 @@ class CloudRadioShareValues {
             CloudRadioShareValues.drawRadioTimeTimer = nil
         }
     }
+}
+
+struct CRAppInfo: Codable {
+    let isUnlocked: Bool
 }
