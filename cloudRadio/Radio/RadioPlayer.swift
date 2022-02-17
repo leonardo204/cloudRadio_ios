@@ -32,8 +32,8 @@ class RadioPlayer {
     static var curPlayInfo: PlayInfo? = nil
 
     func setRadioPlayerDefaultValues() {
-        RadioPlayer.curChannelName = "CloudRadio"
-        RadioPlayer.curProgramName = "OnAir Ready"
+//        RadioPlayer.curChannelName = "CloudRadio"
+//        RadioPlayer.curProgramName = "OnAir Ready"
         RadioPlayer.curAlbumUrl = nil
         RadioPlayer.curChannelUrl = nil
         RadioPlayer.curAlbumImg = nil

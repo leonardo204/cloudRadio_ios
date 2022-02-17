@@ -24,7 +24,7 @@ class SideMenuViewController: UIViewController {
 
     var defaultHighlightedCell: Int = 0
 
-    var menu: [SideMenuModel] = [
+    static var menu: [SideMenuModel] = [
         SideMenuModel(icon: UIImage(systemName: "music.note")!, title: "KBS Classic FM"),
         SideMenuModel(icon: UIImage(systemName: "music.note")!, title: "MBC FM For U"),
         SideMenuModel(icon: UIImage(systemName: "music.note")!, title: "KBS Cool FM"),
@@ -41,7 +41,7 @@ class SideMenuViewController: UIViewController {
         SideMenuModel(icon: UIImage(systemName: "music.note")!, title: "AFN Legacy")
     ]
     
-    var lockedMenu: [SideMenuModel] = [
+    static var lockedMenu: [SideMenuModel] = [
         SideMenuModel(icon: UIImage(systemName: "music.note")!, title: "AFN The Eagle"),
         SideMenuModel(icon: UIImage(systemName: "music.note")!, title: "AFN The Voice"),
         SideMenuModel(icon: UIImage(systemName: "music.note")!, title: "AFN Joe Radio"),
@@ -139,9 +139,9 @@ extension SideMenuViewController: UITableViewDelegate {
 extension SideMenuViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if ( CloudRadioShareValues.isUnlocked ) {
-            return self.menu.count
+            return SideMenuViewController.menu.count
         } else {
-            return self.lockedMenu.count
+            return SideMenuViewController.lockedMenu.count
         }
     }
 
@@ -149,11 +149,11 @@ extension SideMenuViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: SideMenuCell.identifier, for: indexPath) as? SideMenuCell else { fatalError("xib doesn't exist") }
                 
         if ( CloudRadioShareValues.isUnlocked ) {
-            cell.iconImageView.image = self.menu[indexPath.row].icon
-            cell.titleLabel.text = self.menu[indexPath.row].title
+            cell.iconImageView.image = SideMenuViewController.menu[indexPath.row].icon
+            cell.titleLabel.text = SideMenuViewController.menu[indexPath.row].title
         } else {
-            cell.iconImageView.image = self.lockedMenu[indexPath.row].icon
-            cell.titleLabel.text = self.lockedMenu[indexPath.row].title
+            cell.iconImageView.image = SideMenuViewController.lockedMenu[indexPath.row].icon
+            cell.titleLabel.text = SideMenuViewController.lockedMenu[indexPath.row].title
         }
         // Highlighted color
         let myCustomSelectionColorView = UIView()
@@ -164,9 +164,9 @@ extension SideMenuViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if ( CloudRadioShareValues.isUnlocked ) {
-            self.delegate?.selectedCell(indexPath.row, title: self.menu[indexPath.row].title)
+            self.delegate?.selectedCell(indexPath.row, title: SideMenuViewController.menu[indexPath.row].title)
         } else {
-            self.delegate?.selectedCell(indexPath.row, title: self.lockedMenu[indexPath.row].title)
+            self.delegate?.selectedCell(indexPath.row, title: SideMenuViewController.lockedMenu[indexPath.row].title)
         }
         // Remove highlighted color when you press the 'Profile' and 'Like us on facebook' cell
 //        if indexPath.row == 4 || indexPath.row == 6 {

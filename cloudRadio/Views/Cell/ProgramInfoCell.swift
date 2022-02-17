@@ -69,7 +69,7 @@ class ProgramInfoCell: UITableViewCell {
                   recognizer.didTapAttributedTextInLabel(label: body, inRange: NSRange(range, in: text)) {
             if ( !CloudRadioShareValues.isUnlocked ) {
                 CloudRadioShareValues.hiddenCount+=1
-                print("clicked version.... \(CloudRadioShareValues.hiddenCount)")
+                Log.print("clicked version.... \(CloudRadioShareValues.hiddenCount)")
                 if ( CloudRadioShareValues.hiddenCount >= 40 ) {
                     setUnlockFeature()
                 }
@@ -78,13 +78,28 @@ class ProgramInfoCell: UITableViewCell {
     }
     
     func setUnlockFeature() {
+        Log.print("unlock feature on!")
+        
+        // set version
         CloudRadioShareValues.versionString = CloudRadioShareValues.versionString + " (Awesome!)"
         body.text = CloudRadioShareValues.versionString
         CloudRadioShareValues.isUnlocked = true
         
+        // save unlocked flag
         let appInfo = CRAppInfo(isUnlocked: true)
-        
         CloudRadioUtils.saveJsonData(data: appInfo)
+        
+        // stop radio
+        NotificationCenter.default.post(name: .stopRadioMain, object: nil)
+        
+        // reset side menu
+        let idx = SideMenuViewController.menu.count - SideMenuViewController.lockedMenu.count + MainViewController.currentChannelIdx
+        Log.print("cur idx: \(MainViewController.currentChannelIdx) -> \(idx)")
+        NotificationCenter.default.post(name: .updateSideMenu, object: Int(idx))
+        
+        // start radio
+        let info = RadioChannelResources.getChannel(title: SideMenuViewController.menu[idx].title)
+        NotificationCenter.default.post(name: .startRadioMain, object: info)
     }
     
     func goToContactToByEmail(address: String) {

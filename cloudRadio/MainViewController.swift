@@ -49,6 +49,7 @@ extension Notification.Name {
     static let callTestTimeSettingMain = Notification.Name("callTestTimeSettingMain")
     static let startRadioTimerSettingsMain = Notification.Name("startRadioTimerSettingsMain")
     static let stopRadioTimerSettingsMain = Notification.Name("stopRadioTimerSettingsMain")
+    static let updateSideMenu = Notification.Name("updateSideMenu")
 }
 
 class MainViewController: UIViewController {
@@ -84,14 +85,14 @@ class MainViewController: UIViewController {
         
         // load specialFeatures
         if let appInfo = CloudRadioUtils.loadJsonFile() {
-            print("Found app info json")
+            Log.print("Found app info json")
             if ( appInfo.isUnlocked ) {
-                print("Making awesome")
+                Log.print("Making awesome")
                 CloudRadioShareValues.isUnlocked = appInfo.isUnlocked
                 CloudRadioShareValues.versionString = CloudRadioShareValues.versionString + " (Awesome!)"
             }
         } else {
-            print("Can't load app info json.")
+            Log.print("Can't load app info json.")
         }
         
         
@@ -159,6 +160,8 @@ class MainViewController: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(stopRadioTimerSettingsMain(_:)), name: .stopRadioTimerSettingsMain, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(startRadioTimerSettingsMain(_:)), name: .startRadioTimerSettingsMain, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(updateSideMenuMain(_:)), name: .updateSideMenu, object: nil)
 
         DispatchQueue.global().async {
             self.playerDelegate?.setupRemoteCommandCenter()
@@ -336,21 +339,35 @@ class MainViewController: UIViewController {
             Log.print("(ERROR) play info is invalid")
             return
         }
+        var info: PlayInfo? = nil
+        var curIdx = MainViewController.currentChannelIdx
+        let menuCount = SideMenuViewController.menu.count
+        let lockedMenuCount = SideMenuViewController.lockedMenu.count
+        var title = channelName
         
-        var idx = RadioChannelResources.getIndexByName(channelName: channelName)
-        Log.print("cur) Idx(\(idx)/\(RadioChannelResources.CHANNELS.count-1)) - channelName(\(channelName))")
-        
-        if ( idx == 0 ) {
-            idx = (RadioChannelResources.CHANNELS.count-1)
+        if ( CloudRadioShareValues.isUnlocked ) {
+            Log.print("cur) Idx(\(curIdx)/\(menuCount-1)) - channelName(\(channelName))")
+            if ( curIdx == 0 ) {
+                curIdx = (menuCount-1)
+            } else {
+                curIdx-=1
+            }
+            Log.print("next) Idx(\(curIdx)/\(menuCount-1)) - channelName(\(SideMenuViewController.menu[curIdx].title))")
+            title = SideMenuViewController.menu[curIdx].title
         } else {
-            idx-=1
+            Log.print("cur) Idx(\(curIdx)/\(lockedMenuCount-1)) - channelName(\(channelName))")
+            if ( curIdx == 0 ) {
+                curIdx = (lockedMenuCount-1)
+            } else {
+                curIdx-=1
+            }
+            Log.print("next) Idx(\(curIdx)/\(lockedMenuCount-1)) - channelName(\(SideMenuViewController.lockedMenu[curIdx].title))")
+            title = SideMenuViewController.lockedMenu[curIdx].title
         }
-        Log.print("next) Idx(\(idx)/\(RadioChannelResources.CHANNELS.count-1)) - channelName(\(RadioChannelResources.CHANNELS[idx].name))")
-
-        let info = RadioChannelResources.getChannel(title: RadioChannelResources.CHANNELS[idx].name)
+            
+        info = RadioChannelResources.getChannel(title: title)
         NotificationCenter.default.post(name: .startRadioMain, object: info)
-        
-        updateSideMenu(idx: idx)
+        updateSideMenu(idx: curIdx)
     }
     
     @objc func skipRadioMain(_ notification: NSNotification) {
@@ -359,20 +376,35 @@ class MainViewController: UIViewController {
             return
         }
         
-        var idx = RadioChannelResources.getIndexByName(channelName: channelName)
-        Log.print("cur) Idx(\(idx)/\(RadioChannelResources.CHANNELS.count-1)) - channelName(\(channelName))")
+        var info: PlayInfo? = nil
+        var curIdx = MainViewController.currentChannelIdx
+        let menuCount = SideMenuViewController.menu.count
+        let lockedMenuCount = SideMenuViewController.lockedMenu.count
+        var title = channelName
         
-        if ( idx == (RadioChannelResources.CHANNELS.count-1) ) {
-            idx = 0
+        if ( CloudRadioShareValues.isUnlocked ) {
+            Log.print("cur) Idx(\(curIdx)/\(menuCount-1)) - channelName(\(channelName))")
+            if ( curIdx == (menuCount-1) ) {
+                curIdx = 0
+            } else {
+                curIdx+=1
+            }
+            Log.print("next) Idx(\(curIdx)/\(menuCount-1)) - channelName(\(SideMenuViewController.menu[curIdx].title))")
+            title = SideMenuViewController.menu[curIdx].title
         } else {
-            idx+=1
+            Log.print("cur) Idx(\(curIdx)/\(lockedMenuCount-1)) - channelName(\(channelName))")
+            if ( curIdx == (lockedMenuCount-1) ) {
+                curIdx = 0
+            } else {
+                curIdx+=1
+            }
+            Log.print("next) Idx(\(curIdx)/\(lockedMenuCount-1)) - channelName(\(SideMenuViewController.lockedMenu[curIdx].title))")
+            title = SideMenuViewController.lockedMenu[curIdx].title
         }
-        Log.print("next) Idx(\(idx)/\(RadioChannelResources.CHANNELS.count-1)) - channelName(\(RadioChannelResources.CHANNELS[idx].name))")
-
-        let info = RadioChannelResources.getChannel(title: RadioChannelResources.CHANNELS[idx].name)
-        NotificationCenter.default.post(name: .startRadioMain, object: info)
         
-        updateSideMenu(idx: idx)
+        info = RadioChannelResources.getChannel(title: title)
+        NotificationCenter.default.post(name: .startRadioMain, object: info)
+        updateSideMenu(idx: curIdx)
     }
     
     @objc func stopRadioMain(_ notification: NSNotification) {
@@ -384,7 +416,7 @@ class MainViewController: UIViewController {
         CloudRadioShareValues.stopRadioTimerisActive = false
         CloudRadioShareValues.requestStopRadioTimer()
         
-        MainViewController.currentChannelIdx = -1
+//        MainViewController.currentChannelIdx = -1
         self.playerDelegate?.stopRadio()
     }
     
@@ -418,6 +450,15 @@ class MainViewController: UIViewController {
         DispatchQueue.main.async {
             self.sideMenuState(expanded: false)
             self.showViewController(viewController: UINavigationController.self, storyboardId: "HomeNavID")
+        }
+    }
+    
+    @objc func updateSideMenuMain(_ notification: NSNotification) {
+        if let idx = notification.object as? Int {
+            Log.print("updateSideMenu idx: \(idx)")
+            updateSideMenu(idx: idx)
+        } else {
+            Log.print("updateSideMenu is failed. wrong idx")
         }
     }
     

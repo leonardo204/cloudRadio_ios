@@ -248,11 +248,11 @@ class CloudRadioUtils {
     }
     
     static func saveJsonData(data: CRAppInfo) {
-        print("saveJsonData")
+        Log.print("saveJsonData")
         let jsonEncoder = JSONEncoder()
         do {
             let encodedData = try jsonEncoder.encode(data)
-            print(String(data: encodedData, encoding: .utf8)!)
+            Log.print(String(data: encodedData, encoding: .utf8)!)
             
             guard let documentDirectoryUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
             let fileURL = documentDirectoryUrl.appendingPathComponent("CRAppInfo.json")
@@ -260,15 +260,15 @@ class CloudRadioUtils {
             do {
                 try encodedData.write(to: fileURL)
             } catch let error as NSError {
-                print(error)
+                Log.print(error)
             }
         } catch {
-            print(error)
+            Log.print(error)
         }
     }
     
     static func loadJsonFile() -> CRAppInfo? {
-        print("loadJsonData")
+        Log.print("loadJsonData")
         let jsonDecoder = JSONDecoder()
         
         do {
@@ -280,7 +280,7 @@ class CloudRadioUtils {
             let decodedCRAppInfo = try jsonDecoder.decode(CRAppInfo.self, from: jsonData)
             return decodedCRAppInfo
         } catch {
-            print(error)
+            Log.print(error)
             return nil
         }
     }
