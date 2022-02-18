@@ -66,7 +66,7 @@ class SideMenuViewController: UIViewController {
         // Header
         // Create Attachment
         let imageAttachment = NSTextAttachment()
-        imageAttachment.image = UIImage(named:"earphones")
+        imageAttachment.image = UIImage(named:"sound-wave")
         // Set bound to reposition
         let imageOffsetY: CGFloat = 0
         imageAttachment.bounds = CGRect(x: 0, y: imageOffsetY, width: 20, height: 20)
