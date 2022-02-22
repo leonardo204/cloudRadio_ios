@@ -42,10 +42,6 @@ extension UIImageView {
     }
 }
 
-protocol HomeViewDelegate {
-    func updateAlbumArtDelegate(image: UIImage)
-}
-
 class HomeViewController: UIViewController {
 
     
@@ -73,7 +69,6 @@ class HomeViewController: UIViewController {
     static var albumArtPath: String = "http://zerolive7.iptime.org:9093/api/public/dl/CCxak7Jj/01_project/cloudradio/cosmos1.jpeg"
     
     static var homeViewInitialLoaded: Bool = true
-    static var homeViewDelegate: HomeViewDelegate?
     
     var progressTimer: Timer? = nil
     

@@ -29,11 +29,6 @@ protocol RadioPlayerDelegate {
     func setupRemoteCommandCenter()
 }
 
-//protocol HomeViewControllerDelegate {
-//    func setLabelText(text: String!)
-//    func setAlbumArt(path: String)
-//}
-
 extension Notification.Name {
     static let startRadioMain = Notification.Name("startRadioMain")
     static let startCurrentRadioMain = Notification.Name("startCurrentRadioMain")
@@ -54,6 +49,7 @@ extension Notification.Name {
 
 class MainViewController: UIViewController {
     private var sideMenuViewController: SideMenuViewController!
+    private var homeMenuViewcontroller: UIViewController? = nil
     private var sideMenuShadowView: UIView!
     private var sideMenuRevealWidth: CGFloat = 260
     private let paddingForRotation: CGFloat = 150
@@ -69,7 +65,6 @@ class MainViewController: UIViewController {
     var gestureEnabled: Bool = true
     
     var playerDelegate: RadioPlayerDelegate?
-    var homeViewDelegate: HomeViewDelegate?
     
     static var currentChannelIdx: Int = -1
     var mainRadioTimer: Timer?
@@ -138,7 +133,7 @@ class MainViewController: UIViewController {
         view.addGestureRecognizer(panGestureRecognizer)
 
         // Default Main View Controller
-        showViewController(viewController: UINavigationController.self, storyboardId: "HomeNavID")
+        showHomeViewController(viewController: UINavigationController.self, storyboardId: "HomeNavID")
         
         // player setting
         self.playerDelegate = RadioPlayer()
@@ -167,7 +162,7 @@ class MainViewController: UIViewController {
             self.playerDelegate?.setupRemoteCommandCenter()
         }
         
-        Log.print("MainViewController viewDidend")
+        Log.print(">>> MainViewController viewDidend")
     }
     
     @objc func startRadioTimerSettingsMain(_ notification: NSNotification) {
@@ -430,6 +425,7 @@ class MainViewController: UIViewController {
         if let info = notification.object as? PlayInfo {
             Log.print("startRadioMain: \(info.channelName), channelCode: \(info.channelCode)")
             
+            RadioPlayer.curPlayInfo = nil
             RadioPlayer.curPlayInfo = info
             
             // kbs has own channel code
@@ -449,7 +445,7 @@ class MainViewController: UIViewController {
     func showHomeMenu() {
         DispatchQueue.main.async {
             self.sideMenuState(expanded: false)
-            self.showViewController(viewController: UINavigationController.self, storyboardId: "HomeNavID")
+            self.showHomeViewController(viewController: UINavigationController.self, storyboardId: "HomeNavID")
         }
     }
     
@@ -465,10 +461,22 @@ class MainViewController: UIViewController {
     func updateSideMenu(idx: Int) {
         MainViewController.currentChannelIdx = idx
         
+        for subview in view.subviews {
+            if subview.tag == 999 {
+                Log.print("- updateSideMenu() Remove subviews -")
+                self.sideMenuViewController.willMove(toParent: nil)
+                self.sideMenuViewController.removeFromParent()
+                subview.removeFromSuperview()
+            }
+        }
+        
         let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
         self.sideMenuViewController = storyboard.instantiateViewController(withIdentifier: "SideMenuID") as? SideMenuViewController
         self.sideMenuViewController.defaultHighlightedCell = idx
         self.sideMenuViewController.delegate = self
+        
+        self.sideMenuViewController!.view.tag = 999
+        
         view.insertSubview(self.sideMenuViewController!.view, at: self.revealSideMenuOnTop ? 2 : 0)
         addChild(self.sideMenuViewController!)
         self.sideMenuViewController!.didMove(toParent: self)
@@ -551,7 +559,7 @@ class MainViewController: UIViewController {
 extension MainViewController: SideMenuViewControllerDelegate {
     func returnHomeScene() {
         self.currentSceneIndex = 0
-        self.showViewController(viewController: UINavigationController.self, storyboardId: "HomeNavID")
+        self.showHomeViewController(viewController: UINavigationController.self, storyboardId: "HomeNavID")
         // Collapse side menu with animation
         DispatchQueue.main.async { self.sideMenuState(expanded: false) }
     }
@@ -580,7 +588,7 @@ extension MainViewController: SideMenuViewControllerDelegate {
             self.sideMenuState(expanded: false)
             if self.currentSceneIndex != 0 {
                 self.currentSceneIndex = 0
-                self.showViewController(viewController: UINavigationController.self, storyboardId: "HomeNavID")
+                self.showHomeViewController(viewController: UINavigationController.self, storyboardId: "HomeNavID")
             }
         }
 
@@ -592,28 +600,36 @@ extension MainViewController: SideMenuViewControllerDelegate {
         }
     }
 
-    func showViewController<T: UIViewController>(viewController: T.Type, storyboardId: String) -> () {
+    func showHomeViewController<T: UIViewController>(viewController: T.Type, storyboardId: String) -> () {
         // Remove the previous View
         for subview in view.subviews {
             if subview.tag == 99 {
+                Log.print("- showViewController() Remove subviews -")
+                self.homeMenuViewcontroller?.willMove(toParent: nil)
+                self.homeMenuViewcontroller?.removeFromParent()
                 subview.removeFromSuperview()
             }
         }
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let vc = storyboard.instantiateViewController(withIdentifier: storyboardId) as! T
         
-        vc.view.tag = 99
-        view.insertSubview(vc.view, at: self.revealSideMenuOnTop ? 0 : 1)
-        addChild(vc)
+        
+        let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
+        guard let vc = storyboard.instantiateViewController(withIdentifier: storyboardId) as? T else {
+            Log.print("Can't get home nav view")
+            return
+        }
+        self.homeMenuViewcontroller = vc
+        self.homeMenuViewcontroller!.view.tag = 99
+        view.insertSubview(self.homeMenuViewcontroller!.view, at: self.revealSideMenuOnTop ? 0 : 1)
+        addChild(self.homeMenuViewcontroller!)
         if !self.revealSideMenuOnTop {
             if isExpanded {
-                vc.view.frame.origin.x = self.sideMenuRevealWidth
+                self.homeMenuViewcontroller!.view.frame.origin.x = self.sideMenuRevealWidth
             }
             if self.sideMenuShadowView != nil {
-                vc.view.addSubview(self.sideMenuShadowView)
+                self.homeMenuViewcontroller!.view.addSubview(self.sideMenuShadowView)
             }
         }
-        vc.didMove(toParent: self)
+        self.homeMenuViewcontroller!.didMove(toParent: self)
     }
 }
 

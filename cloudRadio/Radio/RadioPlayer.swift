@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Alamofire
 import AVKit
 import MediaPlayer
 import Kanna
@@ -55,14 +54,15 @@ class RadioPlayer {
         NotificationCenter.default.post(name: .stopRadioTimerMain, object: nil)
 
         self.player?.pause()
+        self.player = nil
         RadioPlayer.IsRadioPlaying = RadioPlayStatus.stopped
     }
     
     func pauseRadio()
     {
         Log.print("pauseRadio")
-        RadioPlayer.setAlbumArtPrepare(channelName: RadioPlayer.curChannelName, isPlaying: true)
-        RadioPlayer.setNowPlayingInfo(channelName: RadioPlayer.curChannelName, programName: RadioPlayer.curProgramName, toPlay: false)
+//        RadioPlayer.setAlbumArtPrepare(channelName: RadioPlayer.curChannelName, isPlaying: true)
+//        RadioPlayer.setNowPlayingInfo(channelName: RadioPlayer.curChannelName, programName: RadioPlayer.curProgramName, toPlay: false)
         self.player?.pause()
         RadioPlayer.IsRadioPlaying = RadioPlayStatus.paused
         NotificationCenter.default.post(name: .updateAlbumArtMain, object: nil)
@@ -73,9 +73,13 @@ class RadioPlayer {
         if ( self.isPlaying() ) {
             RadioPlayer.curPlayTimeInfo = nil
             self.player?.pause()
+            self.player = nil
             Log.print("stop previous radio")
+        } else if ( RadioPlayer.IsRadioPlaying == RadioPlayStatus.paused ) {
+            self.player?.play()
+            return
         }
-
+        
         RadioPlayer.curChannelName = channelName
         RadioPlayer.curChannelUrl = channelUrl
 

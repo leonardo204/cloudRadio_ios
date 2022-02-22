@@ -8,7 +8,6 @@
 import Foundation
 import UIKit
 import Kanna
-import Alamofire
 import SwiftyJSON
 
 struct MBCChannelJson: Codable {
@@ -284,12 +283,16 @@ class RadioChannelResources {
                     imgAddr = imgAddr[imgAddr.index(imgAddr.startIndex, offsetBy: 2)..<imgAddr.index(imgAddr.endIndex, offsetBy: -4)]
                     Log.print("imgAddr: \(imgAddr)")
 
-                    let url = URL(string: String(imgAddr))
+                    guard let encodedStr = imgAddr.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else { return }
+                    Log.print("encodedStr: \(encodedStr)")
+                    
+                    let url = URL(string: String(encodedStr))
                     let data = try Data(contentsOf: url!)
                     let image = UIImage(data: data)
                     RadioPlayer.curAlbumImg = image
-                    RadioPlayer.curAlbumUrl = String(imgAddr)
+                    RadioPlayer.curAlbumUrl = String(encodedStr)
                 }
+                
             }
         } catch let error {
             Log.print("Error: \(error)")
