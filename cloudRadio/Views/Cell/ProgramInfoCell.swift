@@ -87,7 +87,7 @@ class ProgramInfoCell: UITableViewCell {
         
         // save unlocked flag
         let appInfo = CRAppInfo(isUnlocked: true)
-        CloudRadioUtils.saveJsonData(data: appInfo)
+        CloudRadioUtils.saveAppInfoJson(data: appInfo)
         
         // stop radio
         NotificationCenter.default.post(name: .stopRadioMain, object: nil)

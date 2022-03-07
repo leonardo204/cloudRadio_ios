@@ -247,8 +247,8 @@ class CloudRadioUtils {
         return percent
     }
     
-    static func saveJsonData(data: CRAppInfo) {
-        Log.print("saveJsonData")
+    static func saveAppInfoJson(data: CRAppInfo) {
+        Log.print("saveAppInfoJson")
         let jsonEncoder = JSONEncoder()
         do {
             let encodedData = try jsonEncoder.encode(data)
@@ -267,8 +267,8 @@ class CloudRadioUtils {
         }
     }
     
-    static func loadJsonFile() -> CRAppInfo? {
-        Log.print("loadJsonData")
+    static func loadAppInfoJson() -> CRAppInfo? {
+        Log.print("loadAppInfoJson")
         let jsonDecoder = JSONDecoder()
         
         do {
@@ -279,6 +279,44 @@ class CloudRadioUtils {
             
             let decodedCRAppInfo = try jsonDecoder.decode(CRAppInfo.self, from: jsonData)
             return decodedCRAppInfo
+        } catch {
+            Log.print(error)
+            return nil
+        }
+    }
+    
+    static func saveChannelInfoJson(data: CRChannels) {
+        Log.print("saveChannelInfoJson")
+        let jsonEncoder = JSONEncoder()
+        do {
+            let encodedData = try jsonEncoder.encode(data)
+            Log.print(String(data: encodedData, encoding: .utf8)!)
+            
+            guard let documentDirectoryUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
+            let fileURL = documentDirectoryUrl.appendingPathComponent("CRChannels.json")
+            
+            do {
+                try encodedData.write(to: fileURL)
+            } catch let error as NSError {
+                Log.print(error)
+            }
+        } catch {
+            Log.print(error)
+        }
+    }
+    
+    static func loadChannelsJson() -> CRChannels? {
+        Log.print("loadChannelsJson")
+        let jsonDecoder = JSONDecoder()
+        
+        do {
+            guard let documentDirectoryUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return nil }
+            let fileURL = documentDirectoryUrl.appendingPathComponent("CRChannels.json")
+            
+            let jsonData = try Data(contentsOf: fileURL, options: .mappedIfSafe)
+            
+            let decodedInfo = try jsonDecoder.decode(CRChannels.self, from: jsonData)
+            return decodedInfo
         } catch {
             Log.print(error)
             return nil

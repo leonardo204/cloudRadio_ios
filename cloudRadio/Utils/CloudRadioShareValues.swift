@@ -43,3 +43,12 @@ class CloudRadioShareValues {
 struct CRAppInfo: Codable {
     let isUnlocked: Bool
 }
+
+struct CRChannels: Codable {
+    let channels: [CRChannelInfo]
+}
+
+struct CRChannelInfo: Codable {
+    let type: Int // 0: radio, 1: youtube playlist
+    let title: String
+}

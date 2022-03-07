@@ -15,6 +15,7 @@ class SettingsViewController: UIViewController {
     @IBOutlet weak var SettingViewHeaderLabel: UILabel!
     @IBOutlet weak var SettingBackButton: UIButton!
     
+    
     var delegate: TimerTableViewCellDelegate? = nil
     
     var stopTimer: Timer? = nil

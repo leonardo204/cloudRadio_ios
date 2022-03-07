@@ -7,7 +7,12 @@
 
 import UIKit
 
+enum CHANNELTYPE {
+    case RADIO, YOUTUBEPLAYLIST
+}
+
 struct SideMenuModel {
+    var type: CHANNELTYPE
     var icon: UIImage
     var title: String
 }

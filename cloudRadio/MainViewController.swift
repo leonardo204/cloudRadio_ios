@@ -73,13 +73,13 @@ class MainViewController: UIViewController {
     var settingRadioTimer: Timer?
 
     var currentSceneIndex: Int = 0
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
         
         // load specialFeatures
-        if let appInfo = CloudRadioUtils.loadJsonFile() {
+        if let appInfo = CloudRadioUtils.loadAppInfoJson() {
             Log.print("Found app info json")
             if ( appInfo.isUnlocked ) {
                 Log.print("Making awesome")
@@ -89,8 +89,7 @@ class MainViewController: UIViewController {
         } else {
             Log.print("Can't load app info json.")
         }
-        
-        
+                
         // Shadow Background View
         self.sideMenuShadowView = UIView(frame: self.view.bounds)
         self.sideMenuShadowView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -523,6 +522,8 @@ class MainViewController: UIViewController {
     }
 
     func sideMenuState(expanded: Bool) {
+        Log.print("sideMenuState: \(expanded)")
+
         if expanded {
             self.animateSideMenu(targetPosition: self.revealSideMenuOnTop ? 0 : self.sideMenuRevealWidth) { _ in
                 self.isExpanded = true
@@ -536,6 +537,8 @@ class MainViewController: UIViewController {
             }
             // Animate Shadow (Fade Out)
             UIView.animate(withDuration: 0.5) { self.sideMenuShadowView.alpha = 0.0 }
+            
+            NotificationCenter.default.post(name: Notification.Name("finishEdit"), object: nil)
         }
     }
     
