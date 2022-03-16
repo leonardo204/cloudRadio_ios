@@ -51,4 +51,5 @@ struct CRChannels: Codable {
 struct CRChannelInfo: Codable {
     let type: Int // 0: radio, 1: youtube playlist
     let title: String
+    let playlistId: String
 }

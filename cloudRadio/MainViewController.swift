@@ -335,8 +335,8 @@ class MainViewController: UIViewController {
         }
         var info: PlayInfo? = nil
         var curIdx = MainViewController.currentChannelIdx
-        let menuCount = SideMenuViewController.menu.count
-        let lockedMenuCount = SideMenuViewController.lockedMenu.count
+        let menuCount = sideMenuViewController.sideMenuData.menu.count
+        let lockedMenuCount = sideMenuViewController.sideMenuData.lockedMenu.count
         var title = channelName
         
         if ( CloudRadioShareValues.isUnlocked ) {
@@ -346,8 +346,8 @@ class MainViewController: UIViewController {
             } else {
                 curIdx-=1
             }
-            Log.print("next) Idx(\(curIdx)/\(menuCount-1)) - channelName(\(SideMenuViewController.menu[curIdx].title))")
-            title = SideMenuViewController.menu[curIdx].title
+            Log.print("next) Idx(\(curIdx)/\(menuCount-1)) - channelName(\(sideMenuViewController.sideMenuData.menu[curIdx].title))")
+            title = sideMenuViewController.sideMenuData.menu[curIdx].title
         } else {
             Log.print("cur) Idx(\(curIdx)/\(lockedMenuCount-1)) - channelName(\(channelName))")
             if ( curIdx == 0 ) {
@@ -355,8 +355,8 @@ class MainViewController: UIViewController {
             } else {
                 curIdx-=1
             }
-            Log.print("next) Idx(\(curIdx)/\(lockedMenuCount-1)) - channelName(\(SideMenuViewController.lockedMenu[curIdx].title))")
-            title = SideMenuViewController.lockedMenu[curIdx].title
+            Log.print("next) Idx(\(curIdx)/\(lockedMenuCount-1)) - channelName(\(sideMenuViewController.sideMenuData.lockedMenu[curIdx].title))")
+            title = sideMenuViewController.sideMenuData.lockedMenu[curIdx].title
         }
             
         info = RadioChannelResources.getChannel(title: title)
@@ -372,8 +372,8 @@ class MainViewController: UIViewController {
         
         var info: PlayInfo? = nil
         var curIdx = MainViewController.currentChannelIdx
-        let menuCount = SideMenuViewController.menu.count
-        let lockedMenuCount = SideMenuViewController.lockedMenu.count
+        let menuCount = sideMenuViewController.sideMenuData.menu.count
+        let lockedMenuCount = sideMenuViewController.sideMenuData.lockedMenu.count
         var title = channelName
         
         if ( CloudRadioShareValues.isUnlocked ) {
@@ -383,8 +383,8 @@ class MainViewController: UIViewController {
             } else {
                 curIdx+=1
             }
-            Log.print("next) Idx(\(curIdx)/\(menuCount-1)) - channelName(\(SideMenuViewController.menu[curIdx].title))")
-            title = SideMenuViewController.menu[curIdx].title
+            Log.print("next) Idx(\(curIdx)/\(menuCount-1)) - channelName(\(sideMenuViewController.sideMenuData.menu[curIdx].title))")
+            title = sideMenuViewController.sideMenuData.menu[curIdx].title
         } else {
             Log.print("cur) Idx(\(curIdx)/\(lockedMenuCount-1)) - channelName(\(channelName))")
             if ( curIdx == (lockedMenuCount-1) ) {
@@ -392,8 +392,8 @@ class MainViewController: UIViewController {
             } else {
                 curIdx+=1
             }
-            Log.print("next) Idx(\(curIdx)/\(lockedMenuCount-1)) - channelName(\(SideMenuViewController.lockedMenu[curIdx].title))")
-            title = SideMenuViewController.lockedMenu[curIdx].title
+            Log.print("next) Idx(\(curIdx)/\(lockedMenuCount-1)) - channelName(\(sideMenuViewController.sideMenuData.lockedMenu[curIdx].title))")
+            title = sideMenuViewController.sideMenuData.lockedMenu[curIdx].title
         }
         
         info = RadioChannelResources.getChannel(title: title)
@@ -595,7 +595,18 @@ extension MainViewController: SideMenuViewControllerDelegate {
             }
         }
 
+        // TODO
+        // Implment play youtube
         if ( MainViewController.currentChannelIdx != row  ) {
+            if !sideMenuViewController.sideMenuData.menuMirror.isEmpty {
+                if sideMenuViewController.sideMenuData.menuMirror[row].type == .YOUTUBEPLAYLIST {
+                    Log.print("start youtube ID: \(sideMenuViewController.sideMenuData.menuMirror[row].playlistId)")
+                    MainViewController.currentChannelIdx = row
+                    
+                    return
+                }
+            }
+            
             let info = RadioChannelResources.getChannel(title: title)
             MainViewController.currentChannelIdx = row
             Log.print("start radio: \(String(describing: info?.channelName))")

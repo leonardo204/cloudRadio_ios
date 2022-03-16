@@ -43,6 +43,8 @@ class ProgramInfoCell: UITableViewCell {
     class var identifier: String { return String(describing: self) }
     class var nib: UINib { return UINib(nibName: identifier, bundle: nil) }
     
+    var sideMenuData = SideMenuDataModel()
+    
     override func awakeFromNib() {
         super.awakeFromNib()
 
@@ -93,12 +95,12 @@ class ProgramInfoCell: UITableViewCell {
         NotificationCenter.default.post(name: .stopRadioMain, object: nil)
         
         // reset side menu
-        let idx = SideMenuViewController.menu.count - SideMenuViewController.lockedMenu.count + MainViewController.currentChannelIdx
+        let idx = sideMenuData.menu.count - sideMenuData.lockedMenu.count + MainViewController.currentChannelIdx
         Log.print("cur idx: \(MainViewController.currentChannelIdx) -> \(idx)")
         NotificationCenter.default.post(name: .updateSideMenu, object: Int(idx))
         
         // start radio
-        let info = RadioChannelResources.getChannel(title: SideMenuViewController.menu[idx].title)
+        let info = RadioChannelResources.getChannel(title: sideMenuData.menu[idx].title)
         NotificationCenter.default.post(name: .startRadioMain, object: info)
     }
     

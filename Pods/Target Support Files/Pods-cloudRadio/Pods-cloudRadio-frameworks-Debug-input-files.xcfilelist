@@ -2,3 +2,4 @@ ${PODS_ROOT}/Target Support Files/Pods-cloudRadio/Pods-cloudRadio-frameworks.sh
 ${BUILT_PRODUCTS_DIR}/Kanna/Kanna.framework
 ${BUILT_PRODUCTS_DIR}/QuickTableViewController/QuickTableViewController.framework
 ${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework
+${BUILT_PRODUCTS_DIR}/youtube-ios-player-helper-swift/youtube_ios_player_helper_swift.framework

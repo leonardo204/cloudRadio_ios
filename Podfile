@@ -10,4 +10,5 @@ target 'cloudRadio' do
   pod 'Kanna', '~> 5.2.2'
   pod 'SwiftyJSON', '~> 4.0'
   pod 'QuickTableViewController'
+  pod 'youtube-ios-player-helper-swift'
 end

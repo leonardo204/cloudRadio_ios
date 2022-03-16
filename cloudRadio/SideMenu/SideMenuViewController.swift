@@ -27,36 +27,8 @@ class SideMenuViewController: UIViewController {
     var defaultHighlightedCell: Int = 0
     var isChannelLoaded: Bool = false
     var isChannelAdded: Bool = false
-
-    static var menu: [SideMenuModel] = [
-        SideMenuModel(type: .RADIO, icon: UIImage(systemName: "music.note")!, title: "KBS Classic FM"),
-        SideMenuModel(type: .RADIO, icon: UIImage(systemName: "music.note")!, title: "MBC FM For U"),
-        SideMenuModel(type: .RADIO, icon: UIImage(systemName: "music.note")!, title: "KBS Cool FM"),
-        SideMenuModel(type: .RADIO, icon: UIImage(systemName: "music.note")!, title: "SBS Love FM"),
-        SideMenuModel(type: .RADIO, icon: UIImage(systemName: "music.note")!, title: "SBS Power FM"),
-        SideMenuModel(type: .RADIO, icon: UIImage(systemName: "music.note")!, title: "MBC Standard FM"),
-        SideMenuModel(type: .RADIO, icon: UIImage(systemName: "music.note")!, title: "KBS Happy FM"),
-        SideMenuModel(type: .RADIO, icon: UIImage(systemName: "music.note")!, title: "KBS1 Radio"),
-        SideMenuModel(type: .RADIO, icon: UIImage(systemName: "music.note")!, title: "CBS Music"),
-        SideMenuModel(type: .RADIO, icon: UIImage(systemName: "music.note")!, title: "TBS FM"),
-        SideMenuModel(type: .RADIO, icon: UIImage(systemName: "music.note")!, title: "AFN The Eagle"),
-        SideMenuModel(type: .RADIO, icon: UIImage(systemName: "music.note")!, title: "AFN The Voice"),
-        SideMenuModel(type: .RADIO, icon: UIImage(systemName: "music.note")!, title: "AFN Joe Radio"),
-        SideMenuModel(type: .RADIO, icon: UIImage(systemName: "music.note")!, title: "AFN Legacy")
-    ]
-    
-    static var lockedMenu: [SideMenuModel] = [
-        SideMenuModel(type: .RADIO, icon: UIImage(systemName: "music.note")!, title: "AFN The Eagle"),
-        SideMenuModel(type: .RADIO, icon: UIImage(systemName: "music.note")!, title: "AFN The Voice"),
-        SideMenuModel(type: .RADIO, icon: UIImage(systemName: "music.note")!, title: "AFN Joe Radio"),
-        SideMenuModel(type: .RADIO, icon: UIImage(systemName: "music.note")!, title: "AFN Legacy")
-    ]
-    
-    // 1. menu reordering 에 의해 순서가 바뀐 상태를 저장
-    // 2. 순서 바뀐 채로 editing 이 끝나면 json 으로 저장
-    // 3. 다음 side menu 구성 시 json 파일이 있다면, menuMirror 에 올려두고 사용
-    var menuMirror = [SideMenuModel]()
-    
+   
+    var sideMenuData = SideMenuDataModel()
     
     private var mainViewCon: MainViewController!
     
@@ -70,8 +42,8 @@ class SideMenuViewController: UIViewController {
                 if channels.channels[i].type == 1 {
                     type = .YOUTUBEPLAYLIST
                 }
-                let target = SideMenuModel(type: type, icon: UIImage(systemName: "music.note")!, title: channels.channels[i].title)
-                menuMirror.insert(target, at: i)
+                let target = SideMenuModel(type: type, icon: UIImage(systemName: "music.note")!, title: channels.channels[i].title, playlistId: channels.channels[i].playlistId)
+                sideMenuData.menuMirror.insert(target, at: i)
                 isChannelLoaded = true
             }
         }
@@ -206,10 +178,12 @@ class SideMenuViewController: UIViewController {
             guard let addr = alert.textFields?[1].text else { return }
             if addr != "" {
                 if addr.contains("youtube.com/playlist?list=") {
-                    let item = SideMenuModel(type: .YOUTUBEPLAYLIST, icon: UIImage(systemName:"music.note")!, title: name)
-                    Log.print("self.menuMirror.count: \(self.menuMirror.count)")
-                    self.menuMirror.insert(item, at: 0)
-                    self.dumpMenuMirror(menu: self.menuMirror)
+                    let id = addr[addr.endIndex(of: "youtube.com/playlist?list=")!..<addr.endIndex]
+                    Log.print("add id: \(String(id))")
+                    let item = SideMenuModel(type: .YOUTUBEPLAYLIST, icon: UIImage(systemName:"music.note")!, title: name, playlistId: String(id))
+                    Log.print("self.menuMirror.count: \(self.sideMenuData.menuMirror.count)")
+                    self.sideMenuData.menuMirror.insert(item, at: 0)
+                    self.dumpMenuMirror(menu: self.sideMenuData.menuMirror)
                     self.isChannelAdded = true
 
                     self.sideMenuTableView.beginUpdates()
@@ -232,13 +206,13 @@ class SideMenuViewController: UIViewController {
     private func saveChannels() {
         var channelInfo = [CRChannelInfo]()
         var type = 0
-        for i in 0..<menuMirror.count {
-            if menuMirror[i].type == .YOUTUBEPLAYLIST {
+        for i in 0..<self.sideMenuData.menuMirror.count {
+            if self.sideMenuData.menuMirror[i].type == .YOUTUBEPLAYLIST {
                 type = 1
             } else {
                 type = 0
             }
-            let info = CRChannelInfo(type: type, title: menuMirror[i].title)
+            let info = CRChannelInfo(type: type, title: self.sideMenuData.menuMirror[i].title, playlistId: self.sideMenuData.menuMirror[i].playlistId)
             channelInfo.insert(info, at: i)
         }
         let channels = CRChannels(channels: channelInfo)
@@ -265,8 +239,8 @@ extension SideMenuViewController: UITableViewDelegate {
     //tableView는 편집모드에서 editing Control과 겹치지 않도록 여백을 추가합니다. 이 여백은 editing Control의 여부와 상관없이 표시됩니다.
     //왼쪽의 빨간색 editing Control이 표시가 안되도록
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-        Log.print("edit stype[\(indexPath.row)]: \(menuMirror[indexPath.row].type)")
-        if menuMirror[indexPath.row].type == .RADIO {
+        Log.print("edit stype[\(indexPath.row)]: \(self.sideMenuData.menuMirror[indexPath.row].type)")
+        if self.sideMenuData.menuMirror[indexPath.row].type == .RADIO {
             return .none //none이라고 해서 cell편집이 금지되는것은 아님. 단지 cell왼쪽에 editing control이 표시되지 않는것
         }
         return .delete
@@ -274,7 +248,7 @@ extension SideMenuViewController: UITableViewDelegate {
     
     //editing Control이 있던 여백이 제거됨
     func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
-        if menuMirror[indexPath.row].type == .RADIO {
+        if self.sideMenuData.menuMirror[indexPath.row].type == .RADIO {
             return false
         }
         return true
@@ -286,12 +260,12 @@ extension SideMenuViewController: UITableViewDelegate {
 extension SideMenuViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if isChannelLoaded || isChannelAdded {
-            return self.menuMirror.count
+            return self.sideMenuData.menuMirror.count
         } else {
             if ( CloudRadioShareValues.isUnlocked ) {
-                return SideMenuViewController.menu.count
+                return self.sideMenuData.menu.count
             } else {
-                return SideMenuViewController.lockedMenu.count
+                return self.sideMenuData.lockedMenu.count
             }
         }
     }
@@ -302,18 +276,18 @@ extension SideMenuViewController: UITableViewDataSource {
         if !isChannelLoaded && !isChannelAdded {
             Log.print("sideMenuBuild from STATIC")
             if ( CloudRadioShareValues.isUnlocked ) {
-                cell.iconImageView.image = SideMenuViewController.menu[indexPath.row].icon
-                cell.titleLabel.text = SideMenuViewController.menu[indexPath.row].title
-                menuMirror.insert(SideMenuViewController.menu[indexPath.row], at: indexPath.row)
+                cell.iconImageView.image = self.sideMenuData.menu[indexPath.row].icon
+                cell.titleLabel.text = self.sideMenuData.menu[indexPath.row].title
+                self.sideMenuData.menuMirror.insert(self.sideMenuData.menu[indexPath.row], at: indexPath.row)
             } else {
-                cell.iconImageView.image = SideMenuViewController.lockedMenu[indexPath.row].icon
-                cell.titleLabel.text = SideMenuViewController.lockedMenu[indexPath.row].title
-                menuMirror.insert(SideMenuViewController.lockedMenu[indexPath.row], at: indexPath.row)
+                cell.iconImageView.image = self.sideMenuData.lockedMenu[indexPath.row].icon
+                cell.titleLabel.text = self.sideMenuData.lockedMenu[indexPath.row].title
+                self.sideMenuData.menuMirror.insert(self.sideMenuData.lockedMenu[indexPath.row], at: indexPath.row)
             }
         } else {
-            Log.print("sideMenuBuild from DYNAMIC \(menuMirror[indexPath.row].title)")
-            cell.iconImageView.image = menuMirror[indexPath.row].icon
-            cell.titleLabel.text = menuMirror[indexPath.row].title
+            Log.print("sideMenuBuild from DYNAMIC \(self.sideMenuData.menuMirror[indexPath.row].title)")
+            cell.iconImageView.image = self.sideMenuData.menuMirror[indexPath.row].icon
+            cell.titleLabel.text = self.sideMenuData.menuMirror[indexPath.row].title
         }
         
         // Highlighted color
@@ -330,8 +304,8 @@ extension SideMenuViewController: UITableViewDataSource {
 //        } else {
 //            self.delegate?.selectedCell(indexPath.row, title: SideMenuViewController.lockedMenu[indexPath.row].title)
 //        }
-        Log.print("select: \(menuMirror[indexPath.row].title)")
-        self.delegate?.selectedCell(indexPath.row, title: menuMirror[indexPath.row].title)
+        Log.print("select: \(self.sideMenuData.menuMirror[indexPath.row].title)")
+        self.delegate?.selectedCell(indexPath.row, title: self.sideMenuData.menuMirror[indexPath.row].title)
     }
     
     //편집 모드에서 순서를 바꾸는 기능은 기본적으로 비활성화 되어있습니다. 그래서 Reordering기능을 사용하고 싶다면 이 메서드에서 true를 리턴해야함
@@ -345,10 +319,10 @@ extension SideMenuViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         //실제로 데이터를 이동하는 코드를 구현
         Log.print("Move src: \(sourceIndexPath.row) ->  dest: \(destinationIndexPath.row)")
-        let target = menuMirror.remove(at: sourceIndexPath.row)
-        menuMirror.insert(target, at: destinationIndexPath.row)
+        let target = self.sideMenuData.menuMirror.remove(at: sourceIndexPath.row)
+        self.sideMenuData.menuMirror.insert(target, at: destinationIndexPath.row)
         
-        dumpMenuMirror(menu: menuMirror)
+        dumpMenuMirror(menu: self.sideMenuData.menuMirror)
     }
     
     func dumpMenuMirror(menu: [SideMenuModel]) {
@@ -359,7 +333,7 @@ extension SideMenuViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            self.menuMirror.remove(at: indexPath.row)
+            self.sideMenuData.menuMirror.remove(at: indexPath.row)
             self.sideMenuTableView.deleteRows(at: [indexPath], with: .fade)
         }
     }

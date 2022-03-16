@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -17,6 +17,8 @@
 		1F4F8016275E9FED006E0733 /* CloudRadioShareValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4F8015275E9FEC006E0733 /* CloudRadioShareValues.swift */; };
 		1F4F801927673B78006E0733 /* ProgramInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4F801727673B77006E0733 /* ProgramInfoCell.swift */; };
 		1F4F801A27673B78006E0733 /* ProgramInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1F4F801827673B77006E0733 /* ProgramInfoCell.xib */; };
+		1FD6F33E27E22A9A0030AF92 /* Youtube in Resources */ = {isa = PBXBuildFile; fileRef = 1FD6F33D27E22A9A0030AF92 /* Youtube */; };
+		1FD6F34127E22B280030AF92 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 1FD6F34027E22B280030AF92 /* Alamofire */; };
 		A3E37FFC63EC35CE59A44CC0 /* Pods_cloudRadio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29D46A8AB2B793599F464842 /* Pods_cloudRadio.framework */; };
 		C20E9E2225E1B79B001B1A11 /* SideMenuModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20E9E2125E1B79A001B1A11 /* SideMenuModel.swift */; };
 		C25EF4CE25D067D00086441F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25EF4CD25D067D00086441F /* AppDelegate.swift */; };
@@ -43,6 +45,7 @@
 		1F4F8015275E9FEC006E0733 /* CloudRadioShareValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudRadioShareValues.swift; sourceTree = "<group>"; };
 		1F4F801727673B77006E0733 /* ProgramInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramInfoCell.swift; sourceTree = "<group>"; };
 		1F4F801827673B77006E0733 /* ProgramInfoCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ProgramInfoCell.xib; sourceTree = "<group>"; };
+		1FD6F33D27E22A9A0030AF92 /* Youtube */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Youtube; sourceTree = "<group>"; };
 		200FFA4529D68641B5256C36 /* Pods-cloudRadio.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cloudRadio.release.xcconfig"; path = "Target Support Files/Pods-cloudRadio/Pods-cloudRadio.release.xcconfig"; sourceTree = "<group>"; };
 		29D46A8AB2B793599F464842 /* Pods_cloudRadio.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_cloudRadio.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD89ADD52E60CBC22C5D2054 /* Pods-cloudRadio.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cloudRadio.debug.xcconfig"; path = "Target Support Files/Pods-cloudRadio/Pods-cloudRadio.debug.xcconfig"; sourceTree = "<group>"; };
@@ -67,6 +70,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1FD6F34127E22B280030AF92 /* Alamofire in Frameworks */,
 				1F4F800F27547DA4006E0733 /* OSLog.framework in Frameworks */,
 				A3E37FFC63EC35CE59A44CC0 /* Pods_cloudRadio.framework in Frameworks */,
 			);
@@ -159,6 +163,7 @@
 				C22DF82F25D1917200FEB621 /* Views */,
 				C25EF4E225D06A2D0086441F /* SideMenu */,
 				C25EF52B25D09AC30086441F /* MainViewController.swift */,
+				1FD6F33D27E22A9A0030AF92 /* Youtube */,
 				C25EF4D325D067D00086441F /* Main.storyboard */,
 				C25EF4D625D067D20086441F /* Assets.xcassets */,
 				C25EF4D825D067D20086441F /* LaunchScreen.storyboard */,
@@ -206,6 +211,9 @@
 			dependencies = (
 			);
 			name = cloudRadio;
+			packageProductDependencies = (
+				1FD6F34027E22B280030AF92 /* Alamofire */,
+			);
 			productName = CustomSideMenuiOSExample;
 			productReference = C25EF4CA25D067D00086441F /* cloudRadio.app */;
 			productType = "com.apple.product-type.application";
@@ -233,6 +241,9 @@
 				Base,
 			);
 			mainGroup = C25EF4C125D067D00086441F;
+			packageReferences = (
+				1FD6F33F27E22B280030AF92 /* XCRemoteSwiftPackageReference "Alamofire" */,
+			);
 			productRefGroup = C25EF4CB25D067D00086441F /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -249,6 +260,7 @@
 			files = (
 				1F4F8013275DEB2A006E0733 /* TimerTableViewCell.xib in Resources */,
 				C25EF4DA25D067D20086441F /* LaunchScreen.storyboard in Resources */,
+				1FD6F33E27E22A9A0030AF92 /* Youtube in Resources */,
 				C25EF4D725D067D20086441F /* Assets.xcassets in Resources */,
 				C25EF4D525D067D00086441F /* Main.storyboard in Resources */,
 				1F4F801A27673B78006E0733 /* ProgramInfoCell.xib in Resources */,
@@ -527,6 +539,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		1FD6F33F27E22B280030AF92 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		1FD6F34027E22B280030AF92 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1FD6F33F27E22B280030AF92 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = C25EF4C225D067D00086441F /* Project object */;
 }
