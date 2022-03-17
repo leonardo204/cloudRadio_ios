@@ -74,11 +74,17 @@ class RadioPlayer {
             RadioPlayer.curPlayTimeInfo = nil
             self.player?.pause()
             self.player = nil
+            
             Log.print("stop previous radio")
         } else if ( RadioPlayer.IsRadioPlaying == RadioPlayStatus.paused ) {
             self.player?.play()
             return
+        } else if ( YoutubePlayer.IsYoutubePlaying == .playing ) {
+            DispatchQueue.main.async {
+                NotificationCenter.default.post(name: .stopRadioMain, object: nil)
+            }
         }
+        
         
         RadioPlayer.curChannelName = channelName
         RadioPlayer.curChannelUrl = channelUrl

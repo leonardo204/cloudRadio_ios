@@ -53,6 +53,9 @@ class YoutubePlaylistDownloader {
     }
     
     private func requestPlaylist() {
+        
+        self.vList.removeAll()
+        
         let url = apiURL + playlistId
         AF.request(url).responseDecodable(of: YoutubePlaylistDataRoot.self) { response in
             switch response.result {
@@ -65,7 +68,8 @@ class YoutubePlaylistDownloader {
                 var k = 0
                 for i in 0..<data.items.count {
                     // Ignore deleted video
-                    if data.items[i].snippet.title == "Deleted video" {
+                    if data.items[i].snippet.title == "Deleted video"
+                        || data.items[i].snippet.title == "Private video" {
                         k += 1
                         continue
                     }
@@ -113,7 +117,8 @@ class YoutubePlaylistDownloader {
                 }
                 var k = 0
                 for i in idx..<idx+data.items.count {
-                    if data.items[i-idx].snippet.title == "Deleted video" {
+                    if data.items[i-idx].snippet.title == "Deleted video"
+                        || data.items[i-idx].snippet.title == "Private video" {
                         k += 1
                         continue
                     }

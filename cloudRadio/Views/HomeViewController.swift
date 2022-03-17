@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import MarqueeLabel
 
 extension UIImageView {
     func load(url: URL) {
@@ -62,7 +63,7 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var progressView: UIProgressView!
     @IBOutlet weak var initialLabel: UILabel!
     var initialMessage: String = String("Welcome to CloudRadio")
-    @IBOutlet weak var programNameLabel: UILabel!
+    @IBOutlet weak var programNameLabel: MarqueeLabel!
     @IBOutlet weak var channelNameLabel: UILabel!
     static var channelName: String = String("")
     static var programName: String = String("")
@@ -176,7 +177,7 @@ class HomeViewController: UIViewController {
     func updateLabel() {
         Log.print("updateLabel ch: \(HomeViewController.channelName)  program: \(HomeViewController.programName)")
         
-        if ( RadioPlayer.IsRadioPlaying == RadioPlayStatus.initial ) {
+        if ( RadioPlayer.IsRadioPlaying == RadioPlayStatus.initial && YoutubePlayer.IsYoutubePlaying == .unknown ) {
             initialLabel.baselineAdjustment = .alignBaselines
             initialLabel.textAlignment = .center
             initialLabel.numberOfLines = 0
@@ -196,6 +197,7 @@ class HomeViewController: UIViewController {
             programNameLabel.textColor = .white
             programNameLabel.font = UIFont.systemFont(ofSize: 30, weight: .bold)
             programNameLabel.text = HomeViewController.programName
+            programNameLabel.speed = .duration(10)
             
             channelNameLabel.isHidden = false
             channelNameLabel.baselineAdjustment = .alignBaselines
@@ -220,7 +222,8 @@ class HomeViewController: UIViewController {
 //        Log.print("showMediaControllButtons")
         setButtonHideShow(hide: false)
         if ( RadioPlayer.IsRadioPlaying == RadioPlayStatus.playing
-             || RadioPlayer.IsRadioPlaying == RadioPlayStatus.live) {
+             || RadioPlayer.IsRadioPlaying == RadioPlayStatus.live
+             || YoutubePlayer.IsYoutubePlaying == .playing ) {
             self.playImageview.isHidden = true
             self.pauseImageview.isHidden = false
         } else {
@@ -263,6 +266,7 @@ class HomeViewController: UIViewController {
     
     @objc func doUpdateProgressBar(timer: Timer) {
         let bLiveChannel = RadioChannelResources.checkLiveChannel(channelName: RadioPlayer.curChannelName)
+        
         if ( RadioPlayer.IsRadioPlaying == RadioPlayStatus.live
             || (bLiveChannel && RadioPlayer.IsRadioPlaying == RadioPlayStatus.paused) ) {
             progressView.progressViewStyle = .bar
@@ -272,32 +276,46 @@ class HomeViewController: UIViewController {
             progressView.isHidden = false
             showMediaControllButtons()
         } else {
-            guard let starttime = RadioPlayer.curPlayTimeInfo?.starttime else {
-                Log.print("doUpdateProgressBar: starttime invalid")
-                progressView.isHidden = true
-                setButtonHideShow(hide: true)
-                starttimeLabel.isHidden = true
-                endtimeLabel.isHidden = true
-                progressTimer?.invalidate()
-                return
-            }
+            var duration: Double? = 0
+            var elapsed: Double? = 0
             
-            guard let endtime = RadioPlayer.curPlayTimeInfo?.endtime else {
-                Log.print("doUpdateProgressBar: endtime invalid")
-                progressView.isHidden = true
-                setButtonHideShow(hide: true)
-                starttimeLabel.isHidden = true
-                endtimeLabel.isHidden = true
-                progressTimer?.invalidate()
-                return
+            if YoutubePlayer.IsYoutubePlaying == .playing
+                || YoutubePlayer.IsYoutubePlaying == .paused {
+                duration = YoutubePlayer.getDurationTime()
+                elapsed = YoutubePlayer.getPlayTime()
+            } else {
+                guard let starttime = RadioPlayer.curPlayTimeInfo?.starttime else {
+                    Log.print("doUpdateProgressBar: starttime invalid")
+                    progressView.isHidden = true
+                    setButtonHideShow(hide: true)
+                    starttimeLabel.isHidden = true
+                    endtimeLabel.isHidden = true
+                    if YoutubePlayer.IsYoutubePlaying == .unknown {
+                        progressTimer?.invalidate()
+                    }
+                    return
+                }
+                
+                guard let endtime = RadioPlayer.curPlayTimeInfo?.endtime else {
+                    Log.print("doUpdateProgressBar: endtime invalid")
+                    progressView.isHidden = true
+                    setButtonHideShow(hide: true)
+                    starttimeLabel.isHidden = true
+                    endtimeLabel.isHidden = true
+                    if YoutubePlayer.IsYoutubePlaying == .unknown {
+                        progressTimer?.invalidate()
+                    }
+                    return
+                }
+                let starttimeSec = starttime + ":00"
+                let endtimeSec = endtime + ":00"
+                duration = CloudRadioUtils.getDuration(startTime: starttimeSec, endTime: endtimeSec)
+                elapsed = CloudRadioUtils.getElapsedWith(startTime: starttimeSec)
             }
 
+            guard let duration = duration else { return }
+            guard let elapsed = elapsed else { return }
             
-            let starttimeSec = starttime + ":00"
-            let endtimeSec = endtime + ":00"
-            guard let duration = CloudRadioUtils.getDuration(startTime: starttimeSec, endTime: endtimeSec) else { return }
-            guard let elapsed = CloudRadioUtils.getElapsedWith(startTime: starttimeSec) else { return }
-
             let percent = CloudRadioUtils.getPercentProgress(elapsed: elapsed, duration: duration)
 
     //        Log.print("doUpdateProgressBar percent: \(percent)")
@@ -310,7 +328,7 @@ class HomeViewController: UIViewController {
             showMediaControllButtons()
             showPlayTimeLable(elapsed: elapsed, duration: duration)
             
-            if ( RadioPlayer.IsRadioPlaying != RadioPlayStatus.playing ) {
+            if ( RadioPlayer.IsRadioPlaying != RadioPlayStatus.playing && YoutubePlayer.IsYoutubePlaying != .playing) {
                 Log.print("Finish progressView update! It's not playing state")
                 progressTimer?.invalidate()
             }

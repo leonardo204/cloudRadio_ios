@@ -17,8 +17,10 @@
 		1F4F8016275E9FED006E0733 /* CloudRadioShareValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4F8015275E9FEC006E0733 /* CloudRadioShareValues.swift */; };
 		1F4F801927673B78006E0733 /* ProgramInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4F801727673B77006E0733 /* ProgramInfoCell.swift */; };
 		1F4F801A27673B78006E0733 /* ProgramInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1F4F801827673B77006E0733 /* ProgramInfoCell.xib */; };
-		1FD6F33E27E22A9A0030AF92 /* Youtube in Resources */ = {isa = PBXBuildFile; fileRef = 1FD6F33D27E22A9A0030AF92 /* Youtube */; };
 		1FD6F34127E22B280030AF92 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 1FD6F34027E22B280030AF92 /* Alamofire */; };
+		1FD6F34927E361080030AF92 /* YoutubePlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD6F34627E361080030AF92 /* YoutubePlayer.swift */; };
+		1FD6F34A27E361080030AF92 /* YoutubePlaylistDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD6F34727E361080030AF92 /* YoutubePlaylistDownloader.swift */; };
+		1FD6F34B27E361080030AF92 /* YoutubePlaylistModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD6F34827E361080030AF92 /* YoutubePlaylistModel.swift */; };
 		A3E37FFC63EC35CE59A44CC0 /* Pods_cloudRadio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29D46A8AB2B793599F464842 /* Pods_cloudRadio.framework */; };
 		C20E9E2225E1B79B001B1A11 /* SideMenuModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20E9E2125E1B79A001B1A11 /* SideMenuModel.swift */; };
 		C25EF4CE25D067D00086441F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25EF4CD25D067D00086441F /* AppDelegate.swift */; };
@@ -45,7 +47,9 @@
 		1F4F8015275E9FEC006E0733 /* CloudRadioShareValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudRadioShareValues.swift; sourceTree = "<group>"; };
 		1F4F801727673B77006E0733 /* ProgramInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramInfoCell.swift; sourceTree = "<group>"; };
 		1F4F801827673B77006E0733 /* ProgramInfoCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ProgramInfoCell.xib; sourceTree = "<group>"; };
-		1FD6F33D27E22A9A0030AF92 /* Youtube */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Youtube; sourceTree = "<group>"; };
+		1FD6F34627E361080030AF92 /* YoutubePlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YoutubePlayer.swift; sourceTree = "<group>"; };
+		1FD6F34727E361080030AF92 /* YoutubePlaylistDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YoutubePlaylistDownloader.swift; sourceTree = "<group>"; };
+		1FD6F34827E361080030AF92 /* YoutubePlaylistModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YoutubePlaylistModel.swift; sourceTree = "<group>"; };
 		200FFA4529D68641B5256C36 /* Pods-cloudRadio.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cloudRadio.release.xcconfig"; path = "Target Support Files/Pods-cloudRadio/Pods-cloudRadio.release.xcconfig"; sourceTree = "<group>"; };
 		29D46A8AB2B793599F464842 /* Pods_cloudRadio.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_cloudRadio.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD89ADD52E60CBC22C5D2054 /* Pods-cloudRadio.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cloudRadio.debug.xcconfig"; path = "Target Support Files/Pods-cloudRadio/Pods-cloudRadio.debug.xcconfig"; sourceTree = "<group>"; };
@@ -109,6 +113,16 @@
 			path = Cell;
 			sourceTree = "<group>";
 		};
+		1FD6F34527E360F70030AF92 /* Youtube */ = {
+			isa = PBXGroup;
+			children = (
+				1FD6F34627E361080030AF92 /* YoutubePlayer.swift */,
+				1FD6F34727E361080030AF92 /* YoutubePlaylistDownloader.swift */,
+				1FD6F34827E361080030AF92 /* YoutubePlaylistModel.swift */,
+			);
+			path = Youtube;
+			sourceTree = "<group>";
+		};
 		57D7F770E6B980DBBF97215E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -158,12 +172,12 @@
 		C25EF4CC25D067D00086441F /* cloudRadio */ = {
 			isa = PBXGroup;
 			children = (
+				1FD6F34527E360F70030AF92 /* Youtube */,
 				1F4F8009274E22F2006E0733 /* Utils */,
 				1F3985642747919B00C6E395 /* Radio */,
 				C22DF82F25D1917200FEB621 /* Views */,
 				C25EF4E225D06A2D0086441F /* SideMenu */,
 				C25EF52B25D09AC30086441F /* MainViewController.swift */,
-				1FD6F33D27E22A9A0030AF92 /* Youtube */,
 				C25EF4D325D067D00086441F /* Main.storyboard */,
 				C25EF4D625D067D20086441F /* Assets.xcassets */,
 				C25EF4D825D067D20086441F /* LaunchScreen.storyboard */,
@@ -260,7 +274,6 @@
 			files = (
 				1F4F8013275DEB2A006E0733 /* TimerTableViewCell.xib in Resources */,
 				C25EF4DA25D067D20086441F /* LaunchScreen.storyboard in Resources */,
-				1FD6F33E27E22A9A0030AF92 /* Youtube in Resources */,
 				C25EF4D725D067D20086441F /* Assets.xcassets in Resources */,
 				C25EF4D525D067D00086441F /* Main.storyboard in Resources */,
 				1F4F801A27673B78006E0733 /* ProgramInfoCell.xib in Resources */,
@@ -325,6 +338,8 @@
 				1F4F8016275E9FED006E0733 /* CloudRadioShareValues.swift in Sources */,
 				C25EF4EA25D06B6A0086441F /* SideMenuCell.swift in Sources */,
 				1F4F801927673B78006E0733 /* ProgramInfoCell.swift in Sources */,
+				1FD6F34927E361080030AF92 /* YoutubePlayer.swift in Sources */,
+				1FD6F34B27E361080030AF92 /* YoutubePlaylistModel.swift in Sources */,
 				C25EF4D225D067D00086441F /* HomeViewController.swift in Sources */,
 				C25EF4CE25D067D00086441F /* AppDelegate.swift in Sources */,
 				1F398566274791EF00C6E395 /* RadioPlayer.swift in Sources */,
@@ -332,6 +347,7 @@
 				C25EF4D025D067D00086441F /* SceneDelegate.swift in Sources */,
 				1F4F800D27546E95006E0733 /* CloudRadioLogs.swift in Sources */,
 				1F4F800B274E2306006E0733 /* CloudRadioUtils.swift in Sources */,
+				1FD6F34A27E361080030AF92 /* YoutubePlaylistDownloader.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

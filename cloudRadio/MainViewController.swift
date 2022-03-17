@@ -45,6 +45,9 @@ extension Notification.Name {
     static let startRadioTimerSettingsMain = Notification.Name("startRadioTimerSettingsMain")
     static let stopRadioTimerSettingsMain = Notification.Name("stopRadioTimerSettingsMain")
     static let updateSideMenu = Notification.Name("updateSideMenu")
+    
+    static let updateAlbumArtMainYT = Notification.Name("updateAlbumArtMain")
+
 }
 
 class MainViewController: UIViewController {
@@ -73,6 +76,8 @@ class MainViewController: UIViewController {
     var settingRadioTimer: Timer?
 
     var currentSceneIndex: Int = 0
+    
+    let youtubePlayer = YoutubePlayer()
         
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -89,6 +94,9 @@ class MainViewController: UIViewController {
         } else {
             Log.print("Can't load app info json.")
         }
+        
+        // youtubePlayer
+        youtubePlayer.initialize()
                 
         // Shadow Background View
         self.sideMenuShadowView = UIView(frame: self.view.bounds)
@@ -149,6 +157,8 @@ class MainViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(updateAlbumArtMain(_:)), name: .updateAlbumArtMain, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(startRadioTimerMain(_:)), name: .startRadioTimerMain, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(stopRadioTimerMain(_:)), name: .stopRadioTimerMain, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(updateAlbumArtMainYT(_:)), name: .updateAlbumArtMainYT, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(callTestTimeSettingMain(_:)), name: .callTestTimeSettingMain, object: nil)
         
@@ -312,7 +322,14 @@ class MainViewController: UIViewController {
     @objc func updateAlbumArtMain(_ notification: NSNotification) {
         guard let url = RadioPlayer.curAlbumUrl else { return }
         HomeViewController.albumArtPath = url
-        Log.print("setAlbumArtMain(): \(HomeViewController.albumArtPath)")
+        Log.print("updateAlbumArtMain(): \(HomeViewController.albumArtPath)")
+        showHomeMenu()
+    }
+    
+    @objc func updateAlbumArtMainYT(_ notification: NSNotification) {
+        guard let url = youtubePlayer.curAlbumUrl else { return }
+        HomeViewController.albumArtPath = url
+        Log.print("updateAlbumArtMainYT(): \(HomeViewController.albumArtPath)")
         showHomeMenu()
     }
     
@@ -325,84 +342,98 @@ class MainViewController: UIViewController {
     @objc func pauseRadioMain(_ notification: NSNotification) {
         Log.print("pauseRadioMain")
 
-        self.playerDelegate?.pauseRadio()
+        if YoutubePlayer.IsYoutubePlaying == .playing {
+            self.youtubePlayer.pauseVideo()
+            self.youtubePlayer.updateVideoInfo()
+        } else {
+            self.playerDelegate?.pauseRadio()
+        }
     }
     
     @objc func previousRadioMain(_ notification: NSNotification) {
-        guard let channelName = RadioPlayer.curPlayInfo?.channelName else {
-            Log.print("(ERROR) play info is invalid")
-            return
-        }
-        var info: PlayInfo? = nil
-        var curIdx = MainViewController.currentChannelIdx
-        let menuCount = sideMenuViewController.sideMenuData.menu.count
-        let lockedMenuCount = sideMenuViewController.sideMenuData.lockedMenu.count
-        var title = channelName
-        
-        if ( CloudRadioShareValues.isUnlocked ) {
+        if YoutubePlayer.IsYoutubePlaying == .playing || YoutubePlayer.IsYoutubePlaying == .paused {
+            self.youtubePlayer.setCurrentVideoIndex(direction: .PREV)
+            self.youtubePlayer.requestNextVideo()
+        } else {
+            guard let channelName = RadioPlayer.curPlayInfo?.channelName else {
+                Log.print("(ERROR) play info is invalid")
+                return
+            }
+            
+            var info: PlayInfo? = nil
+            var curIdx = MainViewController.currentChannelIdx
+            let menuCount = sideMenuViewController.sideMenuData.menuMirror.count
+            var title = channelName
+            
             Log.print("cur) Idx(\(curIdx)/\(menuCount-1)) - channelName(\(channelName))")
             if ( curIdx == 0 ) {
                 curIdx = (menuCount-1)
             } else {
                 curIdx-=1
             }
-            Log.print("next) Idx(\(curIdx)/\(menuCount-1)) - channelName(\(sideMenuViewController.sideMenuData.menu[curIdx].title))")
-            title = sideMenuViewController.sideMenuData.menu[curIdx].title
-        } else {
-            Log.print("cur) Idx(\(curIdx)/\(lockedMenuCount-1)) - channelName(\(channelName))")
-            if ( curIdx == 0 ) {
-                curIdx = (lockedMenuCount-1)
-            } else {
-                curIdx-=1
-            }
-            Log.print("next) Idx(\(curIdx)/\(lockedMenuCount-1)) - channelName(\(sideMenuViewController.sideMenuData.lockedMenu[curIdx].title))")
-            title = sideMenuViewController.sideMenuData.lockedMenu[curIdx].title
-        }
+            Log.print("next) Idx(\(curIdx)/\(menuCount-1)) - channelName(\(sideMenuViewController.sideMenuData.menuMirror[curIdx].title))")
+
+            updateSideMenu(idx: curIdx)
             
-        info = RadioChannelResources.getChannel(title: title)
-        NotificationCenter.default.post(name: .startRadioMain, object: info)
-        updateSideMenu(idx: curIdx)
+            // check if next is youtube or not
+            if sideMenuViewController.sideMenuData.menuMirror[curIdx].type == .YOUTUBEPLAYLIST {
+                youtubePlayer.playlistName = sideMenuViewController.sideMenuData.menuMirror[curIdx].title
+                youtubePlayer.playlistId = sideMenuViewController.sideMenuData.menuMirror[curIdx].playlistId
+                NotificationCenter.default.post(name: .stopRadioMain, object: nil)
+            } else {
+                title = sideMenuViewController.sideMenuData.menuMirror[curIdx].title
+                info = RadioChannelResources.getChannel(title: title)
+                NotificationCenter.default.post(name: .startRadioMain, object: info)
+            }
+        }
     }
     
     @objc func skipRadioMain(_ notification: NSNotification) {
-        guard let channelName = RadioPlayer.curPlayInfo?.channelName else {
-            Log.print("(ERROR) play info is invalid")
-            return
-        }
-        
-        var info: PlayInfo? = nil
-        var curIdx = MainViewController.currentChannelIdx
-        let menuCount = sideMenuViewController.sideMenuData.menu.count
-        let lockedMenuCount = sideMenuViewController.sideMenuData.lockedMenu.count
-        var title = channelName
-        
-        if ( CloudRadioShareValues.isUnlocked ) {
+        if YoutubePlayer.IsYoutubePlaying == .playing || YoutubePlayer.IsYoutubePlaying == .paused {
+            self.youtubePlayer.setCurrentVideoIndex(direction: .NEXT)
+            self.youtubePlayer.requestNextVideo()
+        } else {
+            guard let channelName = RadioPlayer.curPlayInfo?.channelName else {
+                Log.print("(ERROR) play info is invalid")
+                return
+            }
+            
+            var info: PlayInfo? = nil
+            var curIdx = MainViewController.currentChannelIdx
+            let menuCount = sideMenuViewController.sideMenuData.menuMirror.count
+            //let lockedMenuCount = sideMenuViewController.sideMenuData.lockedMenu.count
+            var title = channelName
+            
             Log.print("cur) Idx(\(curIdx)/\(menuCount-1)) - channelName(\(channelName))")
             if ( curIdx == (menuCount-1) ) {
                 curIdx = 0
             } else {
                 curIdx+=1
             }
-            Log.print("next) Idx(\(curIdx)/\(menuCount-1)) - channelName(\(sideMenuViewController.sideMenuData.menu[curIdx].title))")
-            title = sideMenuViewController.sideMenuData.menu[curIdx].title
-        } else {
-            Log.print("cur) Idx(\(curIdx)/\(lockedMenuCount-1)) - channelName(\(channelName))")
-            if ( curIdx == (lockedMenuCount-1) ) {
-                curIdx = 0
+            Log.print("next) Idx(\(curIdx)/\(menuCount-1)) - channelName(\(sideMenuViewController.sideMenuData.menuMirror[curIdx].title))")
+            
+            updateSideMenu(idx: curIdx)
+
+            // check if next is youtube or not
+            if sideMenuViewController.sideMenuData.menuMirror[curIdx].type == .YOUTUBEPLAYLIST {
+                youtubePlayer.playlistName = sideMenuViewController.sideMenuData.menuMirror[curIdx].title
+                youtubePlayer.playlistId = sideMenuViewController.sideMenuData.menuMirror[curIdx].playlistId
+                NotificationCenter.default.post(name: .stopRadioMain, object: nil)
             } else {
-                curIdx+=1
+                title = sideMenuViewController.sideMenuData.menuMirror[curIdx].title
+                info = RadioChannelResources.getChannel(title: title)
+                NotificationCenter.default.post(name: .startRadioMain, object: info)
             }
-            Log.print("next) Idx(\(curIdx)/\(lockedMenuCount-1)) - channelName(\(sideMenuViewController.sideMenuData.lockedMenu[curIdx].title))")
-            title = sideMenuViewController.sideMenuData.lockedMenu[curIdx].title
         }
-        
-        info = RadioChannelResources.getChannel(title: title)
-        NotificationCenter.default.post(name: .startRadioMain, object: info)
-        updateSideMenu(idx: curIdx)
     }
     
     @objc func stopRadioMain(_ notification: NSNotification) {
         Log.print("stopRadioMain")
+        if ( YoutubePlayer.IsYoutubePlaying == .playing ) {
+            Log.print("do Stop Youtube")
+            youtubePlayer.stopVideo()
+            return
+        }
         stopAllTimer()
         
         CloudRadioShareValues.stopRadioTimerTime = 0
@@ -417,7 +448,12 @@ class MainViewController: UIViewController {
     @objc func startCurrentRadioMain(_ notification: NSNotification) {
         Log.print("startCurrentRadioMain")
 
-        self.playerDelegate?.playRadio(channelName: RadioPlayer.curChannelName, channelUrl: RadioPlayer.curChannelUrl!)
+        if YoutubePlayer.IsYoutubePlaying == .paused {
+            self.youtubePlayer.resumeVideo()
+            self.youtubePlayer.updateVideoInfo()
+        } else {
+            self.playerDelegate?.playRadio(channelName: RadioPlayer.curChannelName, channelUrl: RadioPlayer.curChannelUrl!)
+        }
     }
     
     @objc func startRadioMain(_ notification: NSNotification) {
@@ -603,6 +639,11 @@ extension MainViewController: SideMenuViewControllerDelegate {
                     Log.print("start youtube ID: \(sideMenuViewController.sideMenuData.menuMirror[row].playlistId)")
                     MainViewController.currentChannelIdx = row
                     
+                    // do download playlist first
+                    // After download finish, playYoutube will call automatically
+                    youtubePlayer.playlistName = sideMenuViewController.sideMenuData.menuMirror[row].title
+                    youtubePlayer.playlistId = sideMenuViewController.sideMenuData.menuMirror[row].playlistId
+                    NotificationCenter.default.post(name: .stopRadioMain, object: nil)
                     return
                 }
             }
