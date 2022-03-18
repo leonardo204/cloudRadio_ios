@@ -39,10 +39,13 @@ class SideMenuViewController: UIViewController {
             Log.print("Load channels from JSON: \(channels.channels.count)")
             for i in 0..<channels.channels.count {
                 var type: CHANNELTYPE = .RADIO
+                var image = UIImage(systemName: "music.note")
+
                 if channels.channels[i].type == 1 {
                     type = .YOUTUBEPLAYLIST
+                    image = UIImage(systemName: "headphones")
                 }
-                let target = SideMenuModel(type: type, icon: UIImage(systemName: "music.note")!, title: channels.channels[i].title, playlistId: channels.channels[i].playlistId)
+                let target = SideMenuModel(type: type, icon: image!, title: channels.channels[i].title, playlistId: channels.channels[i].playlistId)
                 sideMenuData.menuMirror.insert(target, at: i)
                 isChannelLoaded = true
             }
@@ -180,7 +183,7 @@ class SideMenuViewController: UIViewController {
                 if addr.contains("youtube.com/playlist?list=") {
                     let id = addr[addr.endIndex(of: "youtube.com/playlist?list=")!..<addr.endIndex]
                     Log.print("add id: \(String(id))")
-                    let item = SideMenuModel(type: .YOUTUBEPLAYLIST, icon: UIImage(systemName:"music.note")!, title: name, playlistId: String(id))
+                    let item = SideMenuModel(type: .YOUTUBEPLAYLIST, icon: UIImage(systemName:"waveform")!, title: name, playlistId: String(id))
                     Log.print("self.menuMirror.count: \(self.sideMenuData.menuMirror.count)")
                     self.sideMenuData.menuMirror.insert(item, at: 0)
                     self.dumpMenuMirror(menu: self.sideMenuData.menuMirror)
