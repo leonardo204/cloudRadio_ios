@@ -84,15 +84,18 @@ class MainViewController: UIViewController {
         self.view.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
         
         // load specialFeatures
-        if let appInfo = CloudRadioUtils.loadSettings(){
-            Log.print("Found app info json")
-            if ( appInfo.isUnlocked ) {
+        if let settingValue = CloudRadioUtils.loadSettings(){
+            Log.print("Found settings json")
+            CloudRadioShareValues.isUnlocked = settingValue.isUnlocked
+            CloudRadioShareValues.isShuffle = settingValue.isShuffle
+            CloudRadioShareValues.isRepeat = settingValue.isRepeat
+            
+            if ( CloudRadioShareValues.isUnlocked ) {
                 Log.print("Making awesome")
-                CloudRadioShareValues.isUnlocked = appInfo.isUnlocked
                 CloudRadioShareValues.versionString = CloudRadioShareValues.versionString + " (Awesome!)"
             }
         } else {
-            Log.print("Can't load app info json.")
+            Log.print("Can't load setting json.")
         }
         
         // youtubePlayer

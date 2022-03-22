@@ -15,8 +15,6 @@ class YoutubePlayer {
     private var IsNeedPlay = false
     var curIndex = 0
     var listCount = 0
-    var IsShuffle: Bool = CloudRadioShareValues.isShuffle
-    var IsRepeat: Bool = CloudRadioShareValues.isRepeat
     var state: YTPlayerState = .unknown
     var curAlbumUrl: String? = nil
     var ranList = [YoutubeVideLists]()
@@ -38,7 +36,7 @@ class YoutubePlayer {
     var waitTimeToPlay: Int = 0
     
     func initialize() {
-        Log.print("YoutubePlayer init() IsShuffle: \(IsShuffle) IsRepeat: \(IsRepeat)")
+        Log.print("YoutubePlayer init() IsShuffle: \(CloudRadioShareValues.isShuffle) IsRepeat: \(CloudRadioShareValues.isRepeat)")
         self.downloader.delegate = self
         
         let view = UIView()
@@ -50,11 +48,11 @@ class YoutubePlayer {
     }
     
     func updateVideoInfo() {
-        Log.print("updateVideoInfo()")
+        Log.print("updateVideoInfo() IsShuffle: \(CloudRadioShareValues.isShuffle) IsRepeat: \(CloudRadioShareValues.isRepeat)")
         YoutubePlayer.IsYoutubePlaying = .buffering
         HomeViewController.channelName = self.playlistName!
 
-        if IsShuffle {
+        if CloudRadioShareValues.isShuffle {
             HomeViewController.programName = self.ranList[curIndex].titles + "      "
             self.curAlbumUrl = self.ranList[curIndex].thumbnail
         } else {
@@ -91,7 +89,7 @@ class YoutubePlayer {
         
         Log.print("curIndx: \(curIndex)   size: \(String(describing: self.downloader.pList.list?.count))")
         
-        if IsShuffle {
+        if CloudRadioShareValues.isShuffle {
             videoId = self.ranList[curIndex].videoIds
         } else {
             videoId = self.downloader.pList.list![curIndex].videoIds
@@ -107,6 +105,7 @@ class YoutubePlayer {
             "fs": "0",
             "playsinline" : "1"
         ]
+
         if !ytView.load(videoId: videoId, playerVars: playerVars) {
             Log.print("loading failed")
         } else {
@@ -137,7 +136,7 @@ class YoutubePlayer {
     
     
     // 여러 가지 이유로 일부 비디오는 자동 재생이 되지 않는다.
-    // 약 3초 정도 기다린 후 재생되지 않으면, 다음 비디오로 넘긴다.
+    // 약 5초 정도 기다린 후 재생되지 않으면, 다음 비디오로 넘긴다.
     @objc func watchingPlayState(timer: Timer) {
         Log.print("watchingPlayState(\(self.waitTimeToPlay)): \(self.state)")
         self.waitTimeToPlay += 1
@@ -151,7 +150,7 @@ class YoutubePlayer {
         if self.waitTimeToPlay > 5 {
             Log.print("go Next Video by FORCE")
             // repeat=false, curIndex=99, listCount=100
-            if !IsRepeat && curIndex == (self.listCount-1) {
+            if !CloudRadioShareValues.isRepeat && curIndex == (self.listCount-1) {
                 Log.print("Playing Ends (Repeat false)")
             } else {
                 // 자동재생이 되지 않으면 state 도 안올라옴
@@ -163,13 +162,13 @@ class YoutubePlayer {
             self.watchTimer?.invalidate()
         }
     }
-    
+
     func setupAudioSession() {
         do {
             audioSession = AVAudioSession.sharedInstance()
             try audioSession!.setCategory(.playback, mode: .default, options: [])
             try audioSession!.setActive(true)
-            
+
             // 1. 전화가 오는 등의 인터럽트 상황에 발생하는 Notification 등록
             NotificationCenter.default.addObserver(self,
                                                    selector: #selector(handleInterruption),
@@ -179,15 +178,15 @@ class YoutubePlayer {
             Log.print("Error setting the AVAudioSession: \(error.localizedDescription)")
         }
     }
-    
+
     // 2. 처리
     @objc func handleInterruption(notification: Notification) {
-        Log.print("handleInterruption called")
-        
+        Log.print("YT) handleInterruption called")
+
         guard let userInfo = notification.userInfo,
             let typeValue = userInfo[AVAudioSessionInterruptionTypeKey] as? UInt,
             let type = AVAudioSession.InterruptionType(rawValue: typeValue) else {
-                Log.print("ERROR to handle interrupt")
+                Log.print("YT) ERROR to handle interrupt")
                 return
         }
 
@@ -196,29 +195,29 @@ class YoutubePlayer {
 
         case .began:
             // An interruption began. Update the UI as necessary.
-            Log.print("interrupt start")
+            Log.print("YT) interrupt start")
             if self.state == .playing {
                 self.pauseVideo()
             }
         case .ended:
            // An interruption ended. Resume playback, if appropriate.
-            Log.print("interrupt end")
+            Log.print("YT) interrupt end")
 
             guard let optionsValue = userInfo[AVAudioSessionInterruptionOptionKey] as? UInt else { return }
             let options = AVAudioSession.InterruptionOptions(rawValue: optionsValue)
             if options.contains(.shouldResume) {
                 // An interruption ended. Resume playback.
                 if self.state == .paused {
-                    Log.print("playback resume")
+                    Log.print("YT) playback resume")
                     self.resumeVideo()
                 }
 
             } else {
                 // An interruption ended. Don't resume playback.
-                Log.print("playback didn't resume")
+                Log.print("YT) playback didn't resume")
             }
         default:
-            Log.print("default?")
+            Log.print("YT) default?")
             break
         }
     }
@@ -275,7 +274,7 @@ extension YoutubePlayer: YTPlayerViewDelegate{
         case .ended:
             Log.print("go Next Video")
             // repeat=false, curIndex=99, listCount=100
-            if !IsRepeat && curIndex == (self.listCount-1) {
+            if !CloudRadioShareValues.isRepeat && curIndex == (self.listCount-1) {
                 Log.print("Playing Ends (Repeat false)")
             } else {
                 setCurrentVideoIndex(direction: PlayDirection.NEXT)
@@ -298,16 +297,17 @@ extension YoutubePlayer: YoutubePlaylistDownloaderDelegate {
     func downloadState(state: DownloadingState) {
         Log.print("downloadState: \(state)")
         if ( state == DownloadingState.FINISHED ) {
-            self.listCount = self.downloader.pList.list?.count ?? 0
-            for i in 0..<self.listCount {
-                self.ranList.insert(self.downloader.pList.list![i], at: i)
+            guard let list = self.downloader.pList.list else {
+                Log.print("Failed to get youtube playlist")
+                return
             }
-            self.ranList.shuffle()
+            self.listCount = list.count
+            self.ranList = list.shuffled()
             let videoId: String
-            if IsShuffle {
+            if CloudRadioShareValues.isShuffle {
                 videoId = self.ranList[curIndex].videoIds
             } else {
-                videoId = self.downloader.pList.list![curIndex].videoIds
+                videoId = list[curIndex].videoIds
             }
             let playerVars:[String: Any] = [
                 "controls" : "0",
