@@ -133,7 +133,8 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
 //        Log.print("section: \(indexPath.section) row: \(indexPath.row)")
         
         if ( indexPath.section == 0 ) {
-            guard let cell0 = tableView.dequeueReusableCell(withIdentifier: PlaylistSettingCell.identifier, for: indexPath) as? PlaylistSettingCell else { fatalError("PlaylistSettingCell xib doesn't exist")
+            guard let cell0 = tableView.dequeueReusableCell(withIdentifier: PlaylistSettingCell.identifier, for: indexPath) as? PlaylistSettingCell else {
+                fatalError("PlaylistSettingCell xib doesn't exist")
             }
             Log.print("making Setting table views. \(cell0.playlistSwitch.isOn)")
 
@@ -148,8 +149,7 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
             cell0.title.textColor = .white
             cell0.title.font = UIFont.systemFont(ofSize: 13, weight: .bold)
             cell0.title.textAlignment = .left
-            
-            
+                        
             let myCustomSelectionColorView = UIView()
             myCustomSelectionColorView.backgroundColor = #colorLiteral(red: 0.2605174184, green: 0.2605243921, blue: 0.260520637, alpha: 1)
             cell0.selectedBackgroundView = myCustomSelectionColorView
@@ -158,7 +158,8 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
 
         } else if ( indexPath.section == 1 ) {
             if ( indexPath.row == 0 ) {
-                guard let cell0 = tableView.dequeueReusableCell(withIdentifier: TimerTableViewCell.identifier, for: indexPath) as? TimerTableViewCell else { fatalError("TimerTableViewCell xib doesn't exist")
+                guard let cell0 = tableView.dequeueReusableCell(withIdentifier: TimerTableViewCell.identifier, for: indexPath) as? TimerTableViewCell else {
+                    fatalError("TimerTableViewCell xib doesn't exist")
                 }
                 
                 Log.print("making Setting table views. \(cell0.TimerSwitch.isOn) ")
@@ -186,12 +187,14 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
 
                 cell = cell0
             } else {
-                guard let cell0 = tableView.dequeueReusableCell(withIdentifier: TimerTableViewCell.identifier, for: indexPath) as? TimerTableViewCell else { fatalError("TimerTableViewCell xib doesn't exist") }
+                guard let cell0 = tableView.dequeueReusableCell(withIdentifier: TimerTableViewCell.identifier, for: indexPath) as? TimerTableViewCell else {
+                    fatalError("TimerTableViewCell xib doesn't exist") }
                 cell = cell0
             }
 
         } else if ( indexPath.section == 2 ) {
-            guard let cell1 = tableView.dequeueReusableCell(withIdentifier: ProgramInfoCell.identifier, for: indexPath) as? ProgramInfoCell else { fatalError("TimerTableViewCell xib doesn't exist") }
+            guard let cell1 = tableView.dequeueReusableCell(withIdentifier: ProgramInfoCell.identifier, for: indexPath) as? ProgramInfoCell else {
+                fatalError("TimerTableViewCell xib doesn't exist") }
             if ( indexPath.row == 0 ) {
                 cell1.title.text = "Version"
                 cell1.body.text = CloudRadioShareValues.versionString
