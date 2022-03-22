@@ -14,6 +14,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        registerforDeviceLockNotification()
         return true
     }
 
@@ -35,6 +36,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
            
         // 세로방향 고정
         return UIInterfaceOrientationMask.portrait
+    }
+    
+    func registerforDeviceLockNotification() {
+        //Screen lock notifications
+        CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(),     //center
+            Unmanaged.passUnretained(self).toOpaque(),     // observer
+            displayStatusChangedCallback,     // callback
+            "com.apple.springboard.lockcomplete" as CFString,     // event name
+            nil,     // object
+            .deliverImmediately)
+    }
+    
+    private let displayStatusChangedCallback: CFNotificationCallback = { _, cfObserver, cfName, _, _ in
+        guard let lockState = cfName?.rawValue as String? else {return}
+        if (lockState == "com.apple.springboard.lockcomplete") {
+            Log.print("DEVICE LOCKED")
+            CloudRadioShareValues.IsLockScreen = true
+            CloudRadioShareValues.LockedPlay = false
+        } else {
+            Log.print("LOCK STATUS CHANGED")
+            CloudRadioShareValues.IsLockScreen = false
+        }
     }
 }
 

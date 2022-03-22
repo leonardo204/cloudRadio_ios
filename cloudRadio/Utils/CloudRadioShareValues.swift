@@ -15,6 +15,10 @@ class CloudRadioShareValues {
     // hidden count
     static var isUnlocked = false
     static var hiddenCount = 0
+    
+    // LOCK SCREEN
+    static var IsLockScreen = false
+    static var LockedPlay = false
 
     // RADIO TIMER
     static var stopRadioTimerTime = 0.0

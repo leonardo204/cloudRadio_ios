@@ -1,5 +1,6 @@
 
 import youtube_ios_player_helper_swift
+import MediaPlayer
 
 enum PlayDirection {
     case PREV
@@ -9,7 +10,8 @@ enum PlayDirection {
 
 class YoutubePlayer {
     private let ytView = YTPlayerView()
-    
+    var audioSession: AVAudioSession? = nil
+
     private var IsNeedPlay = false
     var curIndex = 0
     var listCount = 0
@@ -162,6 +164,65 @@ class YoutubePlayer {
         }
     }
     
+    func setupAudioSession() {
+        do {
+            audioSession = AVAudioSession.sharedInstance()
+            try audioSession!.setCategory(.playback, mode: .default, options: [])
+            try audioSession!.setActive(true)
+            
+            // 1. 전화가 오는 등의 인터럽트 상황에 발생하는 Notification 등록
+            NotificationCenter.default.addObserver(self,
+                                                   selector: #selector(handleInterruption),
+                                                   name: AVAudioSession.interruptionNotification,
+                                                   object: audioSession)
+        } catch {
+            Log.print("Error setting the AVAudioSession: \(error.localizedDescription)")
+        }
+    }
+    
+    // 2. 처리
+    @objc func handleInterruption(notification: Notification) {
+        Log.print("handleInterruption called")
+        
+        guard let userInfo = notification.userInfo,
+            let typeValue = userInfo[AVAudioSessionInterruptionTypeKey] as? UInt,
+            let type = AVAudioSession.InterruptionType(rawValue: typeValue) else {
+                Log.print("ERROR to handle interrupt")
+                return
+        }
+
+        // Switch over the interruption type.
+        switch type {
+
+        case .began:
+            // An interruption began. Update the UI as necessary.
+            Log.print("interrupt start")
+            if self.state == .playing {
+                self.pauseVideo()
+            }
+        case .ended:
+           // An interruption ended. Resume playback, if appropriate.
+            Log.print("interrupt end")
+
+            guard let optionsValue = userInfo[AVAudioSessionInterruptionOptionKey] as? UInt else { return }
+            let options = AVAudioSession.InterruptionOptions(rawValue: optionsValue)
+            if options.contains(.shouldResume) {
+                // An interruption ended. Resume playback.
+                if self.state == .paused {
+                    Log.print("playback resume")
+                    self.resumeVideo()
+                }
+
+            } else {
+                // An interruption ended. Don't resume playback.
+                Log.print("playback didn't resume")
+            }
+        default:
+            Log.print("default?")
+            break
+        }
+    }
+    
     static func getDurationTime() -> Double {
         return Double(durationTime)
     }
@@ -197,6 +258,12 @@ extension YoutubePlayer: YTPlayerViewDelegate{
     func playerView(_ playerView: YTPlayerView, didChangeTo state: YTPlayerState) {
         if self.state != state {
             Log.print("playerView state: \(state)")
+            if CloudRadioShareValues.IsLockScreen && CloudRadioShareValues.LockedPlay == false {
+                Log.print("resumeVideo on LockScreen")
+                self.resumeVideo()
+                CloudRadioShareValues.LockedPlay = true
+                return
+            }
             self.state = state
         }
         YoutubePlayer.IsYoutubePlaying = self.state

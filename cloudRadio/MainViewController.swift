@@ -97,6 +97,7 @@ class MainViewController: UIViewController {
         
         // youtubePlayer
         youtubePlayer.initialize()
+        youtubePlayer.setupAudioSession()
                 
         // Shadow Background View
         self.sideMenuShadowView = UIView(frame: self.view.bounds)
@@ -170,7 +171,7 @@ class MainViewController: UIViewController {
         DispatchQueue.global().async {
             self.playerDelegate?.setupRemoteCommandCenter()
         }
-        
+
         Log.print(">>> MainViewController viewDidend")
     }
     

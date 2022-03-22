@@ -191,13 +191,13 @@ class RadioPlayer {
         commandCenter.playCommand.isEnabled = false
         commandCenter.playCommand.addTarget {event in
             Log.print("mediaCenter play")
-            self.playRadio(channelName: RadioPlayer.curChannelName, channelUrl: RadioPlayer.curChannelUrl!)
+            NotificationCenter.default.post(name: .startCurrentRadioMain, object: nil)
             return .success
         }
         commandCenter.pauseCommand.isEnabled = false
         commandCenter.pauseCommand.addTarget {event in
             Log.print("mediaCenter pause")
-            self.pauseRadio()
+            NotificationCenter.default.post(name: .pauseRadioMain, object: nil)
             return .success
         }
         commandCenter.nextTrackCommand.isEnabled = false
