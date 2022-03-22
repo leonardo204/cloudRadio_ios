@@ -84,7 +84,7 @@ class MainViewController: UIViewController {
         self.view.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
         
         // load specialFeatures
-        if let appInfo = CloudRadioUtils.loadAppInfoJson() {
+        if let appInfo = CloudRadioUtils.loadSettings(){
             Log.print("Found app info json")
             if ( appInfo.isUnlocked ) {
                 Log.print("Making awesome")

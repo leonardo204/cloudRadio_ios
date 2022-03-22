@@ -13,7 +13,8 @@ class YoutubePlayer {
     private var IsNeedPlay = false
     var curIndex = 0
     var listCount = 0
-    var IsShuffle: Bool = false
+    var IsShuffle: Bool = CloudRadioShareValues.isShuffle
+    var IsRepeat: Bool = CloudRadioShareValues.isRepeat
     var state: YTPlayerState = .unknown
     var curAlbumUrl: String? = nil
     var ranList = [YoutubeVideLists]()
@@ -30,9 +31,12 @@ class YoutubePlayer {
             }
         }
     }
-
+    
+    var watchTimer: Timer?
+    var waitTimeToPlay: Int = 0
+    
     func initialize() {
-        Log.print("YoutubePlayer init()")
+        Log.print("YoutubePlayer init() IsShuffle: \(IsShuffle) IsRepeat: \(IsRepeat)")
         self.downloader.delegate = self
         
         let view = UIView()
@@ -46,15 +50,24 @@ class YoutubePlayer {
     func updateVideoInfo() {
         Log.print("updateVideoInfo()")
         YoutubePlayer.IsYoutubePlaying = .buffering
-        HomeViewController.programName = (self.downloader.pList.list?[curIndex].titles)! + "      "
         HomeViewController.channelName = self.playlistName!
-        self.curAlbumUrl = self.downloader.pList.list?[curIndex].thumbnail
+
+        if IsShuffle {
+            HomeViewController.programName = self.ranList[curIndex].titles + "      "
+            self.curAlbumUrl = self.ranList[curIndex].thumbnail
+        } else {
+            HomeViewController.programName = (self.downloader.pList.list?[curIndex].titles)! + "      "
+            self.curAlbumUrl = self.downloader.pList.list?[curIndex].thumbnail
+        }
         
         NotificationCenter.default.post(name: .updateAlbumArtMainYT, object: nil)
     }
     
     func stopVideo() {
         Log.print("stopVideo() ~")
+        // 자동재생이 되지 않으면 state 도 안올라옴
+        self.state = .ended
+        self.waitTimeToPlay = 0
         self.curAlbumUrl = nil
         ytView.stopVideo()
     }
@@ -74,7 +87,7 @@ class YoutubePlayer {
         
         let videoId: String
         
-        Log.print("curIndx: \(curIndex)   size: \(self.downloader.pList.list?.count)")
+        Log.print("curIndx: \(curIndex)   size: \(String(describing: self.downloader.pList.list?.count))")
         
         if IsShuffle {
             videoId = self.ranList[curIndex].videoIds
@@ -120,6 +133,35 @@ class YoutubePlayer {
         }
     }
     
+    
+    // 여러 가지 이유로 일부 비디오는 자동 재생이 되지 않는다.
+    // 약 3초 정도 기다린 후 재생되지 않으면, 다음 비디오로 넘긴다.
+    @objc func watchingPlayState(timer: Timer) {
+        Log.print("watchingPlayState(\(self.waitTimeToPlay)): \(self.state)")
+        self.waitTimeToPlay += 1
+        
+        if self.state == .playing {
+            Log.print("Playing OK")
+            self.waitTimeToPlay  = 0
+            self.watchTimer?.invalidate()
+        }
+        
+        if self.waitTimeToPlay > 5 {
+            Log.print("go Next Video by FORCE")
+            // repeat=false, curIndex=99, listCount=100
+            if !IsRepeat && curIndex == (self.listCount-1) {
+                Log.print("Playing Ends (Repeat false)")
+            } else {
+                // 자동재생이 되지 않으면 state 도 안올라옴
+                self.state = .ended
+                setCurrentVideoIndex(direction: PlayDirection.NEXT)
+                requestNextVideo()
+            }
+            self.waitTimeToPlay  = 0
+            self.watchTimer?.invalidate()
+        }
+    }
+    
     static func getDurationTime() -> Double {
         return Double(durationTime)
     }
@@ -137,6 +179,8 @@ extension YoutubePlayer: YTPlayerViewDelegate{
             Log.print("PlayVideo() ~")
             ytView.playVideo()
             IsNeedPlay = false
+            self.watchTimer?.invalidate()
+            self.watchTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.watchingPlayState), userInfo: nil, repeats: true)
         }
     }
     
@@ -163,8 +207,13 @@ extension YoutubePlayer: YTPlayerViewDelegate{
             break
         case .ended:
             Log.print("go Next Video")
-            setCurrentVideoIndex(direction: PlayDirection.NEXT)
-            requestNextVideo()
+            // repeat=false, curIndex=99, listCount=100
+            if !IsRepeat && curIndex == (self.listCount-1) {
+                Log.print("Playing Ends (Repeat false)")
+            } else {
+                setCurrentVideoIndex(direction: PlayDirection.NEXT)
+                requestNextVideo()
+            }
             break
         case .unknown, .unstarted:
             Log.print("ERROR?")
@@ -183,7 +232,16 @@ extension YoutubePlayer: YoutubePlaylistDownloaderDelegate {
         Log.print("downloadState: \(state)")
         if ( state == DownloadingState.FINISHED ) {
             self.listCount = self.downloader.pList.list?.count ?? 0
-            let videoId = self.downloader.pList.list?[curIndex].videoIds ?? "m3DZsBw5bnE"
+            for i in 0..<self.listCount {
+                self.ranList.insert(self.downloader.pList.list![i], at: i)
+            }
+            self.ranList.shuffle()
+            let videoId: String
+            if IsShuffle {
+                videoId = self.ranList[curIndex].videoIds
+            } else {
+                videoId = self.downloader.pList.list![curIndex].videoIds
+            }
             let playerVars:[String: Any] = [
                 "controls" : "0",
                 "showinfo" : "0",

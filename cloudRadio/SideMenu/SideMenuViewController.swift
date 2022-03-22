@@ -183,7 +183,7 @@ class SideMenuViewController: UIViewController {
                 if addr.contains("youtube.com/playlist?list=") {
                     let id = addr[addr.endIndex(of: "youtube.com/playlist?list=")!..<addr.endIndex]
                     Log.print("add id: \(String(id))")
-                    let item = SideMenuModel(type: .YOUTUBEPLAYLIST, icon: UIImage(systemName:"waveform")!, title: name, playlistId: String(id))
+                    let item = SideMenuModel(type: .YOUTUBEPLAYLIST, icon: UIImage(systemName:"headphones")!, title: name, playlistId: String(id))
                     Log.print("self.menuMirror.count: \(self.sideMenuData.menuMirror.count)")
                     self.sideMenuData.menuMirror.insert(item, at: 0)
                     self.dumpMenuMirror(menu: self.sideMenuData.menuMirror)

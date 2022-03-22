@@ -247,15 +247,18 @@ class CloudRadioUtils {
         return percent
     }
     
-    static func saveAppInfoJson(data: CRAppInfo) {
+    static func saveSettings() {
         Log.print("saveAppInfoJson")
+        
+        let settings = CRSettings(isUnlocked: CloudRadioShareValues.isUnlocked, isShuffle: CloudRadioShareValues.isShuffle, isRepeat: CloudRadioShareValues.isRepeat)
+        
         let jsonEncoder = JSONEncoder()
         do {
-            let encodedData = try jsonEncoder.encode(data)
+            let encodedData = try jsonEncoder.encode(settings)
             Log.print(String(data: encodedData, encoding: .utf8)!)
             
             guard let documentDirectoryUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
-            let fileURL = documentDirectoryUrl.appendingPathComponent("CRAppInfo.json")
+            let fileURL = documentDirectoryUrl.appendingPathComponent("CRSettings.json")
             
             do {
                 try encodedData.write(to: fileURL)
@@ -267,17 +270,17 @@ class CloudRadioUtils {
         }
     }
     
-    static func loadAppInfoJson() -> CRAppInfo? {
-        Log.print("loadAppInfoJson")
+    static func loadSettings() -> CRSettings? {
+        Log.print("loadSettings")
         let jsonDecoder = JSONDecoder()
         
         do {
             guard let documentDirectoryUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return nil }
-            let fileURL = documentDirectoryUrl.appendingPathComponent("CRAppInfo.json")
+            let fileURL = documentDirectoryUrl.appendingPathComponent("CRSettings.json")
             
             let jsonData = try Data(contentsOf: fileURL, options: .mappedIfSafe)
             
-            let decodedCRAppInfo = try jsonDecoder.decode(CRAppInfo.self, from: jsonData)
+            let decodedCRAppInfo = try jsonDecoder.decode(CRSettings.self, from: jsonData)
             return decodedCRAppInfo
         } catch {
             Log.print(error)

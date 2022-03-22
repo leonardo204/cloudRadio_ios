@@ -52,6 +52,7 @@ class SettingsViewController: UIViewController {
         self.settingTableView.sectionHeaderHeight = UITableView.automaticDimension
         
         // cell nib register
+        self.settingTableView.register(PlaylistSettingCell.nib, forCellReuseIdentifier: PlaylistSettingCell.identifier)
         self.settingTableView.register(TimerTableViewCell.nib, forCellReuseIdentifier: TimerTableViewCell.identifier)
         self.settingTableView.register(ProgramInfoCell.nib, forCellReuseIdentifier: ProgramInfoCell.identifier)
 
@@ -84,20 +85,23 @@ class SettingsViewController: UIViewController {
         if ( CloudRadioShareValues.stopRadioSwitchisOn && CloudRadioShareValues.stopRadioTimerisActive ) {
             NotificationCenter.default.post(name: .startRadioTimerSettingsMain, object: nil)
         }
+        
+        CloudRadioUtils.saveSettings()
     }
 }
 
 extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 3
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         var title = "Secion"
         switch section {
-            case 0: title = "자동 종료 설정"
-            case 1: title = "프로그램 정보"
+            case 0: title = "플레이리스트 재생 설정"
+            case 1: title = "자동 종료 설정"
+            case 2: title = "프로그램 정보"
             default: break;
         }
         return title
@@ -129,8 +133,33 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
 //        Log.print("section: \(indexPath.section) row: \(indexPath.row)")
         
         if ( indexPath.section == 0 ) {
+            guard let cell0 = tableView.dequeueReusableCell(withIdentifier: PlaylistSettingCell.identifier, for: indexPath) as? PlaylistSettingCell else { fatalError("PlaylistSettingCell xib doesn't exist")
+            }
+            Log.print("making Setting table views. \(cell0.playlistSwitch.isOn)")
+
             if ( indexPath.row == 0 ) {
-                guard let cell0 = tableView.dequeueReusableCell(withIdentifier: TimerTableViewCell.identifier, for: indexPath) as? TimerTableViewCell else { fatalError("TimerTableViewCell xib doesn't exist") }
+                cell0.title.text = "랜덤 재생 설정"
+                cell0.playlistSwitch.isOn = CloudRadioShareValues.isShuffle
+            } else {
+                cell0.title.text = "연속 재생 설정"
+                cell0.playlistSwitch.isOn = CloudRadioShareValues.isRepeat
+            }
+            
+            cell0.title.textColor = .white
+            cell0.title.font = UIFont.systemFont(ofSize: 13, weight: .bold)
+            cell0.title.textAlignment = .left
+            
+            
+            let myCustomSelectionColorView = UIView()
+            myCustomSelectionColorView.backgroundColor = #colorLiteral(red: 0.2605174184, green: 0.2605243921, blue: 0.260520637, alpha: 1)
+            cell0.selectedBackgroundView = myCustomSelectionColorView
+            
+            cell = cell0
+
+        } else if ( indexPath.section == 1 ) {
+            if ( indexPath.row == 0 ) {
+                guard let cell0 = tableView.dequeueReusableCell(withIdentifier: TimerTableViewCell.identifier, for: indexPath) as? TimerTableViewCell else { fatalError("TimerTableViewCell xib doesn't exist")
+                }
                 
                 Log.print("making Setting table views. \(cell0.TimerSwitch.isOn) ")
                 
@@ -161,7 +190,7 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
                 cell = cell0
             }
 
-        } else if ( indexPath.section == 1 ) {
+        } else if ( indexPath.section == 2 ) {
             guard let cell1 = tableView.dequeueReusableCell(withIdentifier: ProgramInfoCell.identifier, for: indexPath) as? ProgramInfoCell else { fatalError("TimerTableViewCell xib doesn't exist") }
             if ( indexPath.row == 0 ) {
                 cell1.title.text = "Version"
@@ -196,7 +225,9 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if ( indexPath.section == 0 ){
+        if ( indexPath.section == 0 ) {
+            return 50
+        } else if ( indexPath.section == 1 ){
             if ( indexPath.row == 0 ) {
                 return 80
             } else {

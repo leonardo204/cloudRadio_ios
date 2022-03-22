@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1F1EB9B727E9B2C600CA35DF /* PlaylistSettingCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1F1EB9B627E9B2C600CA35DF /* PlaylistSettingCell.xib */; };
+		1F1EB9B927E9B32C00CA35DF /* PlaylistSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F1EB9B827E9B32C00CA35DF /* PlaylistSettingCell.swift */; };
 		1F398566274791EF00C6E395 /* RadioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F398565274791EF00C6E395 /* RadioPlayer.swift */; };
 		1F398568274792A500C6E395 /* RadioChannelResources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F398567274792A400C6E395 /* RadioChannelResources.swift */; };
 		1F4F800B274E2306006E0733 /* CloudRadioUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4F800A274E2305006E0733 /* CloudRadioUtils.swift */; };
@@ -37,6 +39,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1F1EB9B627E9B2C600CA35DF /* PlaylistSettingCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlaylistSettingCell.xib; sourceTree = "<group>"; };
+		1F1EB9B827E9B32C00CA35DF /* PlaylistSettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistSettingCell.swift; sourceTree = "<group>"; };
 		1F398565274791EF00C6E395 /* RadioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioPlayer.swift; sourceTree = "<group>"; };
 		1F398567274792A400C6E395 /* RadioChannelResources.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioChannelResources.swift; sourceTree = "<group>"; };
 		1F4F800A274E2305006E0733 /* CloudRadioUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudRadioUtils.swift; sourceTree = "<group>"; };
@@ -108,7 +112,9 @@
 				1F4F8010275DEB2A006E0733 /* TimerTableViewCell.swift */,
 				1F4F8011275DEB2A006E0733 /* TimerTableViewCell.xib */,
 				1F4F801727673B77006E0733 /* ProgramInfoCell.swift */,
+				1F1EB9B627E9B2C600CA35DF /* PlaylistSettingCell.xib */,
 				1F4F801827673B77006E0733 /* ProgramInfoCell.xib */,
+				1F1EB9B827E9B32C00CA35DF /* PlaylistSettingCell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -278,6 +284,7 @@
 				C25EF4D525D067D00086441F /* Main.storyboard in Resources */,
 				1F4F801A27673B78006E0733 /* ProgramInfoCell.xib in Resources */,
 				C25EF4EB25D06B6A0086441F /* SideMenuCell.xib in Resources */,
+				1F1EB9B727E9B2C600CA35DF /* PlaylistSettingCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -348,6 +355,7 @@
 				1F4F800D27546E95006E0733 /* CloudRadioLogs.swift in Sources */,
 				1F4F800B274E2306006E0733 /* CloudRadioUtils.swift in Sources */,
 				1FD6F34A27E361080030AF92 /* YoutubePlaylistDownloader.swift in Sources */,
+				1F1EB9B927E9B32C00CA35DF /* PlaylistSettingCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

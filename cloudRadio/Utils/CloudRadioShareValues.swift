@@ -26,6 +26,10 @@ class CloudRadioShareValues {
     static var TimeLabel: UILabel? = nil
     static var TimeSlider: UISlider? = nil
     
+    // Playlist setting
+    static var isShuffle = true
+    static var isRepeat = true
+    
     static func requestStopRadioTimer() {
         if ( CloudRadioShareValues.stopRadioTimer?.isValid ) != nil {
             Log.print("stop stopRadioTimer")
@@ -40,8 +44,10 @@ class CloudRadioShareValues {
     }
 }
 
-struct CRAppInfo: Codable {
+struct CRSettings: Codable {
     let isUnlocked: Bool
+    let isShuffle: Bool
+    let isRepeat: Bool
 }
 
 struct CRChannels: Codable {
