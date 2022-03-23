@@ -13,7 +13,7 @@ class CloudRadioShareValues {
     static var versionString = "v1.4"
     
     // hidden count
-    static var isUnlocked = false
+    static var IsUnlockedFeature = false
     static var hiddenCount = 0
     
     // LOCK SCREEN
@@ -31,8 +31,8 @@ class CloudRadioShareValues {
     static var TimeSlider: UISlider? = nil
     
     // Playlist setting
-    static var isShuffle = true
-    static var isRepeat = true
+    static var IsShuffle = true
+    static var IsRepeat = true
     
     static func requestStopRadioTimer() {
         if ( CloudRadioShareValues.stopRadioTimer?.isValid ) != nil {

@@ -250,7 +250,7 @@ class CloudRadioUtils {
     static func saveSettings() {
         Log.print("saveAppInfoJson")
         
-        let settings = CRSettings(isUnlocked: CloudRadioShareValues.isUnlocked, isShuffle: CloudRadioShareValues.isShuffle, isRepeat: CloudRadioShareValues.isRepeat)
+        let settings = CRSettings(isUnlocked: CloudRadioShareValues.IsUnlockedFeature, isShuffle: CloudRadioShareValues.IsShuffle, isRepeat: CloudRadioShareValues.IsRepeat)
         
         let jsonEncoder = JSONEncoder()
         do {

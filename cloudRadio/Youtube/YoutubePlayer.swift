@@ -36,7 +36,7 @@ class YoutubePlayer {
     var waitTimeToPlay: Int = 0
     
     func initialize() {
-        Log.print("YoutubePlayer init() IsShuffle: \(CloudRadioShareValues.isShuffle) IsRepeat: \(CloudRadioShareValues.isRepeat)")
+        Log.print("YoutubePlayer init() IsShuffle: \(CloudRadioShareValues.IsShuffle) IsRepeat: \(CloudRadioShareValues.IsRepeat)")
         self.downloader.delegate = self
         
         let view = UIView()
@@ -48,11 +48,11 @@ class YoutubePlayer {
     }
     
     func updateVideoInfo() {
-        Log.print("updateVideoInfo() IsShuffle: \(CloudRadioShareValues.isShuffle) IsRepeat: \(CloudRadioShareValues.isRepeat)")
+        Log.print("updateVideoInfo() IsShuffle: \(CloudRadioShareValues.IsShuffle) IsRepeat: \(CloudRadioShareValues.IsRepeat)")
         YoutubePlayer.IsYoutubePlaying = .buffering
         HomeViewController.channelName = self.playlistName!
 
-        if CloudRadioShareValues.isShuffle {
+        if CloudRadioShareValues.IsShuffle {
             HomeViewController.programName = self.ranList[curIndex].titles + "      "
             self.curAlbumUrl = self.ranList[curIndex].thumbnail
         } else {
@@ -89,7 +89,7 @@ class YoutubePlayer {
         
         Log.print("curIndx: \(curIndex)   size: \(String(describing: self.downloader.pList.list?.count))")
         
-        if CloudRadioShareValues.isShuffle {
+        if CloudRadioShareValues.IsShuffle {
             videoId = self.ranList[curIndex].videoIds
         } else {
             videoId = self.downloader.pList.list![curIndex].videoIds
@@ -150,7 +150,7 @@ class YoutubePlayer {
         if self.waitTimeToPlay > 5 {
             Log.print("go Next Video by FORCE")
             // repeat=false, curIndex=99, listCount=100
-            if !CloudRadioShareValues.isRepeat && curIndex == (self.listCount-1) {
+            if !CloudRadioShareValues.IsRepeat && curIndex == (self.listCount-1) {
                 Log.print("Playing Ends (Repeat false)")
             } else {
                 // 자동재생이 되지 않으면 state 도 안올라옴
@@ -274,7 +274,7 @@ extension YoutubePlayer: YTPlayerViewDelegate{
         case .ended:
             Log.print("go Next Video")
             // repeat=false, curIndex=99, listCount=100
-            if !CloudRadioShareValues.isRepeat && curIndex == (self.listCount-1) {
+            if !CloudRadioShareValues.IsRepeat && curIndex == (self.listCount-1) {
                 Log.print("Playing Ends (Repeat false)")
             } else {
                 setCurrentVideoIndex(direction: PlayDirection.NEXT)
@@ -304,7 +304,7 @@ extension YoutubePlayer: YoutubePlaylistDownloaderDelegate {
             self.listCount = list.count
             self.ranList = list.shuffled()
             let videoId: String
-            if CloudRadioShareValues.isShuffle {
+            if CloudRadioShareValues.IsShuffle {
                 videoId = self.ranList[curIndex].videoIds
             } else {
                 videoId = list[curIndex].videoIds

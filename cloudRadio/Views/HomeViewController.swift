@@ -170,6 +170,7 @@ class HomeViewController: UIViewController {
     
     static func setDefaultValues() {
         HomeViewController.albumArtPath = "http://zerolive7.iptime.org:9093/api/public/dl/CCxak7Jj/01_project/cloudradio/cosmos1.jpeg"
+        RadioPlayer.curAlbumUrl = HomeViewController.albumArtPath
         HomeViewController.channelName = "CloudRadio"
         HomeViewController.programName = "OnAir Ready"
     }
@@ -285,12 +286,13 @@ class HomeViewController: UIViewController {
                 elapsed = YoutubePlayer.getPlayTime()
             } else {
                 guard let starttime = RadioPlayer.curPlayTimeInfo?.starttime else {
-                    Log.print("doUpdateProgressBar: starttime invalid")
+                    Log.print("doUpdateProgressBar: starttime invalid ytState: \(YoutubePlayer.IsYoutubePlaying)")
                     progressView.isHidden = true
                     setButtonHideShow(hide: true)
                     starttimeLabel.isHidden = true
                     endtimeLabel.isHidden = true
-                    if YoutubePlayer.IsYoutubePlaying == .unknown {
+                    // stopVideo 인 경우 queued 로 올라온다
+                    if YoutubePlayer.IsYoutubePlaying == .unknown || YoutubePlayer.IsYoutubePlaying == .queued {
                         progressTimer?.invalidate()
                     }
                     return
@@ -302,7 +304,8 @@ class HomeViewController: UIViewController {
                     setButtonHideShow(hide: true)
                     starttimeLabel.isHidden = true
                     endtimeLabel.isHidden = true
-                    if YoutubePlayer.IsYoutubePlaying == .unknown {
+                    // stopVideo 인 경우 queued 로 올라온다
+                    if YoutubePlayer.IsYoutubePlaying == .unknown || YoutubePlayer.IsYoutubePlaying == .queued {
                         progressTimer?.invalidate()
                     }
                     return

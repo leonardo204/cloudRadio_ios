@@ -59,10 +59,19 @@ class SettingsViewController: UIViewController {
         // back button
         self.SettingBackButton.setTitle("완료", for: .normal)
         self.SettingBackButton.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .medium)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(closeSettingViewImpl(_:)), name: .closeSettingView, object: nil)
+    }
+    
+    @objc func closeSettingViewImpl(_ notification: NSNotification) {
+        Log.print("closeSettingViewImpl")
+        NotificationCenter.default.removeObserver(self, name: .closeSettingView, object: nil)
+        self.dismiss(animated: true, completion: .none)
     }
     
     @IBAction func SettingBackButtonClicked(_ sender: Any) {
         Log.print("SettingBackButtonClicked")
+        NotificationCenter.default.removeObserver(self, name: .closeSettingView, object: nil)
         self.dismiss(animated: true, completion: .none)
     }
     
@@ -140,10 +149,10 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
 
             if ( indexPath.row == 0 ) {
                 cell0.title.text = "랜덤 재생 설정"
-                cell0.playlistSwitch.isOn = CloudRadioShareValues.isShuffle
+                cell0.playlistSwitch.isOn = CloudRadioShareValues.IsShuffle
             } else {
                 cell0.title.text = "연속 재생 설정"
-                cell0.playlistSwitch.isOn = CloudRadioShareValues.isRepeat
+                cell0.playlistSwitch.isOn = CloudRadioShareValues.IsRepeat
             }
             
             cell0.title.textColor = .white

@@ -8,7 +8,7 @@
 import UIKit
 
 enum CHANNELTYPE {
-    case RADIO, YOUTUBEPLAYLIST
+    case RADIO, YOUTUBEPLAYLIST, SAMPLE
 }
 
 struct SideMenuModel {
@@ -36,12 +36,10 @@ class SideMenuDataModel {
         SideMenuModel(type: .RADIO, icon: UIImage(systemName: "music.note")!, title: "AFN Joe Radio", playlistId: "N/A"),
         SideMenuModel(type: .RADIO, icon: UIImage(systemName: "music.note")!, title: "AFN Legacy", playlistId: "N/A")
     ]
-
+    
+    // locked 상태에서는 메뉴가 없다
     var lockedMenu: [SideMenuModel] = [
-        SideMenuModel(type: .RADIO, icon: UIImage(systemName: "music.note")!, title: "AFN The Eagle", playlistId: "N/A"),
-        SideMenuModel(type: .RADIO, icon: UIImage(systemName: "music.note")!, title: "AFN The Voice", playlistId: "N/A"),
-        SideMenuModel(type: .RADIO, icon: UIImage(systemName: "music.note")!, title: "AFN Joe Radio", playlistId: "N/A"),
-        SideMenuModel(type: .RADIO, icon: UIImage(systemName: "music.note")!, title: "AFN Legacy", playlistId: "N/A")
+        SideMenuModel(type: .SAMPLE, icon: UIImage(systemName: "music.note")!, title: "ADD PLAYLIST", playlistId: "N/A")
     ]
 
     // 1. menu reordering 에 의해 순서가 바뀐 상태를 저장

@@ -46,8 +46,10 @@ extension Notification.Name {
     static let stopRadioTimerSettingsMain = Notification.Name("stopRadioTimerSettingsMain")
     static let updateSideMenu = Notification.Name("updateSideMenu")
     
-    static let updateAlbumArtMainYT = Notification.Name("updateAlbumArtMain")
-
+    static let updateAlbumArtMainYT = Notification.Name("updateAlbumArtMainYT")
+    static let showAwesomeAlert = Notification.Name("showAwesomeAlert")
+    
+    static let closeSettingView = Notification.Name("closeSettingView")
 }
 
 class MainViewController: UIViewController {
@@ -86,11 +88,11 @@ class MainViewController: UIViewController {
         // load specialFeatures
         if let settingValue = CloudRadioUtils.loadSettings(){
             Log.print("Found settings json")
-            CloudRadioShareValues.isUnlocked = settingValue.isUnlocked
-            CloudRadioShareValues.isShuffle = settingValue.isShuffle
-            CloudRadioShareValues.isRepeat = settingValue.isRepeat
+            CloudRadioShareValues.IsUnlockedFeature = settingValue.isUnlocked
+            CloudRadioShareValues.IsShuffle = settingValue.isShuffle
+            CloudRadioShareValues.IsRepeat = settingValue.isRepeat
             
-            if ( CloudRadioShareValues.isUnlocked ) {
+            if ( CloudRadioShareValues.IsUnlockedFeature ) {
                 Log.print("Making awesome")
                 CloudRadioShareValues.versionString = CloudRadioShareValues.versionString + " (Awesome!)"
             }
@@ -118,7 +120,7 @@ class MainViewController: UIViewController {
         // Side Menu
         let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
         self.sideMenuViewController = storyboard.instantiateViewController(withIdentifier: "SideMenuID") as? SideMenuViewController
-        self.sideMenuViewController.defaultHighlightedCell = 0 // Default Highlighted Cell
+        self.sideMenuViewController.defaultHighlightedCell = 999 // Default Highlighted Cell
         self.sideMenuViewController.delegate = self
         view.insertSubview(self.sideMenuViewController!.view, at: self.revealSideMenuOnTop ? 2 : 0)
         addChild(self.sideMenuViewController!)
@@ -170,12 +172,38 @@ class MainViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(startRadioTimerSettingsMain(_:)), name: .startRadioTimerSettingsMain, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(updateSideMenuMain(_:)), name: .updateSideMenu, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(showAwesomeAlertMain(_:)), name: .showAwesomeAlert, object: nil)
 
         DispatchQueue.global().async {
             self.playerDelegate?.setupRemoteCommandCenter()
         }
+        
+        // Detect into background
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(appMovedToBackground), name: UIApplication.willResignActiveNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(appMovedToForeground), name: UIApplication.didBecomeActiveNotification, object: nil)
 
+        
         Log.print(">>> MainViewController viewDidend")
+    }
+    
+    @objc func appMovedToBackground() {
+        Log.print("App moved to background!")
+        CloudRadioShareValues.IsLockScreen = true
+        CloudRadioShareValues.LockedPlay = false
+    }
+    
+    @objc func appMovedToForeground() {
+        Log.print("App moved to foreground!")
+        CloudRadioShareValues.IsLockScreen = false
+    }
+    
+    @objc func showAwesomeAlertMain(_ notification: NSNotification) {
+        Log.print("showAwesomeAlertMain")
+        let alert = UIAlertController(title: "Awesome", message: "이제 모든 기능을 사용할 수 있습니다.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .cancel, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
     
     @objc func startRadioTimerSettingsMain(_ notification: NSNotification) {
@@ -359,17 +387,11 @@ class MainViewController: UIViewController {
             self.youtubePlayer.setCurrentVideoIndex(direction: .PREV)
             self.youtubePlayer.requestNextVideo()
         } else {
-            guard let channelName = RadioPlayer.curPlayInfo?.channelName else {
-                Log.print("(ERROR) play info is invalid")
-                return
-            }
-            
             var info: PlayInfo? = nil
             var curIdx = MainViewController.currentChannelIdx
             let menuCount = sideMenuViewController.sideMenuData.menuMirror.count
-            var title = channelName
             
-            Log.print("cur) Idx(\(curIdx)/\(menuCount-1)) - channelName(\(channelName))")
+            Log.print("cur) Idx(\(curIdx)/\(menuCount-1)) - channelName(\(sideMenuViewController.sideMenuData.menuMirror[curIdx].title))")
             if ( curIdx == 0 ) {
                 curIdx = (menuCount-1)
             } else {
@@ -385,7 +407,7 @@ class MainViewController: UIViewController {
                 youtubePlayer.playlistId = sideMenuViewController.sideMenuData.menuMirror[curIdx].playlistId
                 NotificationCenter.default.post(name: .stopRadioMain, object: nil)
             } else {
-                title = sideMenuViewController.sideMenuData.menuMirror[curIdx].title
+                let title = sideMenuViewController.sideMenuData.menuMirror[curIdx].title
                 info = RadioChannelResources.getChannel(title: title)
                 NotificationCenter.default.post(name: .startRadioMain, object: info)
             }
@@ -397,18 +419,11 @@ class MainViewController: UIViewController {
             self.youtubePlayer.setCurrentVideoIndex(direction: .NEXT)
             self.youtubePlayer.requestNextVideo()
         } else {
-            guard let channelName = RadioPlayer.curPlayInfo?.channelName else {
-                Log.print("(ERROR) play info is invalid")
-                return
-            }
-            
             var info: PlayInfo? = nil
             var curIdx = MainViewController.currentChannelIdx
             let menuCount = sideMenuViewController.sideMenuData.menuMirror.count
-            //let lockedMenuCount = sideMenuViewController.sideMenuData.lockedMenu.count
-            var title = channelName
             
-            Log.print("cur) Idx(\(curIdx)/\(menuCount-1)) - channelName(\(channelName))")
+            Log.print("cur) Idx(\(curIdx)/\(menuCount-1)) - channelName(\(sideMenuViewController.sideMenuData.menuMirror[curIdx].title))")
             if ( curIdx == (menuCount-1) ) {
                 curIdx = 0
             } else {
@@ -424,7 +439,7 @@ class MainViewController: UIViewController {
                 youtubePlayer.playlistId = sideMenuViewController.sideMenuData.menuMirror[curIdx].playlistId
                 NotificationCenter.default.post(name: .stopRadioMain, object: nil)
             } else {
-                title = sideMenuViewController.sideMenuData.menuMirror[curIdx].title
+                let title = sideMenuViewController.sideMenuData.menuMirror[curIdx].title
                 info = RadioChannelResources.getChannel(title: title)
                 NotificationCenter.default.post(name: .startRadioMain, object: info)
             }
@@ -433,11 +448,7 @@ class MainViewController: UIViewController {
     
     @objc func stopRadioMain(_ notification: NSNotification) {
         Log.print("stopRadioMain")
-        if ( YoutubePlayer.IsYoutubePlaying == .playing ) {
-            Log.print("do Stop Youtube")
-            youtubePlayer.stopVideo()
-            return
-        }
+        
         stopAllTimer()
         
         CloudRadioShareValues.stopRadioTimerTime = 0
@@ -447,6 +458,11 @@ class MainViewController: UIViewController {
         
 //        MainViewController.currentChannelIdx = -1
         self.playerDelegate?.stopRadio()
+        
+        if ( YoutubePlayer.IsYoutubePlaying == .playing ) {
+            Log.print("do Stop Youtube")
+            youtubePlayer.stopVideo()
+        }
     }
     
     @objc func startCurrentRadioMain(_ notification: NSNotification) {

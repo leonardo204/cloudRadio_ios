@@ -184,14 +184,15 @@ class SideMenuViewController: UIViewController {
                     let id = addr[addr.endIndex(of: "youtube.com/playlist?list=")!..<addr.endIndex]
                     Log.print("add id: \(String(id))")
                     let item = SideMenuModel(type: .YOUTUBEPLAYLIST, icon: UIImage(systemName:"headphones")!, title: name, playlistId: String(id))
-                    Log.print("self.menuMirror.count: \(self.sideMenuData.menuMirror.count)")
                     self.sideMenuData.menuMirror.insert(item, at: 0)
-                    self.dumpMenuMirror(menu: self.sideMenuData.menuMirror)
                     self.isChannelAdded = true
 
                     self.sideMenuTableView.beginUpdates()
                     self.sideMenuTableView.insertRows(at: [IndexPath.init(row: 0, section: 0)], with: .automatic)
                     self.sideMenuTableView.endUpdates()
+                    
+                    self.decideMenuMirror()
+                    Log.print("self.menuMirror.count: \(self.sideMenuData.menuMirror.count)")
                     
                     self.saveChannels()
                 } else {
@@ -265,7 +266,7 @@ extension SideMenuViewController: UITableViewDataSource {
         if isChannelLoaded || isChannelAdded {
             return self.sideMenuData.menuMirror.count
         } else {
-            if ( CloudRadioShareValues.isUnlocked ) {
+            if ( CloudRadioShareValues.IsUnlockedFeature ) {
                 return self.sideMenuData.menu.count
             } else {
                 return self.sideMenuData.lockedMenu.count
@@ -278,7 +279,7 @@ extension SideMenuViewController: UITableViewDataSource {
         
         if !isChannelLoaded && !isChannelAdded {
             Log.print("sideMenuBuild from STATIC")
-            if ( CloudRadioShareValues.isUnlocked ) {
+            if ( CloudRadioShareValues.IsUnlockedFeature ) {
                 cell.iconImageView.image = self.sideMenuData.menu[indexPath.row].icon
                 cell.titleLabel.text = self.sideMenuData.menu[indexPath.row].title
                 self.sideMenuData.menuMirror.insert(self.sideMenuData.menu[indexPath.row], at: indexPath.row)
@@ -324,13 +325,15 @@ extension SideMenuViewController: UITableViewDataSource {
         Log.print("Move src: \(sourceIndexPath.row) ->  dest: \(destinationIndexPath.row)")
         let target = self.sideMenuData.menuMirror.remove(at: sourceIndexPath.row)
         self.sideMenuData.menuMirror.insert(target, at: destinationIndexPath.row)
-        
-        dumpMenuMirror(menu: self.sideMenuData.menuMirror)
     }
     
-    func dumpMenuMirror(menu: [SideMenuModel]) {
-        for i in 0..<menu.count {
-            Log.print("idx: \(i) value: \(menu[i].title)")
+    func decideMenuMirror() {
+        for i in 0..<self.sideMenuData.menuMirror.count {
+            if self.sideMenuData.menuMirror[i].type == .SAMPLE {
+                Log.print("Remove SAMPLE")
+                self.sideMenuData.menuMirror.remove(at: i)
+                self.sideMenuTableView.deleteRows(at: [IndexPath.init(row: i, section: 0)], with: .fade)
+            }
         }
     }
     

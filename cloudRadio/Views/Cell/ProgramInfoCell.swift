@@ -69,7 +69,7 @@ class ProgramInfoCell: UITableViewCell {
             goToContactToByEmail(address: text)
         } else if let range = text.range(of: NSLocalizedString(CloudRadioShareValues.versionString, comment: CloudRadioShareValues.versionString)),
                   recognizer.didTapAttributedTextInLabel(label: body, inRange: NSRange(range, in: text)) {
-            if ( !CloudRadioShareValues.isUnlocked ) {
+            if ( !CloudRadioShareValues.IsUnlockedFeature ) {
                 CloudRadioShareValues.hiddenCount+=1
                 Log.print("clicked version.... \(CloudRadioShareValues.hiddenCount)")
                 if ( CloudRadioShareValues.hiddenCount >= 40 ) {
@@ -79,28 +79,97 @@ class ProgramInfoCell: UITableViewCell {
         }
     }
     
+    private func checkDuplication(infos: [CRChannelInfo], title: String) -> Bool {
+        for i in 0..<infos.count {
+            if infos[i].title == title {
+                Log.print("SKIP. \(title) -> DUPLICATE!")
+                return true
+            }
+        }
+        
+        return false
+    }
+    
+    private func loadCurrentChannels() {
+        if let channels = CloudRadioUtils.loadChannelsJson() {
+            Log.print("Load channels from JSON: \(channels.channels.count)")
+            for i in 0..<channels.channels.count {
+                var type: CHANNELTYPE = .RADIO
+                var image = UIImage(systemName: "music.note")
+
+                if channels.channels[i].type == 1 {
+                    type = .YOUTUBEPLAYLIST
+                    image = UIImage(systemName: "headphones")
+                }
+                let target = SideMenuModel(type: type, icon: image!, title: channels.channels[i].title, playlistId: channels.channels[i].playlistId)
+                self.sideMenuData.menuMirror.insert(target, at: i)
+            }
+        }
+    }
+    
+    private func saveChannels() {
+        var channelInfo = [CRChannelInfo]()
+        var type = 0
+        
+        // load channels from json
+        self.loadCurrentChannels()
+        
+        // current
+        for i in 0..<self.sideMenuData.menuMirror.count {
+            if self.sideMenuData.menuMirror[i].type == .YOUTUBEPLAYLIST {
+                type = 1
+            } else {
+                type = 0
+            }
+            let info = CRChannelInfo(type: type, title: self.sideMenuData.menuMirror[i].title, playlistId: self.sideMenuData.menuMirror[i].playlistId)
+            Log.print("(CUR) ADD. \(info.title) ")
+            channelInfo.append(info)
+        }
+        
+        // unlocked channel (All radio)
+        type = 0
+        for i in 0..<self.sideMenuData.menu.count {
+            let info = CRChannelInfo(type: type, title: self.sideMenuData.menu[i].title, playlistId: self.sideMenuData.menu[i].playlistId)
+            // skip duplication
+            if self.checkDuplication(infos: channelInfo, title: info.title) {
+                continue
+            }
+            Log.print("(UNLOCKED) ADD. \(info.title) ")
+            channelInfo.append(info)
+        }
+        
+        let channels = CRChannels(channels: channelInfo)
+        CloudRadioUtils.saveChannelInfoJson(data: channels)
+    }
+    
     func setUnlockFeature() {
         Log.print("unlock feature on!")
         
         // set version
         CloudRadioShareValues.versionString = CloudRadioShareValues.versionString + " (Awesome!)"
         body.text = CloudRadioShareValues.versionString
-        CloudRadioShareValues.isUnlocked = true
+        CloudRadioShareValues.IsUnlockedFeature = true
         
         // save unlocked flag
         CloudRadioUtils.saveSettings()
+        
+        // save channels
+        self.saveChannels()
         
         // stop radio
         NotificationCenter.default.post(name: .stopRadioMain, object: nil)
         
         // reset side menu
-        let idx = sideMenuData.menu.count - sideMenuData.lockedMenu.count + MainViewController.currentChannelIdx
-        Log.print("cur idx: \(MainViewController.currentChannelIdx) -> \(idx)")
-        NotificationCenter.default.post(name: .updateSideMenu, object: Int(idx))
+        NotificationCenter.default.post(name: .updateSideMenu, object: Int(999))
         
-        // start radio
-        let info = RadioChannelResources.getChannel(title: sideMenuData.menu[idx].title)
-        NotificationCenter.default.post(name: .startRadioMain, object: info)
+        // close setting view
+        NotificationCenter.default.post(name: .closeSettingView, object: nil)
+        
+        // Making Alert
+        NotificationCenter.default.post(name: .showAwesomeAlert, object: nil)
+        
+        // show home to update
+        NotificationCenter.default.post(name: .updateAlbumArtMain, object: nil)
     }
     
     func goToContactToByEmail(address: String) {

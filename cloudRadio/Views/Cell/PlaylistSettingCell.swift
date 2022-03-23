@@ -28,10 +28,10 @@ class PlaylistSettingCell: UITableViewCell {
     @IBAction func onSwitchValueChanged(_ sender: Any) {
         if ( self.title.text == "랜덤 재생 설정" ) {
             Log.print("shuffle switch value: \(self.playlistSwitch.isOn)")
-            CloudRadioShareValues.isShuffle = self.playlistSwitch.isOn
+            CloudRadioShareValues.IsShuffle = self.playlistSwitch.isOn
         } else {
             Log.print("repeat switch value: \(self.playlistSwitch.isOn)")
-            CloudRadioShareValues.isRepeat = self.playlistSwitch.isOn
+            CloudRadioShareValues.IsRepeat = self.playlistSwitch.isOn
         }
     }
 
