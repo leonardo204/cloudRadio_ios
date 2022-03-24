@@ -89,7 +89,7 @@ class HomeViewController: UIViewController {
 
         sideMenuBtn.target = revealViewController()
         sideMenuBtn.action = #selector(revealViewController()?.revealSideMenu)
-        
+                
         Log.print("home viewDidLoad()")
     }
     
@@ -178,7 +178,7 @@ class HomeViewController: UIViewController {
     func updateLabel() {
         Log.print("updateLabel ch: \(HomeViewController.channelName)  program: \(HomeViewController.programName)")
         
-        if ( RadioPlayer.IsRadioPlaying == RadioPlayStatus.initial && YoutubePlayer.IsYoutubePlaying == .unknown ) {
+        if ( RadioPlayer.IsRadioPlaying == RadioPlayStatus.initial && YoutubePlayer.PlayingState == .unknown ) {
             initialLabel.baselineAdjustment = .alignBaselines
             initialLabel.textAlignment = .center
             initialLabel.numberOfLines = 0
@@ -224,7 +224,7 @@ class HomeViewController: UIViewController {
         setButtonHideShow(hide: false)
         if ( RadioPlayer.IsRadioPlaying == RadioPlayStatus.playing
              || RadioPlayer.IsRadioPlaying == RadioPlayStatus.live
-             || YoutubePlayer.IsYoutubePlaying == .playing ) {
+             || YoutubePlayer.PlayingState == .playing ) {
             self.playImageview.isHidden = true
             self.pauseImageview.isHidden = false
         } else {
@@ -268,6 +268,16 @@ class HomeViewController: UIViewController {
     @objc func doUpdateProgressBar(timer: Timer) {
         let bLiveChannel = RadioChannelResources.checkLiveChannel(channelName: RadioPlayer.curChannelName)
         
+        // stop media by global timer
+        if CloudRadioShareValues.IsTimerStop {
+            guard let progressTimer = progressTimer else { return }
+            Log.print("Stop progressBar because of stopping by global timer")
+            progressTimer.invalidate()
+            CloudRadioShareValues.IsTimerStop = false
+            YoutubePlayer.PlayingState = .unknown
+            return
+        }
+        
         if ( RadioPlayer.IsRadioPlaying == RadioPlayStatus.live
             || (bLiveChannel && RadioPlayer.IsRadioPlaying == RadioPlayStatus.paused) ) {
             progressView.progressViewStyle = .bar
@@ -279,20 +289,20 @@ class HomeViewController: UIViewController {
         } else {
             var duration: Double? = 0
             var elapsed: Double? = 0
-            
-            if YoutubePlayer.IsYoutubePlaying == .playing
-                || YoutubePlayer.IsYoutubePlaying == .paused {
+
+            if YoutubePlayer.PlayingState == .playing
+                || YoutubePlayer.PlayingState == .paused {
                 duration = YoutubePlayer.getDurationTime()
                 elapsed = YoutubePlayer.getPlayTime()
+//                Log.print("state: \(YoutubePlayer.PlayingState)  elapsed: \(elapsed)   duration: \(duration)")
             } else {
                 guard let starttime = RadioPlayer.curPlayTimeInfo?.starttime else {
-                    Log.print("doUpdateProgressBar: starttime invalid ytState: \(YoutubePlayer.IsYoutubePlaying)")
+                    Log.print("doUpdateProgressBar: starttime invalid ytState: \(YoutubePlayer.PlayingState)")
                     progressView.isHidden = true
                     setButtonHideShow(hide: true)
                     starttimeLabel.isHidden = true
                     endtimeLabel.isHidden = true
-                    // stopVideo 인 경우 queued 로 올라온다
-                    if YoutubePlayer.IsYoutubePlaying == .unknown || YoutubePlayer.IsYoutubePlaying == .queued {
+                    if YoutubePlayer.PlayingState == .unknown || YoutubePlayer.PlayingState == .unstarted {
                         progressTimer?.invalidate()
                     }
                     return
@@ -304,8 +314,7 @@ class HomeViewController: UIViewController {
                     setButtonHideShow(hide: true)
                     starttimeLabel.isHidden = true
                     endtimeLabel.isHidden = true
-                    // stopVideo 인 경우 queued 로 올라온다
-                    if YoutubePlayer.IsYoutubePlaying == .unknown || YoutubePlayer.IsYoutubePlaying == .queued {
+                    if YoutubePlayer.PlayingState == .unknown || YoutubePlayer.PlayingState == .unstarted {
                         progressTimer?.invalidate()
                     }
                     return
@@ -331,7 +340,7 @@ class HomeViewController: UIViewController {
             showMediaControllButtons()
             showPlayTimeLable(elapsed: elapsed, duration: duration)
             
-            if ( RadioPlayer.IsRadioPlaying != RadioPlayStatus.playing && YoutubePlayer.IsYoutubePlaying != .playing) {
+            if ( RadioPlayer.IsRadioPlaying != RadioPlayStatus.playing && YoutubePlayer.PlayingState != .playing) {
                 Log.print("Finish progressView update! It's not playing state")
                 progressTimer?.invalidate()
             }

@@ -79,7 +79,7 @@ class RadioPlayer {
         } else if ( RadioPlayer.IsRadioPlaying == RadioPlayStatus.paused ) {
             self.player?.play()
             return
-        } else if ( YoutubePlayer.IsYoutubePlaying == .playing ) {
+        } else if ( YoutubePlayer.PlayingState == .playing ) {
             DispatchQueue.main.async {
                 NotificationCenter.default.post(name: .stopRadioMain, object: nil)
             }
@@ -187,6 +187,10 @@ class RadioPlayer {
     }
     
     func setupRemoteCommandCenter() {
+        if !CloudRadioShareValues.IsUnlockedFeature {
+            Log.print("Ignore remote command center")
+            return
+        }
         let commandCenter = MPRemoteCommandCenter.shared();
         commandCenter.playCommand.isEnabled = false
         commandCenter.playCommand.addTarget {event in

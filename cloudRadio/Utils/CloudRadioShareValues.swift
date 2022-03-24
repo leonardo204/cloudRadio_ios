@@ -29,6 +29,7 @@ class CloudRadioShareValues {
     static var globalStopRadioTimer: Timer? = nil
     static var TimeLabel: UILabel? = nil
     static var TimeSlider: UISlider? = nil
+    static var IsTimerStop = false
     
     // Playlist setting
     static var IsShuffle = true

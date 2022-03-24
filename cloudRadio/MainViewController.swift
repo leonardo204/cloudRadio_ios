@@ -48,7 +48,6 @@ extension Notification.Name {
     
     static let updateAlbumArtMainYT = Notification.Name("updateAlbumArtMainYT")
     static let showAwesomeAlert = Notification.Name("showAwesomeAlert")
-    
     static let closeSettingView = Notification.Name("closeSettingView")
 }
 
@@ -80,7 +79,7 @@ class MainViewController: UIViewController {
     var currentSceneIndex: Int = 0
     
     let youtubePlayer = YoutubePlayer()
-        
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
@@ -102,8 +101,10 @@ class MainViewController: UIViewController {
         
         // youtubePlayer
         youtubePlayer.initialize()
-        youtubePlayer.setupAudioSession()
-                
+        if CloudRadioShareValues.IsUnlockedFeature {
+            youtubePlayer.setupAudioSession()
+        }
+        
         // Shadow Background View
         self.sideMenuShadowView = UIView(frame: self.view.bounds)
         self.sideMenuShadowView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -174,7 +175,7 @@ class MainViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(updateSideMenuMain(_:)), name: .updateSideMenu, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(showAwesomeAlertMain(_:)), name: .showAwesomeAlert, object: nil)
-
+        
         DispatchQueue.global().async {
             self.playerDelegate?.setupRemoteCommandCenter()
         }
@@ -197,6 +198,12 @@ class MainViewController: UIViewController {
     @objc func appMovedToForeground() {
         Log.print("App moved to foreground!")
         CloudRadioShareValues.IsLockScreen = false
+        
+        if MainViewController.currentChannelIdx >= 0 {
+            if sideMenuViewController.sideMenuData.menuMirror[MainViewController.currentChannelIdx].type == .YOUTUBEPLAYLIST {
+                self.youtubePlayer.updateVideoInfo()
+            }
+        }
     }
     
     @objc func showAwesomeAlertMain(_ notification: NSNotification) {
@@ -222,6 +229,7 @@ class MainViewController: UIViewController {
             NotificationCenter.default.post(name: .stopRadioMain, object: nil)
             self.settingRadioTimer?.invalidate()
             self.settingRadioTimer = nil
+            CloudRadioShareValues.IsTimerStop = true
         }
     }
     
@@ -374,7 +382,7 @@ class MainViewController: UIViewController {
     @objc func pauseRadioMain(_ notification: NSNotification) {
         Log.print("pauseRadioMain")
 
-        if YoutubePlayer.IsYoutubePlaying == .playing {
+        if YoutubePlayer.PlayingState == .playing {
             self.youtubePlayer.pauseVideo()
             self.youtubePlayer.updateVideoInfo()
         } else {
@@ -383,9 +391,8 @@ class MainViewController: UIViewController {
     }
     
     @objc func previousRadioMain(_ notification: NSNotification) {
-        if YoutubePlayer.IsYoutubePlaying == .playing || YoutubePlayer.IsYoutubePlaying == .paused {
-            self.youtubePlayer.setCurrentVideoIndex(direction: .PREV)
-            self.youtubePlayer.requestNextVideo()
+        if YoutubePlayer.PlayingState == .playing || YoutubePlayer.PlayingState == .paused {
+            self.youtubePlayer.requestPrevVideo()
         } else {
             var info: PlayInfo? = nil
             var curIdx = MainViewController.currentChannelIdx
@@ -415,8 +422,7 @@ class MainViewController: UIViewController {
     }
     
     @objc func skipRadioMain(_ notification: NSNotification) {
-        if YoutubePlayer.IsYoutubePlaying == .playing || YoutubePlayer.IsYoutubePlaying == .paused {
-            self.youtubePlayer.setCurrentVideoIndex(direction: .NEXT)
+        if YoutubePlayer.PlayingState == .playing || YoutubePlayer.PlayingState == .paused {
             self.youtubePlayer.requestNextVideo()
         } else {
             var info: PlayInfo? = nil
@@ -459,7 +465,7 @@ class MainViewController: UIViewController {
 //        MainViewController.currentChannelIdx = -1
         self.playerDelegate?.stopRadio()
         
-        if ( YoutubePlayer.IsYoutubePlaying == .playing ) {
+        if ( YoutubePlayer.PlayingState == .playing ) {
             Log.print("do Stop Youtube")
             youtubePlayer.stopVideo()
         }
@@ -468,12 +474,15 @@ class MainViewController: UIViewController {
     @objc func startCurrentRadioMain(_ notification: NSNotification) {
         Log.print("startCurrentRadioMain")
 
-        if YoutubePlayer.IsYoutubePlaying == .paused {
-            self.youtubePlayer.resumeVideo()
+        if sideMenuViewController.sideMenuData.menuMirror[MainViewController.currentChannelIdx].type == .YOUTUBEPLAYLIST {
+            if YoutubePlayer.PlayingState == .paused {
+                self.youtubePlayer.resumeVideo()
+            }
             self.youtubePlayer.updateVideoInfo()
-        } else {
+        } else if sideMenuViewController.sideMenuData.menuMirror[MainViewController.currentChannelIdx].type == .RADIO {
             self.playerDelegate?.playRadio(channelName: RadioPlayer.curChannelName, channelUrl: RadioPlayer.curChannelUrl!)
         }
+        
     }
     
     @objc func startRadioMain(_ notification: NSNotification) {
@@ -663,7 +672,9 @@ extension MainViewController: SideMenuViewControllerDelegate {
                     // After download finish, playYoutube will call automatically
                     youtubePlayer.playlistName = sideMenuViewController.sideMenuData.menuMirror[row].title
                     youtubePlayer.playlistId = sideMenuViewController.sideMenuData.menuMirror[row].playlistId
-                    NotificationCenter.default.post(name: .stopRadioMain, object: nil)
+                    if RadioPlayer.bPlaying {
+                        NotificationCenter.default.post(name: .stopRadioMain, object: nil)
+                    }
                     return
                 }
             }
@@ -820,9 +831,6 @@ extension MainViewController: UIGestureRecognizerDelegate {
 }
 
 extension UIViewController {
-    
-    
-    
     // With this extension you can access the MainViewController from the child view controllers.
     func revealViewController() -> MainViewController? {
         var viewController: UIViewController? = self

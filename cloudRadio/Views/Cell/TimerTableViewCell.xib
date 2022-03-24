@@ -24,9 +24,6 @@
                             <constraint firstAttribute="width" secondItem="0eh-qQ-FKL" secondAttribute="height" multiplier="287:29" id="vFy-Gz-rle"/>
                             <constraint firstAttribute="height" constant="29" id="zZE-9h-10U"/>
                         </constraints>
-                        <connections>
-                            <action selector="TimerSliderValueChanged:" destination="KGk-i7-Jjw" eventType="valueChanged" id="dny-Fj-XCV"/>
-                        </connections>
                     </slider>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LiM-2Z-Hd5">
                         <rect key="frame" x="16" y="17" width="84" height="21"/>
