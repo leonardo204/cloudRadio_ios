@@ -31,6 +31,9 @@ class CloudRadioShareValues {
     static var TimeSlider: UISlider? = nil
     static var IsTimerStop = false
     
+    // media type
+    static var TYPE: CHANNELTYPE = .RADIO
+    
     // Playlist setting
     static var IsShuffle = true
     static var IsRepeat = true

@@ -43,10 +43,6 @@ class YoutubePlayer: NSObject {
         self.downloader.delegate = self
         
         ytView.delegate = self
-        let view = UIView()
-        view.frame = CGRect(x: 0, y: 0, width: 300, height: 300)
-//        view.isHidden = true
-        ytView.frame = view.bounds
         ytView.isUserInteractionEnabled = false
     }
     
@@ -160,10 +156,11 @@ class YoutubePlayer: NSObject {
             "showinfo" : "0",
             "autoplay": "1",
             "rel": "0",
-            "modestbranding": "0",
+            "modestbranding": "1",
             "iv_load_policy" : "3",
             "fs": "0",
-            "playsinline" : "1"
+            "playsinline" : "1",
+            "cc_load_policy" : "0",
         ]
         if !self.ytView.load(withPlaylistId: playlistId, playerVars: playerVars) {
             Log.print("loading failed")
@@ -242,6 +239,34 @@ class YoutubePlayer: NSObject {
 }
 
 extension YoutubePlayer: YTPlayerViewDelegate {
+    func getPlayingStateString(state: YTPlayerState) -> String {
+        var stateString = "unknown"
+        switch state {
+            case .unknown:
+                stateString = "unknown"
+                break
+            case .cued:
+                stateString = "cued"
+                break
+            case .unstarted:
+                stateString = "unstarted"
+                break
+            case .paused:
+                stateString = "paused"
+                break
+            case .playing:
+                stateString = "playing"
+                break
+            case .buffering:
+                stateString = "buffering"
+                break
+            case .ended:
+                stateString = "ended"
+                break
+        }
+        return stateString
+    }
+    
     func playerViewDidBecomeReady(_ playerView: YTPlayerView) {
         IsShuffle = CloudRadioShareValues.IsShuffle
         IsRepeat = CloudRadioShareValues.IsRepeat
@@ -269,7 +294,7 @@ extension YoutubePlayer: YTPlayerViewDelegate {
 
     func playerView(_ playerView: YTPlayerView, didChangeTo state: YTPlayerState) {
         if self.state != state {
-            Log.print("playerView state: \(state)")
+            Log.print(">>> playerView state: \(getPlayingStateString(state:state))")
             if CloudRadioShareValues.IsUnlockedFeature {
                 if CloudRadioShareValues.IsLockScreen && CloudRadioShareValues.LockedPlay == false {
                     Log.print("resumeVideo on LockScreen")
@@ -280,7 +305,7 @@ extension YoutubePlayer: YTPlayerViewDelegate {
             }
             self.state = state
         } else {
-            Log.print("playerView same state: \(state)")
+            Log.print(">>> playerView same state: \(getPlayingStateString(state:state))")
         }
         YoutubePlayer.PlayingState = self.state
 
@@ -303,6 +328,7 @@ extension YoutubePlayer: YTPlayerViewDelegate {
                 }
             case .ended:
                 Log.print("go Next Video")
+                YoutubePlayer.playTime = 0
                 // repeat=false, curIndex=99, listCount=100
                 if !CloudRadioShareValues.IsRepeat {
                     Log.print("Playing Ends (Repeat false)")
@@ -312,7 +338,8 @@ extension YoutubePlayer: YTPlayerViewDelegate {
                 }
                 break
             case .unstarted:
-                Log.print("VIDEO COULD NOT PLAYED")
+                Log.print("!!!! VIDEO COULD NOT PLAYED !!!!")
+                YoutubePlayer.playTime = 0
                 if playDirection == .NEXT {
                     self.checkShuffleRepeat()
                     self.ytView.nextVideo()
@@ -333,7 +360,7 @@ extension YoutubePlayer: YTPlayerViewDelegate {
     
     func playerView(_ playerView: YTPlayerView, didPlayTime playTime: Float) {
         self.ytView.duration { (duration, error)  in
-            Log.print("playTime: \(playTime) duratoin: \(duration) error: \(String(describing: error))")
+//            Log.print("playTime: \(playTime) duratoin: \(duration) error: \(String(describing: error))")
             YoutubePlayer.durationTime = Int(duration)
             YoutubePlayer.playTime = Int(playTime)
         }

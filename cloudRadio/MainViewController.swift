@@ -49,6 +49,7 @@ extension Notification.Name {
     static let updateAlbumArtMainYT = Notification.Name("updateAlbumArtMainYT")
     static let showAwesomeAlert = Notification.Name("showAwesomeAlert")
     static let closeSettingView = Notification.Name("closeSettingView")
+    static let setVideoViewIsHiddenMain = Notification.Name("setVideoViewIsHiddenMain")
 }
 
 class MainViewController: UIViewController {
@@ -79,6 +80,7 @@ class MainViewController: UIViewController {
     var currentSceneIndex: Int = 0
     
     let youtubePlayer = YoutubePlayer()
+    @IBOutlet weak var videoView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -104,6 +106,10 @@ class MainViewController: UIViewController {
         if CloudRadioShareValues.IsUnlockedFeature {
             youtubePlayer.setupAudioSession()
         }
+        youtubePlayer.ytView.frame = CGRect(x: 6, y: 4, width: videoView.bounds.width, height: videoView.bounds.height)// videoView.bounds
+        videoView.backgroundColor = .black
+        videoView.isHidden = true
+        videoView.addSubview(youtubePlayer.ytView)
         
         // Shadow Background View
         self.sideMenuShadowView = UIView(frame: self.view.bounds)
@@ -175,7 +181,8 @@ class MainViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(updateSideMenuMain(_:)), name: .updateSideMenu, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(showAwesomeAlertMain(_:)), name: .showAwesomeAlert, object: nil)
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(setVideoViewIsHiddenMain(_:)), name: .setVideoViewIsHiddenMain, object: nil)
+
         DispatchQueue.global().async {
             self.playerDelegate?.setupRemoteCommandCenter()
         }
@@ -187,6 +194,12 @@ class MainViewController: UIViewController {
 
         
         Log.print(">>> MainViewController viewDidend")
+    }
+    
+    @objc func setVideoViewIsHiddenMain(_ notification: NSNotification) {
+        let IsHidden = notification.object as! Bool
+        Log.print(">>> Main videoView to isHidden -> \(IsHidden)")
+        videoView.isHidden = IsHidden
     }
     
     @objc func appMovedToBackground() {
@@ -410,10 +423,17 @@ class MainViewController: UIViewController {
             
             // check if next is youtube or not
             if sideMenuViewController.sideMenuData.menuMirror[curIdx].type == .YOUTUBEPLAYLIST {
+                // type assign
+                CloudRadioShareValues.TYPE = .YOUTUBEPLAYLIST
+                
+                // playlistId 를 할당하는 순간 loading -> play 시작
                 youtubePlayer.playlistName = sideMenuViewController.sideMenuData.menuMirror[curIdx].title
                 youtubePlayer.playlistId = sideMenuViewController.sideMenuData.menuMirror[curIdx].playlistId
                 NotificationCenter.default.post(name: .stopRadioMain, object: nil)
             } else {
+                // type assign
+                CloudRadioShareValues.TYPE = .RADIO
+                
                 let title = sideMenuViewController.sideMenuData.menuMirror[curIdx].title
                 info = RadioChannelResources.getChannel(title: title)
                 NotificationCenter.default.post(name: .startRadioMain, object: info)
@@ -441,10 +461,17 @@ class MainViewController: UIViewController {
 
             // check if next is youtube or not
             if sideMenuViewController.sideMenuData.menuMirror[curIdx].type == .YOUTUBEPLAYLIST {
+                // type assign
+                CloudRadioShareValues.TYPE = .YOUTUBEPLAYLIST
+                
+                // playlistId 를 할당하는 순간 loading -> play 시작
                 youtubePlayer.playlistName = sideMenuViewController.sideMenuData.menuMirror[curIdx].title
                 youtubePlayer.playlistId = sideMenuViewController.sideMenuData.menuMirror[curIdx].playlistId
                 NotificationCenter.default.post(name: .stopRadioMain, object: nil)
             } else {
+                // type assign
+                CloudRadioShareValues.TYPE = .RADIO
+                
                 let title = sideMenuViewController.sideMenuData.menuMirror[curIdx].title
                 info = RadioChannelResources.getChannel(title: title)
                 NotificationCenter.default.post(name: .startRadioMain, object: info)
@@ -660,13 +687,14 @@ extension MainViewController: SideMenuViewControllerDelegate {
             }
         }
 
-        // TODO
-        // Implment play youtube
         if ( MainViewController.currentChannelIdx != row  ) {
             if !sideMenuViewController.sideMenuData.menuMirror.isEmpty {
                 if sideMenuViewController.sideMenuData.menuMirror[row].type == .YOUTUBEPLAYLIST {
                     Log.print("start youtube ID: \(sideMenuViewController.sideMenuData.menuMirror[row].playlistId)")
                     MainViewController.currentChannelIdx = row
+                    
+                    // channel type
+                    CloudRadioShareValues.TYPE = .YOUTUBEPLAYLIST
                     
                     // do download playlist first
                     // After download finish, playYoutube will call automatically
@@ -680,6 +708,14 @@ extension MainViewController: SideMenuViewControllerDelegate {
             }
             
             let info = RadioChannelResources.getChannel(title: title)
+            
+            if let t = info, !t.channelName.isEmpty {
+                // channel type
+                CloudRadioShareValues.TYPE = .RADIO
+                NotificationCenter.default.post(name: .stopRadioMain, object: nil)
+
+            }
+            
             MainViewController.currentChannelIdx = row
             Log.print("start radio: \(String(describing: info?.channelName))")
             NotificationCenter.default.post(name: .startRadioMain, object: info)

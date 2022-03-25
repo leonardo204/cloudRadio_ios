@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		1F1EB9B727E9B2C600CA35DF /* PlaylistSettingCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1F1EB9B627E9B2C600CA35DF /* PlaylistSettingCell.xib */; };
 		1F1EB9B927E9B32C00CA35DF /* PlaylistSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F1EB9B827E9B32C00CA35DF /* PlaylistSettingCell.swift */; };
-		1F1EB9BC27EC6D6A00CA35DF /* YouTubeiOSPlayerHelper in Frameworks */ = {isa = PBXBuildFile; productRef = 1F1EB9BB27EC6D6A00CA35DF /* YouTubeiOSPlayerHelper */; };
+		1F1EB9C227ED520900CA35DF /* YouTubeiOSPlayerHelper in Frameworks */ = {isa = PBXBuildFile; productRef = 1F1EB9C127ED520900CA35DF /* YouTubeiOSPlayerHelper */; };
 		1F398566274791EF00C6E395 /* RadioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F398565274791EF00C6E395 /* RadioPlayer.swift */; };
 		1F398568274792A500C6E395 /* RadioChannelResources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F398567274792A400C6E395 /* RadioChannelResources.swift */; };
 		1F4F800B274E2306006E0733 /* CloudRadioUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4F800A274E2305006E0733 /* CloudRadioUtils.swift */; };
@@ -82,7 +82,7 @@
 				1FD6F34127E22B280030AF92 /* Alamofire in Frameworks */,
 				1F4F800F27547DA4006E0733 /* OSLog.framework in Frameworks */,
 				A3E37FFC63EC35CE59A44CC0 /* Pods_cloudRadio.framework in Frameworks */,
-				1F1EB9BC27EC6D6A00CA35DF /* YouTubeiOSPlayerHelper in Frameworks */,
+				1F1EB9C227ED520900CA35DF /* YouTubeiOSPlayerHelper in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -235,7 +235,7 @@
 			name = cloudRadio;
 			packageProductDependencies = (
 				1FD6F34027E22B280030AF92 /* Alamofire */,
-				1F1EB9BB27EC6D6A00CA35DF /* YouTubeiOSPlayerHelper */,
+				1F1EB9C127ED520900CA35DF /* YouTubeiOSPlayerHelper */,
 			);
 			productName = CustomSideMenuiOSExample;
 			productReference = C25EF4CA25D067D00086441F /* cloudRadio.app */;
@@ -266,7 +266,7 @@
 			mainGroup = C25EF4C125D067D00086441F;
 			packageReferences = (
 				1FD6F33F27E22B280030AF92 /* XCRemoteSwiftPackageReference "Alamofire" */,
-				1F1EB9BA27EC6D6A00CA35DF /* XCRemoteSwiftPackageReference "youtube-ios-player-helper" */,
+				1F1EB9C027ED520900CA35DF /* XCRemoteSwiftPackageReference "youtube-ios-player-helper" */,
 			);
 			productRefGroup = C25EF4CB25D067D00086441F /* Products */;
 			projectDirPath = "";
@@ -569,12 +569,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		1F1EB9BA27EC6D6A00CA35DF /* XCRemoteSwiftPackageReference "youtube-ios-player-helper" */ = {
+		1F1EB9C027ED520900CA35DF /* XCRemoteSwiftPackageReference "youtube-ios-player-helper" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/youtube/youtube-ios-player-helper";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
+				branch = master;
+				kind = branch;
 			};
 		};
 		1FD6F33F27E22B280030AF92 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
@@ -588,9 +588,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		1F1EB9BB27EC6D6A00CA35DF /* YouTubeiOSPlayerHelper */ = {
+		1F1EB9C127ED520900CA35DF /* YouTubeiOSPlayerHelper */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 1F1EB9BA27EC6D6A00CA35DF /* XCRemoteSwiftPackageReference "youtube-ios-player-helper" */;
+			package = 1F1EB9C027ED520900CA35DF /* XCRemoteSwiftPackageReference "youtube-ios-player-helper" */;
 			productName = YouTubeiOSPlayerHelper;
 		};
 		1FD6F34027E22B280030AF92 /* Alamofire */ = {
