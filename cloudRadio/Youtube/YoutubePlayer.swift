@@ -1,6 +1,6 @@
 
-import YouTubeiOSPlayerHelper
 import MediaPlayer
+import youtube_ios_player_helper_swift
 
 enum PlayDirection {
     case PREV
@@ -79,23 +79,21 @@ class YoutubePlayer: NSObject {
     
     func updateVideoInfo() {
         
-        self.ytView.videoUrl { (url, error) in
-            Log.print("updateVideoInfo() IsShuffle: \(CloudRadioShareValues.IsShuffle) IsRepeat: \(CloudRadioShareValues.IsRepeat)")
-            
-            let videoId = self.getVideoId(addr: url)
-            if videoId == "N/A" {
-                Log.print("Can't get videoId")
-                HomeViewController.setDefaultValues()
-            } else {
-                HomeViewController.setDefaultValues()
-                HomeViewController.channelName = self.playlistName!
-                self.setProgramInfo(videoId: videoId)
-            }
-            
-//            DispatchQueue.main.async {
-                NotificationCenter.default.post(name: .updateAlbumArtMainYT, object: nil)
-//            }
+        guard let url = self.ytView.videoUrl else { return }
+        
+        Log.print("updateVideoInfo() IsShuffle: \(CloudRadioShareValues.IsShuffle) IsRepeat: \(CloudRadioShareValues.IsRepeat)")
+        
+        let videoId = self.getVideoId(addr: url)
+        if videoId == "N/A" {
+            Log.print("Can't get videoId")
+            HomeViewController.setDefaultValues()
+        } else {
+            HomeViewController.setDefaultValues()
+            HomeViewController.channelName = self.playlistName!
+            self.setProgramInfo(videoId: videoId)
         }
+        
+        NotificationCenter.default.post(name: .updateAlbumArtMainYT, object: nil)
     }
     
     func stopVideo() {
@@ -117,12 +115,12 @@ class YoutubePlayer: NSObject {
     func checkShuffleRepeat() {
         if IsShuffle != CloudRadioShareValues.IsShuffle {
             IsShuffle = CloudRadioShareValues.IsShuffle
-            self.ytView.setShuffle(IsShuffle)
+            self.ytView.set(shuffle: IsShuffle)
         }
         
         if IsRepeat != CloudRadioShareValues.IsRepeat {
             IsRepeat = CloudRadioShareValues.IsRepeat
-            self.ytView.setLoop(IsRepeat)
+            self.ytView.set(loop: IsRepeat)
         }
     }
     
@@ -162,7 +160,8 @@ class YoutubePlayer: NSObject {
             "playsinline" : "1",
             "cc_load_policy" : "0",
         ]
-        if !self.ytView.load(withPlaylistId: playlistId, playerVars: playerVars) {
+        if !self.ytView.load(playlistId: playlistId) {
+//        if !self.ytView.load(withPlaylistId: playlistId, playerVars: playerVars) {
             Log.print("loading failed")
         } else {
             IsNeedPlay = true
@@ -245,8 +244,8 @@ extension YoutubePlayer: YTPlayerViewDelegate {
             case .unknown:
                 stateString = "unknown"
                 break
-            case .cued:
-                stateString = "cued"
+            case .queued:
+                stateString = "queued"
                 break
             case .unstarted:
                 stateString = "unstarted"
@@ -277,8 +276,8 @@ extension YoutubePlayer: YTPlayerViewDelegate {
         if IsNeedPlay {
             Log.print("Initial PlayVideo()")
 
-            self.ytView.setShuffle(IsShuffle)
-            self.ytView.setLoop(IsRepeat)
+            self.ytView.set(shuffle: IsShuffle)
+            self.ytView.set(loop: IsRepeat)
             
             // shuffle 하는 순간 playlist array 의 indexing 이 바뀜
             // 0 번을 주면 shuffle 이후의 array 의 0 번부터 재생
@@ -294,30 +293,41 @@ extension YoutubePlayer: YTPlayerViewDelegate {
 
     func playerView(_ playerView: YTPlayerView, didChangeTo state: YTPlayerState) {
         if self.state != state {
+            self.state = state
+            YoutubePlayer.PlayingState = self.state
+
             Log.print(">>> playerView state: \(getPlayingStateString(state:state))")
             if CloudRadioShareValues.IsUnlockedFeature {
-                if CloudRadioShareValues.IsLockScreen && CloudRadioShareValues.LockedPlay == false {
-                    Log.print("resumeVideo on LockScreen")
-                    self.resumeVideo()
-                    CloudRadioShareValues.LockedPlay = true
+                if CloudRadioShareValues.IsLockScreen {
+                    Log.print("resumeVideo on LockScreen 1")
+                    self.ytView.playVideo()
                     return
                 }
             }
-            self.state = state
         } else {
             Log.print(">>> playerView same state: \(getPlayingStateString(state:state))")
         }
-        YoutubePlayer.PlayingState = self.state
 
         switch self.state {
             case .buffering:
+                if CloudRadioShareValues.IsUnlockedFeature {
+                    if CloudRadioShareValues.IsLockScreen {
+                        Log.print("resumeVideo on LockScreen 3")
+                        self.ytView.playVideo()
+                        return
+                    }
+                }
                 YoutubePlayer.playTime = 0
                 updateVideoInfo()
+            
             case .playing:
                 playDirection = .NONE
+                if CloudRadioShareValues.IsLockScreen {
+                    CloudRadioShareValues.LockedPlay = true
+                }
                 Log.print("on going")
                 break
-            case .cued, .paused:
+            case .queued, .paused:
                 Log.print("PLAYING TO \(playDirection)")
                 if playDirection == .NEXT {
                     self.checkShuffleRepeat()
@@ -325,7 +335,13 @@ extension YoutubePlayer: YTPlayerViewDelegate {
                 } else if playDirection == .PREV {
                     self.checkShuffleRepeat()
                     self.ytView.previousVideo()
+                } else if CloudRadioShareValues.IsUnlockedFeature {
+                    if CloudRadioShareValues.IsLockScreen {
+                        Log.print("resumeVideo on LockScreen 2")
+                        self.ytView.playVideo()
+                    }
                 }
+                break
             case .ended:
                 Log.print("go Next Video")
                 YoutubePlayer.playTime = 0
@@ -351,19 +367,16 @@ extension YoutubePlayer: YTPlayerViewDelegate {
                     self.checkShuffleRepeat()
                     self.ytView.nextVideo()
                 }
+                break
             case .unknown:
                 Log.print("ERROR?")
-            @unknown default:
-                fatalError("ERROR")
         }
     }
     
     func playerView(_ playerView: YTPlayerView, didPlayTime playTime: Float) {
-        self.ytView.duration { (duration, error)  in
-//            Log.print("playTime: \(playTime) duratoin: \(duration) error: \(String(describing: error))")
-            YoutubePlayer.durationTime = Int(duration)
-            YoutubePlayer.playTime = Int(playTime)
-        }
+//      Log.print("playTime: \(playTime) duratoin: \(playerView.duration)")
+        YoutubePlayer.durationTime = Int(playerView.duration)
+        YoutubePlayer.playTime = Int(playTime)
     }
 }
 

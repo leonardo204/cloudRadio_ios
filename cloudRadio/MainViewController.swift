@@ -27,6 +27,8 @@ protocol RadioPlayerDelegate {
     func startTBFMSRadio(channelName: String, channelPLSAddress: String)
     func getPlayingState() -> RadioPlayStatus
     func setupRemoteCommandCenter()
+    func enableAudioSessionActive(enable: Bool)
+    func enableRemoteCommandCenter(enable: Bool)
 }
 
 extension Notification.Name {
@@ -206,6 +208,13 @@ class MainViewController: UIViewController {
         Log.print("App moved to background!")
         CloudRadioShareValues.IsLockScreen = true
         CloudRadioShareValues.LockedPlay = false
+        
+        if MainViewController.currentChannelIdx >= 0 {
+            Log.print("curIdx: \(MainViewController.currentChannelIdx) menuMirrorCount: \(sideMenuViewController.sideMenuData.menuMirror.count)")
+            if MainViewController.currentChannelIdx < sideMenuViewController.sideMenuData.menuMirror.count && sideMenuViewController.sideMenuData.menuMirror[MainViewController.currentChannelIdx].type == .YOUTUBEPLAYLIST {
+                self.playerDelegate?.enableRemoteCommandCenter(enable: false)
+            }
+        }
     }
     
     @objc func appMovedToForeground() {
@@ -213,16 +222,22 @@ class MainViewController: UIViewController {
         CloudRadioShareValues.IsLockScreen = false
         
         if MainViewController.currentChannelIdx >= 0 {
-            if sideMenuViewController.sideMenuData.menuMirror[MainViewController.currentChannelIdx].type == .YOUTUBEPLAYLIST {
+            Log.print("curIdx: \(MainViewController.currentChannelIdx) menuMirrorCount: \(sideMenuViewController.sideMenuData.menuMirror.count)")
+            if MainViewController.currentChannelIdx < sideMenuViewController.sideMenuData.menuMirror.count && sideMenuViewController.sideMenuData.menuMirror[MainViewController.currentChannelIdx].type == .YOUTUBEPLAYLIST {
                 self.youtubePlayer.updateVideoInfo()
+                NotificationCenter.default.post(name: .setVideoViewIsHiddenMain, object: false)
+                self.playerDelegate?.enableRemoteCommandCenter(enable: true)
             }
         }
     }
     
     @objc func showAwesomeAlertMain(_ notification: NSNotification) {
         Log.print("showAwesomeAlertMain")
-        let alert = UIAlertController(title: "Awesome", message: "이제 모든 기능을 사용할 수 있습니다.", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "확인", style: .cancel, handler: nil))
+        let alert = UIAlertController(title: "Awesome", message: "이제 모든 기능을 사용할 수 있습니다.\n확인 버튼을 누르면 앱이 종료됩니다.\n앱을 다시 시작해주세요.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .cancel, handler: { _ in
+            sleep(1)
+            exit(0)
+        }))
         self.present(alert, animated: true, completion: nil)
     }
     
@@ -677,7 +692,7 @@ extension MainViewController: SideMenuViewControllerDelegate {
     
     func selectedCell(_ row: Int, title: String) {
 
-        Log.print("selectedCell curChIdx(\(row)) self.currentSceneIndex(\(self.currentSceneIndex))")
+        Log.print("selectedCell currentChannelIdx(\(MainViewController.currentChannelIdx)) curChIdx(\(row)) self.currentSceneIndex(\(self.currentSceneIndex))")
         // Collapse side menu with animation
         DispatchQueue.main.async {
             self.sideMenuState(expanded: false)
@@ -703,6 +718,8 @@ extension MainViewController: SideMenuViewControllerDelegate {
                     if RadioPlayer.bPlaying {
                         NotificationCenter.default.post(name: .stopRadioMain, object: nil)
                     }
+                    
+                    self.playerDelegate?.enableAudioSessionActive(enable: false)
                     return
                 }
             }
@@ -716,6 +733,7 @@ extension MainViewController: SideMenuViewControllerDelegate {
 
             }
             
+            self.playerDelegate?.enableAudioSessionActive(enable: true)
             MainViewController.currentChannelIdx = row
             Log.print("start radio: \(String(describing: info?.channelName))")
             NotificationCenter.default.post(name: .startRadioMain, object: info)
