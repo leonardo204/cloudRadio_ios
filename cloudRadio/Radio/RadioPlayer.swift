@@ -187,10 +187,6 @@ class RadioPlayer {
     }
     
     func setupRemoteCommandCenter() {
-        if !CloudRadioShareValues.IsUnlockedFeature {
-            Log.print("Ignore remote command center")
-            return
-        }
         let commandCenter = MPRemoteCommandCenter.shared();
         commandCenter.playCommand.isEnabled = false
         commandCenter.playCommand.addTarget {event in

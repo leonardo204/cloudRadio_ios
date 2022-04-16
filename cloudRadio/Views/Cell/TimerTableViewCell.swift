@@ -102,26 +102,14 @@ class TimerTableViewCell: UITableViewCell {
             stopTimerTimer()
         }
     }
-    
-    @objc func onSliderValChanged(slider: UISlider, event: UIEvent) {
+    @IBAction func TimerSliderValueChanged(_ sender: Any) {
         let valuestring = CloudRadioUtils.getUTCDateString(timevalue: Double(round(self.TimerSlider.value)))
-
-        if let touchEvent = event.allTouches?.first {
-            switch touchEvent.phase {
-            case .began:
-                Log.print("onSliderVal began")
-            case .moved:
-                Log.print("onSliderVal moved: \(valuestring)")
-                self.TimeLabel.text = valuestring
-                stopTimerTimer()
-            case .ended:
-                Log.print("onSliderVal ended: \(valuestring)")
-                let value = Double(round(self.TimerSlider.value))
-                setStopTimer(value: value)
-            default:
-                break
-            }
+        let value = Double(round(self.TimerSlider.value))
+//        Log.print("slider. \(valuestring)")
+        if ( self.TimerSwitch.isOn ) {
+            self.TimeLabel.text = valuestring
         }
+        setStopTimer(value: value)
     }
     
     @objc func requestStopRadio(timer: Timer) {
@@ -171,9 +159,6 @@ class TimerTableViewCell: UITableViewCell {
             CloudRadioShareValues.TimeSlider?.isEnabled = false
             CloudRadioShareValues.TimeSlider?.minimumTrackTintColor = .gray
         }
-        
-        TimerSlider.addTarget(self, action: #selector(onSliderValChanged(slider:event:)), for: .valueChanged)
-
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

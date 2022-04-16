@@ -8,6 +8,7 @@
 import SafariServices
 import UIKit
 import AVKit
+import YoutubeKit
 
 struct PlayInfo {
     var channelName: String
@@ -28,7 +29,6 @@ protocol RadioPlayerDelegate {
     func getPlayingState() -> RadioPlayStatus
     func setupRemoteCommandCenter()
     func enableAudioSessionActive(enable: Bool)
-    func enableRemoteCommandCenter(enable: Bool)
 }
 
 extension Notification.Name {
@@ -50,6 +50,7 @@ extension Notification.Name {
     
     static let updateAlbumArtMainYT = Notification.Name("updateAlbumArtMainYT")
     static let showAwesomeAlert = Notification.Name("showAwesomeAlert")
+    
     static let closeSettingView = Notification.Name("closeSettingView")
     static let setVideoViewIsHiddenMain = Notification.Name("setVideoViewIsHiddenMain")
 }
@@ -83,7 +84,7 @@ class MainViewController: UIViewController {
     
     let youtubePlayer = YoutubePlayer()
     @IBOutlet weak var videoView: UIView!
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
@@ -108,11 +109,12 @@ class MainViewController: UIViewController {
         if CloudRadioShareValues.IsUnlockedFeature {
             youtubePlayer.setupAudioSession()
         }
-        youtubePlayer.ytView.frame = CGRect(x: 6, y: 4, width: videoView.bounds.width, height: videoView.bounds.height)// videoView.bounds
+        
+        //youtubePlayer.ytView.frame = CGRect(x: 6, y: 4, width: videoView.bounds.width, height: videoView.bounds.height)// videoView.bounds
         videoView.backgroundColor = .black
         videoView.isHidden = true
-        videoView.addSubview(youtubePlayer.ytView)
-        
+        CloudRadioShareValues.videoViewBounds = videoView.bounds
+                
         // Shadow Background View
         self.sideMenuShadowView = UIView(frame: self.view.bounds)
         self.sideMenuShadowView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -184,7 +186,7 @@ class MainViewController: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(showAwesomeAlertMain(_:)), name: .showAwesomeAlert, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(setVideoViewIsHiddenMain(_:)), name: .setVideoViewIsHiddenMain, object: nil)
-
+        
         DispatchQueue.global().async {
             self.playerDelegate?.setupRemoteCommandCenter()
         }
@@ -202,42 +204,34 @@ class MainViewController: UIViewController {
         let IsHidden = notification.object as! Bool
         Log.print(">>> Main videoView to isHidden -> \(IsHidden)")
         videoView.isHidden = IsHidden
+
+        guard let player = youtubePlayer.player else {
+            Log.print("can't get ytb player")
+            return
+        }
+
+        if videoView.isHidden {
+            player.removeFromSuperview()
+        } else {
+            videoView.addSubview(player)
+        }
     }
     
     @objc func appMovedToBackground() {
         Log.print("App moved to background!")
         CloudRadioShareValues.IsLockScreen = true
         CloudRadioShareValues.LockedPlay = false
-        
-        if MainViewController.currentChannelIdx >= 0 {
-            Log.print("curIdx: \(MainViewController.currentChannelIdx) menuMirrorCount: \(sideMenuViewController.sideMenuData.menuMirror.count)")
-            if MainViewController.currentChannelIdx < sideMenuViewController.sideMenuData.menuMirror.count && sideMenuViewController.sideMenuData.menuMirror[MainViewController.currentChannelIdx].type == .YOUTUBEPLAYLIST {
-                self.playerDelegate?.enableRemoteCommandCenter(enable: false)
-            }
-        }
     }
     
     @objc func appMovedToForeground() {
         Log.print("App moved to foreground!")
         CloudRadioShareValues.IsLockScreen = false
-        
-        if MainViewController.currentChannelIdx >= 0 {
-            Log.print("curIdx: \(MainViewController.currentChannelIdx) menuMirrorCount: \(sideMenuViewController.sideMenuData.menuMirror.count)")
-            if MainViewController.currentChannelIdx < sideMenuViewController.sideMenuData.menuMirror.count && sideMenuViewController.sideMenuData.menuMirror[MainViewController.currentChannelIdx].type == .YOUTUBEPLAYLIST {
-                self.youtubePlayer.updateVideoInfo()
-                NotificationCenter.default.post(name: .setVideoViewIsHiddenMain, object: false)
-                self.playerDelegate?.enableRemoteCommandCenter(enable: true)
-            }
-        }
     }
     
     @objc func showAwesomeAlertMain(_ notification: NSNotification) {
         Log.print("showAwesomeAlertMain")
-        let alert = UIAlertController(title: "Awesome", message: "이제 모든 기능을 사용할 수 있습니다.\n확인 버튼을 누르면 앱이 종료됩니다.\n앱을 다시 시작해주세요.", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "확인", style: .cancel, handler: { _ in
-            sleep(1)
-            exit(0)
-        }))
+        let alert = UIAlertController(title: "Awesome", message: "이제 모든 기능을 사용할 수 있습니다.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .cancel, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
     
@@ -257,7 +251,6 @@ class MainViewController: UIViewController {
             NotificationCenter.default.post(name: .stopRadioMain, object: nil)
             self.settingRadioTimer?.invalidate()
             self.settingRadioTimer = nil
-            CloudRadioShareValues.IsTimerStop = true
         }
     }
     
@@ -420,7 +413,8 @@ class MainViewController: UIViewController {
     
     @objc func previousRadioMain(_ notification: NSNotification) {
         if YoutubePlayer.PlayingState == .playing || YoutubePlayer.PlayingState == .paused {
-            self.youtubePlayer.requestPrevVideo()
+            self.youtubePlayer.setCurrentVideoIndex(direction: .PREV)
+            self.youtubePlayer.requestNextVideo()
         } else {
             var info: PlayInfo? = nil
             var curIdx = MainViewController.currentChannelIdx
@@ -458,6 +452,7 @@ class MainViewController: UIViewController {
     
     @objc func skipRadioMain(_ notification: NSNotification) {
         if YoutubePlayer.PlayingState == .playing || YoutubePlayer.PlayingState == .paused {
+            self.youtubePlayer.setCurrentVideoIndex(direction: .NEXT)
             self.youtubePlayer.requestNextVideo()
         } else {
             var info: PlayInfo? = nil
@@ -478,7 +473,7 @@ class MainViewController: UIViewController {
             if sideMenuViewController.sideMenuData.menuMirror[curIdx].type == .YOUTUBEPLAYLIST {
                 // type assign
                 CloudRadioShareValues.TYPE = .YOUTUBEPLAYLIST
-                
+
                 // playlistId 를 할당하는 순간 loading -> play 시작
                 youtubePlayer.playlistName = sideMenuViewController.sideMenuData.menuMirror[curIdx].title
                 youtubePlayer.playlistId = sideMenuViewController.sideMenuData.menuMirror[curIdx].playlistId
@@ -516,15 +511,14 @@ class MainViewController: UIViewController {
     @objc func startCurrentRadioMain(_ notification: NSNotification) {
         Log.print("startCurrentRadioMain")
 
-        if sideMenuViewController.sideMenuData.menuMirror[MainViewController.currentChannelIdx].type == .YOUTUBEPLAYLIST {
+        if CloudRadioShareValues.TYPE == .YOUTUBEPLAYLIST {
             if YoutubePlayer.PlayingState == .paused {
                 self.youtubePlayer.resumeVideo()
+                self.youtubePlayer.updateVideoInfo()
             }
-            self.youtubePlayer.updateVideoInfo()
-        } else if sideMenuViewController.sideMenuData.menuMirror[MainViewController.currentChannelIdx].type == .RADIO {
+        } else {
             self.playerDelegate?.playRadio(channelName: RadioPlayer.curChannelName, channelUrl: RadioPlayer.curChannelUrl!)
         }
-        
     }
     
     @objc func startRadioMain(_ notification: NSNotification) {
@@ -692,7 +686,7 @@ extension MainViewController: SideMenuViewControllerDelegate {
     
     func selectedCell(_ row: Int, title: String) {
 
-        Log.print("selectedCell currentChannelIdx(\(MainViewController.currentChannelIdx)) curChIdx(\(row)) self.currentSceneIndex(\(self.currentSceneIndex))")
+        Log.print("selectedCell curChIdx(\(row)) self.currentSceneIndex(\(self.currentSceneIndex))")
         // Collapse side menu with animation
         DispatchQueue.main.async {
             self.sideMenuState(expanded: false)
@@ -702,12 +696,13 @@ extension MainViewController: SideMenuViewControllerDelegate {
             }
         }
 
+        // TODO
+        // Implment play youtube
         if ( MainViewController.currentChannelIdx != row  ) {
             if !sideMenuViewController.sideMenuData.menuMirror.isEmpty {
                 if sideMenuViewController.sideMenuData.menuMirror[row].type == .YOUTUBEPLAYLIST {
                     Log.print("start youtube ID: \(sideMenuViewController.sideMenuData.menuMirror[row].playlistId)")
                     MainViewController.currentChannelIdx = row
-                    
                     // channel type
                     CloudRadioShareValues.TYPE = .YOUTUBEPLAYLIST
                     
@@ -730,7 +725,6 @@ extension MainViewController: SideMenuViewControllerDelegate {
                 // channel type
                 CloudRadioShareValues.TYPE = .RADIO
                 NotificationCenter.default.post(name: .stopRadioMain, object: nil)
-
             }
             
             self.playerDelegate?.enableAudioSessionActive(enable: true)
@@ -885,6 +879,9 @@ extension MainViewController: UIGestureRecognizerDelegate {
 }
 
 extension UIViewController {
+    
+    
+    
     // With this extension you can access the MainViewController from the child view controllers.
     func revealViewController() -> MainViewController? {
         var viewController: UIViewController? = self

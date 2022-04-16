@@ -8,7 +8,7 @@
 import UIKit
 
 enum CHANNELTYPE {
-    case NONE, RADIO, YOUTUBEPLAYLIST, SAMPLE
+    case RADIO, YOUTUBEPLAYLIST, SAMPLE
 }
 
 struct SideMenuModel {

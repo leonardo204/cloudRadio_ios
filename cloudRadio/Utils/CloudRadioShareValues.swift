@@ -29,10 +29,10 @@ class CloudRadioShareValues {
     static var globalStopRadioTimer: Timer? = nil
     static var TimeLabel: UILabel? = nil
     static var TimeSlider: UISlider? = nil
-    static var IsTimerStop = false
     
     // media type
     static var TYPE: CHANNELTYPE = .RADIO
+    static var videoViewBounds: CGRect? = nil
     
     // Playlist setting
     static var IsShuffle = true

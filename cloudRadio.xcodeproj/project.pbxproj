@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		1F1EB9B727E9B2C600CA35DF /* PlaylistSettingCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1F1EB9B627E9B2C600CA35DF /* PlaylistSettingCell.xib */; };
 		1F1EB9B927E9B32C00CA35DF /* PlaylistSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F1EB9B827E9B32C00CA35DF /* PlaylistSettingCell.swift */; };
+		1F2A12B1280A54E3008EFDFA /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 1F2A12B0280A54E3008EFDFA /* Alamofire */; };
 		1F398566274791EF00C6E395 /* RadioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F398565274791EF00C6E395 /* RadioPlayer.swift */; };
 		1F398568274792A500C6E395 /* RadioChannelResources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F398567274792A400C6E395 /* RadioChannelResources.swift */; };
 		1F4F800B274E2306006E0733 /* CloudRadioUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4F800A274E2305006E0733 /* CloudRadioUtils.swift */; };
@@ -19,7 +20,6 @@
 		1F4F8016275E9FED006E0733 /* CloudRadioShareValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4F8015275E9FEC006E0733 /* CloudRadioShareValues.swift */; };
 		1F4F801927673B78006E0733 /* ProgramInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4F801727673B77006E0733 /* ProgramInfoCell.swift */; };
 		1F4F801A27673B78006E0733 /* ProgramInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1F4F801827673B77006E0733 /* ProgramInfoCell.xib */; };
-		1FBD822528054AF1004A75EF /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 1FBD822428054AF1004A75EF /* Alamofire */; };
 		1FD6F34927E361080030AF92 /* YoutubePlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD6F34627E361080030AF92 /* YoutubePlayer.swift */; };
 		1FD6F34A27E361080030AF92 /* YoutubePlaylistDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD6F34727E361080030AF92 /* YoutubePlaylistDownloader.swift */; };
 		1FD6F34B27E361080030AF92 /* YoutubePlaylistModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD6F34827E361080030AF92 /* YoutubePlaylistModel.swift */; };
@@ -78,7 +78,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1FBD822528054AF1004A75EF /* Alamofire in Frameworks */,
+				1F2A12B1280A54E3008EFDFA /* Alamofire in Frameworks */,
 				1F4F800F27547DA4006E0733 /* OSLog.framework in Frameworks */,
 				A3E37FFC63EC35CE59A44CC0 /* Pods_cloudRadio.framework in Frameworks */,
 			);
@@ -232,7 +232,7 @@
 			);
 			name = cloudRadio;
 			packageProductDependencies = (
-				1FBD822428054AF1004A75EF /* Alamofire */,
+				1F2A12B0280A54E3008EFDFA /* Alamofire */,
 			);
 			productName = CustomSideMenuiOSExample;
 			productReference = C25EF4CA25D067D00086441F /* cloudRadio.app */;
@@ -262,7 +262,7 @@
 			);
 			mainGroup = C25EF4C125D067D00086441F;
 			packageReferences = (
-				1FBD822328054AF1004A75EF /* XCRemoteSwiftPackageReference "Alamofire" */,
+				1F2A12AF280A54E3008EFDFA /* XCRemoteSwiftPackageReference "Alamofire" */,
 			);
 			productRefGroup = C25EF4CB25D067D00086441F /* Products */;
 			projectDirPath = "";
@@ -565,7 +565,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		1FBD822328054AF1004A75EF /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+		1F2A12AF280A54E3008EFDFA /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire";
 			requirement = {
@@ -576,9 +576,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		1FBD822428054AF1004A75EF /* Alamofire */ = {
+		1F2A12B0280A54E3008EFDFA /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 1FBD822328054AF1004A75EF /* XCRemoteSwiftPackageReference "Alamofire" */;
+			package = 1F2A12AF280A54E3008EFDFA /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
 		};
 /* End XCSwiftPackageProductDependency section */

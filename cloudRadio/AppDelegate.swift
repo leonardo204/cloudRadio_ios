@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import YoutubeKit
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -14,6 +15,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        YoutubeKit.shared.setAPIKey("AIzaSyC-8Ut8ITfm9KKHE-8-5pre5CzeStgUC-w")
+        
         registerforDeviceLockNotification()
         return true
     }
