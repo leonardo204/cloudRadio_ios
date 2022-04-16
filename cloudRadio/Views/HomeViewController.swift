@@ -344,16 +344,19 @@ class HomeViewController: UIViewController {
     
     func updateAlbumArt(path: String) {
         Log.print("updateAlbumArt path: \(path)")
+        self.albumImageView.isHidden = false
+
         if CloudRadioShareValues.TYPE == .YOUTUBEPLAYLIST {
             if YoutubePlayer.PlayingState == .buffering
                 || YoutubePlayer.PlayingState == .paused
                 || YoutubePlayer.PlayingState == .playing {
                 NotificationCenter.default.post(name: .setVideoViewIsHiddenMain, object: false)
+                self.albumImageView.isHidden = true
             }
         } else {
             NotificationCenter.default.post(name: .setVideoViewIsHiddenMain, object: true)
             albumImageView.downloaded(from: path)
         }
-        albumImageView.downloaded(from: path)
+//        albumImageView.downloaded(from: path)
     }
 }

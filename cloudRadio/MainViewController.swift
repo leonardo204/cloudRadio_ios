@@ -213,6 +213,7 @@ class MainViewController: UIViewController {
         if videoView.isHidden {
             player.removeFromSuperview()
         } else {
+            player.frame = CGRect(x: 0, y: 0, width: videoView.bounds.width, height: videoView.bounds.height)
             videoView.addSubview(player)
         }
     }
@@ -229,9 +230,12 @@ class MainViewController: UIViewController {
     }
     
     @objc func showAwesomeAlertMain(_ notification: NSNotification) {
-        Log.print("showAwesomeAlertMain")
-        let alert = UIAlertController(title: "Awesome", message: "이제 모든 기능을 사용할 수 있습니다.", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "확인", style: .cancel, handler: nil))
+        Log.print("showAwesomeAlertMain")       
+        let alert = UIAlertController(title: "Awesome", message: "이제 모든 기능을 사용할 수 있습니다.\n확인 버튼을 누르면 앱이 종료됩니다.\n앱을 다시 시작해주세요.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .cancel, handler: { _ in
+            sleep(1)
+            exit(0)
+        }))
         self.present(alert, animated: true, completion: nil)
     }
     
