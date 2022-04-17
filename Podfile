@@ -1,16 +1,16 @@
 # Uncomment the next line to define a global platform for your project
-platform :ios, '10.0'
+# platform :ios, '9.0'
 
-target 'cloudRadio' do
-  project 'cloudRadio.xcodeproj'
+target 'zerotube' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
-  # Pods for cloudRadio
+  # Pods for zerotube
   pod 'Kanna', '~> 5.2.2'
   pod 'SwiftyJSON', '~> 4.0'
   pod 'QuickTableViewController'
   #pod 'youtube-ios-player-helper-swift'
   pod 'MarqueeLabel'
   pod 'YoutubeKit'
+
 end
