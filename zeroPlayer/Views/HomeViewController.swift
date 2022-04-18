@@ -62,7 +62,7 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var albumImageView: UIImageView!
     @IBOutlet weak var progressView: UIProgressView!
     @IBOutlet weak var initialLabel: UILabel!
-    var initialMessage: String = String("Welcome to zerotube")
+    var initialMessage: String = String("Welcome to zeroPlayer")
     @IBOutlet weak var programNameLabel: MarqueeLabel!
     @IBOutlet weak var channelNameLabel: UILabel!
     static var channelName: String = String("")

@@ -23,7 +23,7 @@
 		1FD6F34927E361080030AF92 /* YoutubePlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD6F34627E361080030AF92 /* YoutubePlayer.swift */; };
 		1FD6F34A27E361080030AF92 /* YoutubePlaylistDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD6F34727E361080030AF92 /* YoutubePlaylistDownloader.swift */; };
 		1FD6F34B27E361080030AF92 /* YoutubePlaylistModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD6F34827E361080030AF92 /* YoutubePlaylistModel.swift */; };
-		C175E793B6238811C7AA1518 /* Pods_zerotube.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E206516AE71D46702FC6FDD /* Pods_zerotube.framework */; };
+		401159DC3D75EA476760C2B2 /* Pods_zeroPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BD8A7DCE970F2029ABCA164 /* Pods_zeroPlayer.framework */; };
 		C20E9E2225E1B79B001B1A11 /* SideMenuModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20E9E2125E1B79A001B1A11 /* SideMenuModel.swift */; };
 		C25EF4CE25D067D00086441F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25EF4CD25D067D00086441F /* AppDelegate.swift */; };
 		C25EF4D025D067D00086441F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25EF4CF25D067D00086441F /* SceneDelegate.swift */; };
@@ -39,6 +39,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		04A37B75C1E2E17D086E8366 /* Pods-zeroPlayer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-zeroPlayer.release.xcconfig"; path = "Target Support Files/Pods-zeroPlayer/Pods-zeroPlayer.release.xcconfig"; sourceTree = "<group>"; };
 		1F1EB9B627E9B2C600CA35DF /* PlaylistSettingCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlaylistSettingCell.xib; sourceTree = "<group>"; };
 		1F1EB9B827E9B32C00CA35DF /* PlaylistSettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistSettingCell.swift; sourceTree = "<group>"; };
 		1F398565274791EF00C6E395 /* RadioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioPlayer.swift; sourceTree = "<group>"; };
@@ -55,12 +56,12 @@
 		1FD6F34727E361080030AF92 /* YoutubePlaylistDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YoutubePlaylistDownloader.swift; sourceTree = "<group>"; };
 		1FD6F34827E361080030AF92 /* YoutubePlaylistModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YoutubePlaylistModel.swift; sourceTree = "<group>"; };
 		200FFA4529D68641B5256C36 /* Pods-cloudRadio.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cloudRadio.release.xcconfig"; path = "Target Support Files/Pods-cloudRadio/Pods-cloudRadio.release.xcconfig"; sourceTree = "<group>"; };
-		3E206516AE71D46702FC6FDD /* Pods_zerotube.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_zerotube.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		47FD25904AE33567133E1990 /* Pods-zerotube.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-zerotube.release.xcconfig"; path = "Target Support Files/Pods-zerotube/Pods-zerotube.release.xcconfig"; sourceTree = "<group>"; };
 		4DFEBC62D528E7C1C863A059 /* Pods-zerotube.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-zerotube.debug.xcconfig"; path = "Target Support Files/Pods-zerotube/Pods-zerotube.debug.xcconfig"; sourceTree = "<group>"; };
+		8BD8A7DCE970F2029ABCA164 /* Pods_zeroPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_zeroPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD89ADD52E60CBC22C5D2054 /* Pods-cloudRadio.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cloudRadio.debug.xcconfig"; path = "Target Support Files/Pods-cloudRadio/Pods-cloudRadio.debug.xcconfig"; sourceTree = "<group>"; };
 		C20E9E2125E1B79A001B1A11 /* SideMenuModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuModel.swift; sourceTree = "<group>"; };
-		C25EF4CA25D067D00086441F /* zerotube.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = zerotube.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C25EF4CA25D067D00086441F /* zeroPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = zeroPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C25EF4CD25D067D00086441F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C25EF4CF25D067D00086441F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		C25EF4D125D067D00086441F /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
@@ -73,6 +74,7 @@
 		C25EF4E925D06B6A0086441F /* SideMenuCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SideMenuCell.xib; sourceTree = "<group>"; };
 		C25EF52B25D09AC30086441F /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		C2DE6A3A25D2CED4002B885A /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		E5324EE1B7C9921D716AB328 /* Pods-zeroPlayer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-zeroPlayer.debug.xcconfig"; path = "Target Support Files/Pods-zeroPlayer/Pods-zeroPlayer.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,7 +84,7 @@
 			files = (
 				1F2A12B1280A54E3008EFDFA /* Alamofire in Frameworks */,
 				1F4F800F27547DA4006E0733 /* OSLog.framework in Frameworks */,
-				C175E793B6238811C7AA1518 /* Pods_zerotube.framework in Frameworks */,
+				401159DC3D75EA476760C2B2 /* Pods_zeroPlayer.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -135,7 +137,7 @@
 			isa = PBXGroup;
 			children = (
 				1F4F800E27547DA4006E0733 /* OSLog.framework */,
-				3E206516AE71D46702FC6FDD /* Pods_zerotube.framework */,
+				8BD8A7DCE970F2029ABCA164 /* Pods_zeroPlayer.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -147,6 +149,8 @@
 				200FFA4529D68641B5256C36 /* Pods-cloudRadio.release.xcconfig */,
 				4DFEBC62D528E7C1C863A059 /* Pods-zerotube.debug.xcconfig */,
 				47FD25904AE33567133E1990 /* Pods-zerotube.release.xcconfig */,
+				E5324EE1B7C9921D716AB328 /* Pods-zeroPlayer.debug.xcconfig */,
+				04A37B75C1E2E17D086E8366 /* Pods-zeroPlayer.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -174,7 +178,7 @@
 		C25EF4CB25D067D00086441F /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				C25EF4CA25D067D00086441F /* zerotube.app */,
+				C25EF4CA25D067D00086441F /* zeroPlayer.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -196,7 +200,7 @@
 				C25EF4DB25D067D20086441F /* Info.plist */,
 			);
 			name = cloudRadio;
-			path = zerotube;
+			path = zeroPlayer;
 			sourceTree = "<group>";
 		};
 		C25EF4E225D06A2D0086441F /* SideMenu */ = {
@@ -221,9 +225,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		C25EF4C925D067D00086441F /* zerotube */ = {
+		C25EF4C925D067D00086441F /* zeroPlayer */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C25EF4DE25D067D20086441F /* Build configuration list for PBXNativeTarget "zerotube" */;
+			buildConfigurationList = C25EF4DE25D067D20086441F /* Build configuration list for PBXNativeTarget "zeroPlayer" */;
 			buildPhases = (
 				A62053B4CDF16105239F9705 /* [CP] Check Pods Manifest.lock */,
 				C25EF4C625D067D00086441F /* Sources */,
@@ -235,12 +239,12 @@
 			);
 			dependencies = (
 			);
-			name = zerotube;
+			name = zeroPlayer;
 			packageProductDependencies = (
 				1F2A12B0280A54E3008EFDFA /* Alamofire */,
 			);
 			productName = CustomSideMenuiOSExample;
-			productReference = C25EF4CA25D067D00086441F /* zerotube.app */;
+			productReference = C25EF4CA25D067D00086441F /* zeroPlayer.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -257,7 +261,7 @@
 					};
 				};
 			};
-			buildConfigurationList = C25EF4C525D067D00086441F /* Build configuration list for PBXProject "zerotube" */;
+			buildConfigurationList = C25EF4C525D067D00086441F /* Build configuration list for PBXProject "zeroPlayer" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -273,7 +277,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				C25EF4C925D067D00086441F /* zerotube */,
+				C25EF4C925D067D00086441F /* zeroPlayer */,
 			);
 		};
 /* End PBXProject section */
@@ -302,15 +306,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-zerotube/Pods-zerotube-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-zeroPlayer/Pods-zeroPlayer-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-zerotube/Pods-zerotube-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-zeroPlayer/Pods-zeroPlayer-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-zerotube/Pods-zerotube-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-zeroPlayer/Pods-zeroPlayer-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		A62053B4CDF16105239F9705 /* [CP] Check Pods Manifest.lock */ = {
@@ -328,7 +332,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-zerotube-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-zeroPlayer-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -504,14 +508,14 @@
 		};
 		C25EF4DF25D067D20086441F /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4DFEBC62D528E7C1C863A059 /* Pods-zerotube.debug.xcconfig */;
+			baseConfigurationReference = E5324EE1B7C9921D716AB328 /* Pods-zeroPlayer.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = XU8HS9JUTS;
-				INFOPLIST_FILE = "$(SRCROOT)/zerotube/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/zeroPlayer/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -527,14 +531,14 @@
 		};
 		C25EF4E025D067D20086441F /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 47FD25904AE33567133E1990 /* Pods-zerotube.release.xcconfig */;
+			baseConfigurationReference = 04A37B75C1E2E17D086E8366 /* Pods-zeroPlayer.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = XU8HS9JUTS;
-				INFOPLIST_FILE = "$(SRCROOT)/zerotube/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/zeroPlayer/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -551,7 +555,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		C25EF4C525D067D00086441F /* Build configuration list for PBXProject "zerotube" */ = {
+		C25EF4C525D067D00086441F /* Build configuration list for PBXProject "zeroPlayer" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C25EF4DC25D067D20086441F /* Debug */,
@@ -560,7 +564,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C25EF4DE25D067D20086441F /* Build configuration list for PBXNativeTarget "zerotube" */ = {
+		C25EF4DE25D067D20086441F /* Build configuration list for PBXNativeTarget "zeroPlayer" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C25EF4DF25D067D20086441F /* Debug */,

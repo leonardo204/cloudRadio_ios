@@ -11,6 +11,6 @@
 #endif
 
 
-FOUNDATION_EXPORT double Pods_zerotubeVersionNumber;
-FOUNDATION_EXPORT const unsigned char Pods_zerotubeVersionString[];
+FOUNDATION_EXPORT double Pods_zeroPlayerVersionNumber;
+FOUNDATION_EXPORT const unsigned char Pods_zeroPlayerVersionString[];
 

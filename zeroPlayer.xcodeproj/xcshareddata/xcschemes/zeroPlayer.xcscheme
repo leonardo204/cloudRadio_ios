@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "C25EF4C925D067D00086441F"
-               BuildableName = "zerotube.app"
-               BlueprintName = "zerotube"
-               ReferencedContainer = "container:zerotube.xcodeproj">
+               BuildableName = "zeroPlayer.app"
+               BlueprintName = "zeroPlayer"
+               ReferencedContainer = "container:zeroPlayer.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -45,9 +45,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C25EF4C925D067D00086441F"
-            BuildableName = "zerotube.app"
-            BlueprintName = "zerotube"
-            ReferencedContainer = "container:zerotube.xcodeproj">
+            BuildableName = "zeroPlayer.app"
+            BlueprintName = "zeroPlayer"
+            ReferencedContainer = "container:zeroPlayer.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -62,9 +62,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C25EF4C925D067D00086441F"
-            BuildableName = "zerotube.app"
-            BlueprintName = "zerotube"
-            ReferencedContainer = "container:zerotube.xcodeproj">
+            BuildableName = "zeroPlayer.app"
+            BlueprintName = "zeroPlayer"
+            ReferencedContainer = "container:zeroPlayer.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

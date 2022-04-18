@@ -1,0 +1,6 @@
+framework module Pods_zeroPlayer {
+  umbrella header "Pods-zeroPlayer-umbrella.h"
+
+  export *
+  module * { export * }
+}
