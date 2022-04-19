@@ -10,7 +10,7 @@ import UIKit
 
 class CloudRadioShareValues {
     // Version
-    static var versionString = "v1.4"
+    static var versionString = "v1.5"
     
     // hidden count
     static var IsUnlockedFeature = false
