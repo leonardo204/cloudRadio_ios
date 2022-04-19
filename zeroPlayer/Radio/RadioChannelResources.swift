@@ -280,7 +280,7 @@ class RadioChannelResources {
                     guard let value = head.toHTML else { return }
                     
                     var imgAddr = value[value.endIndex(of: "posterUrl =")!..<value.index(of: "player = new noplayer")!]
-                    imgAddr = imgAddr[imgAddr.index(imgAddr.startIndex, offsetBy: 2)..<imgAddr.index(imgAddr.endIndex, offsetBy: -4)]
+                    imgAddr = imgAddr[imgAddr.index(imgAddr.startIndex, offsetBy: 2)..<imgAddr.index(imgAddr.index(of: "png")!, offsetBy: 3)]
                     Log.print("imgAddr: \(imgAddr)")
 
                     guard let encodedStr = imgAddr.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else { return }

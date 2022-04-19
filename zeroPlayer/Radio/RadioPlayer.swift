@@ -336,7 +336,7 @@ extension RadioPlayer: RadioPlayerDelegate {
                         guard let value = head.toHTML else { return }
                         
                         var streamAddr = value[value.endIndex(of: "if (ch == \"CH_A\") streamUrl = ")!..<value.index(of: "else if (ch == \"CH_E\")")!]
-                        streamAddr = streamAddr[streamAddr.index(streamAddr.startIndex, offsetBy: 1)..<streamAddr.index(streamAddr.endIndex, offsetBy: -3)]
+                        streamAddr = streamAddr[streamAddr.index(streamAddr.startIndex, offsetBy: 1)..<streamAddr.index(streamAddr.index(of: "m3u8")!, offsetBy: 4)]
                         Log.print("streamAddr: \(streamAddr)")
                         guard let url = URL.init(string: String(streamAddr)) else {
                             Log.print("Error for playing")

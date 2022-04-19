@@ -168,7 +168,7 @@
 		C25EF4C125D067D00086441F = {
 			isa = PBXGroup;
 			children = (
-				C25EF4CC25D067D00086441F /* cloudRadio */,
+				C25EF4CC25D067D00086441F /* zeroPlayer */,
 				C25EF4CB25D067D00086441F /* Products */,
 				921B6981A64ED59C4253FD93 /* Pods */,
 				57D7F770E6B980DBBF97215E /* Frameworks */,
@@ -183,7 +183,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		C25EF4CC25D067D00086441F /* cloudRadio */ = {
+		C25EF4CC25D067D00086441F /* zeroPlayer */ = {
 			isa = PBXGroup;
 			children = (
 				1FD6F34527E360F70030AF92 /* Youtube */,
@@ -199,7 +199,6 @@
 				C25EF4CF25D067D00086441F /* SceneDelegate.swift */,
 				C25EF4DB25D067D20086441F /* Info.plist */,
 			);
-			name = cloudRadio;
 			path = zeroPlayer;
 			sourceTree = "<group>";
 		};

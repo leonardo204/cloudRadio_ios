@@ -574,6 +574,8 @@ class MainViewController: UIViewController {
             }
         }
         
+        Log.print("revealSideMenuOnTop: \(self.revealSideMenuOnTop)")
+        
         let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
         self.sideMenuViewController = storyboard.instantiateViewController(withIdentifier: "SideMenuID") as? SideMenuViewController
         self.sideMenuViewController.defaultHighlightedCell = idx
@@ -759,9 +761,9 @@ extension MainViewController: SideMenuViewControllerDelegate {
         self.homeMenuViewcontroller!.view.tag = 99
         view.insertSubview(self.homeMenuViewcontroller!.view, at: self.revealSideMenuOnTop ? 0 : 1)
         addChild(self.homeMenuViewcontroller!)
-        if !self.revealSideMenuOnTop {
+        if self.revealSideMenuOnTop {
             if isExpanded {
-                self.homeMenuViewcontroller!.view.frame.origin.x = self.sideMenuRevealWidth
+                self.homeMenuViewcontroller!.view.frame.origin.x = 0
             }
             if self.sideMenuShadowView != nil {
                 self.homeMenuViewcontroller!.view.addSubview(self.sideMenuShadowView)
