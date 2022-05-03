@@ -15,7 +15,8 @@ class YoutubePlaylistDownloader {
     var vList = [YoutubeVideLists]()
     var pList = YoutubePlayListResult(playlistId: nil, list: nil)
     
-    var apiURL = "https://www.googleapis.com/youtube/v3/playlistItems?key=AIzaSyC-8Ut8ITfm9KKHE-8-5pre5CzeStgUC-w&part=snippet&maxResults=50&playlistId="
+    let APIKEY = "GET IT FROM GOOGLE"
+    var apiURL = "https://www.googleapis.com/youtube/v3/playlistItems?key=" + APIKEY + "&part=snippet&maxResults=50&playlistId="
     
     var delegate: YoutubePlaylistDownloaderDelegate? = nil
     
